@@ -10,3 +10,7 @@
   margin: 165px 0 0 0;
   font-size: 128px;
 }
+
+.image {
+  max-height: 100vh;
+}
