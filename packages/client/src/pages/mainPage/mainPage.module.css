@@ -1,0 +1,12 @@
+.main {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--colors-green-text);
+}
+
+.title {
+  width: 523px;
+  margin: 165px 0 0 0;
+  font-size: 128px;
+}

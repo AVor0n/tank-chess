@@ -1,0 +1,14 @@
+@import url(../fonts/index.css);
+@import url(../styles/common.css);
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  background: #eaeaea;
+  margin: 0 auto;
+  max-width: 1440px;
+  font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+}
