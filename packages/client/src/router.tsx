@@ -1,9 +1,10 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
+import MainPage from './pages/mainPage'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <p>Главная страница</p>,
+    element: <MainPage />,
   },
   {
     path: '/login',
