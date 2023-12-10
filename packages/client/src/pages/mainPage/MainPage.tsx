@@ -1,7 +1,7 @@
-import styles from './mainPage.module.css'
+import styles from './mainPage.module.scss'
 import main from '../../assets/images/main.png'
 import { MAIN_MENU_LINKS } from '../../utils/constants'
-import { Menu } from '../../components'
+import Menu from '../../components/menu'
 
 export const MainPage = () => {
   return (

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import styles from './menu.module.css'
+import styles from './menu.module.scss'
 
 type Link = {
   label: string

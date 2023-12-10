@@ -1,0 +1,29 @@
+.menu {
+  margin: 155px 0 76px 0;
+
+  .subtitle {
+    font-size: 42px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+
+    .link {
+      margin: 10px 0;
+      font-size: 24px;
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
