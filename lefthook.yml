@@ -1,10 +1,23 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
+    typecheck-client:
+      root: 'packages/client'
       glob: '*.{ts,tsx}'
-      run: yarn eslint {staged_files}
+      run: yarn tsc -p ./tsconfig.json
+    typecheck-server:
+      root: 'packages/server'
+      glob: '*.{ts,tsx}'
+      run: yarn tsc -p ./tsconfig.json
+    eslint:
+      glob: '*.{ts,tsx}'
+      run: yarn eslint {staged_files} --fix --no-warn-ignored && yarn prettier -w {staged_files}
+      stage_fixed: true
+    stylelint:
+      glob: '*.{scss}'
+      run: yarn stylelint {staged_files} --fix && yarn prettier -w {staged_files}
+      stage_fixed: true
     prettier:
-      glob: '*.{ts,tsx,css}'
+      glob: '*.{html,json.md,yml,css,js}'
       run: yarn prettier -w {staged_files}
       stage_fixed: true

@@ -1,16 +1,17 @@
 .main {
-  max-width: 100%;
   display: flex;
   justify-content: space-between;
+  max-inline-size: 100%;
   color: var(--colors-green-text);
 }
 
 .title {
-  width: 523px;
-  margin: 165px 0 0 0;
+  inline-size: 523px;
+  margin: 0;
+  margin-block-start: 165px;
   font-size: 128px;
 }
 
 .image {
-  max-height: 100vh;
+  inline-size: 100vh;
 }
