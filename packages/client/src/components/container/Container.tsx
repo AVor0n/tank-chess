@@ -1,7 +1,12 @@
+import { ReactNode } from 'react'
 import styles from './container.module.scss'
 import { ThemeProvider } from '@gravity-ui/uikit'
 
-export const Container = ({ children }) => {
+interface ContainerProps {
+  children?: ReactNode
+}
+
+export const Container = ({ children }: ContainerProps) => {
   return (
     <ThemeProvider key="theme_provider" theme="light">
       <div className={styles.cardContainer}>
