@@ -1,5 +1,8 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
 import MainPage from './pages/mainPage'
+import AuthPage from './pages/authPage'
+import PasswordPage from './pages/passwordPage'
+import EmailPage from './pages/emailPage'
 
 const router = createBrowserRouter([
   {
@@ -8,7 +11,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <p>Cтраница входа и регистрации</p>,
+    element: <AuthPage />,
+  },
+  {
+    path: '/password',
+    element: <PasswordPage />,
+  },
+  {
+    path: '/email',
+    element: <EmailPage />,
   },
   {
     path: '/game',
