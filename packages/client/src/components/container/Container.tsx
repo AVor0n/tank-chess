@@ -8,10 +8,8 @@ interface ContainerProps {
 
 export const Container = ({ children }: ContainerProps) => {
   return (
-    <ThemeProvider key="theme_provider" theme="light">
-      <div className={styles.cardContainer}>
-        <div className={styles.card}>{children}</div>
-      </div>
-    </ThemeProvider>
+    <div className={styles.cardContainer}>
+      <div className={styles.card}>{children}</div>
+    </div>
   )
 }
