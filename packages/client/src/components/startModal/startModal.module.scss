@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 825px;
+  background-color: var(--colors-chess-square-light);
+  border: 20px solid var(--colors-chess-dark);
+  padding: 0 20px;
+  align-items: center;
+}
+
+.paginator {
+  margin: 25px 0 0 0;
+}
+
+.button {
+  background-color: var(--colors-chess-dark);
+  color: var(--colors-gray-light);
+  margin: 25px;
+  width: 200px;
+
+  &:hover {
+    opacity: 0.8;
+    color: var(--colors-gray-light);
+  }
+}

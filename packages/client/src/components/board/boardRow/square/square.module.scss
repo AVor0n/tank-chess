@@ -1,0 +1,81 @@
+@mixin square-props($var) {
+  background-color: $var;
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--colors-chess-dark);
+  position: relative;
+}
+
+@mixin numbers-letters() {
+  position: absolute;
+  font-size: 12px;
+  color: var(--colors-white);
+}
+
+.blackSquare {
+  @include square-props(var(--colors-chess-square-dark));
+}
+
+.lightSquare {
+  @include square-props(var(--colors-chess-square-light));
+}
+
+.left {
+  border-left: 19px solid var(--colors-chess-dark);
+}
+
+.right {
+  border-right: 19px solid var(--colors-chess-dark);
+}
+
+.upper {
+  border-top: 19px solid var(--colors-chess-dark);
+}
+
+.lower {
+  border-bottom: 19px solid var(--colors-chess-dark);
+}
+
+.leftUpper {
+  border-left: 19px solid var(--colors-chess-dark);
+  border-top: 19px solid var(--colors-chess-dark);
+}
+
+.rightUpper {
+  border-right: 19px solid var(--colors-chess-dark);
+  border-top: 19px solid var(--colors-chess-dark);
+}
+
+.leftLower {
+  border-left: 19px solid var(--colors-chess-dark);
+  border-bottom: 19px solid var(--colors-chess-dark);
+}
+
+.rightLower {
+  border-right: 19px solid var(--colors-chess-dark);
+  border-bottom: 19px solid var(--colors-chess-dark);
+}
+
+.upperLetter {
+  @include numbers-letters();
+  top: -26px;
+  left: 25px;
+}
+
+.lowerLetter {
+  @include numbers-letters();
+  bottom: -28px;
+  left: 25px;
+}
+
+.leftNumber {
+  @include numbers-letters();
+  top: 10px;
+  left: -13px;
+}
+
+.rightNumber {
+  @include numbers-letters();
+  top: 10px;
+  right: -12px;
+}

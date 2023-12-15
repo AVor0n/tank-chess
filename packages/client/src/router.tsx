@@ -1,6 +1,7 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
 import ErrorPage from '@pages/errorPage'
 import MainPage from '@pages/mainPage'
+import GamePage from '@pages/gamePage'
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/game',
-    element: <p>Страница игры</p>,
+    element: <GamePage />,
   },
   {
     path: '/profile',

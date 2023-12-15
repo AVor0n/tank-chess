@@ -1,0 +1,40 @@
+.title {
+  font-family: 'Bebas Neue';
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 25px 0 0 0;
+}
+
+.subtitle {
+  font-family: 'Bebas Neue';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 25px 0 0 0;
+}
+
+.box {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 25px 0 0 0;
+  text-align: start;
+  letter-spacing: 0.5px;
+}
+
+.image {
+  max-width: 300px;
+  margin: 25px 0 0 0;
+}
