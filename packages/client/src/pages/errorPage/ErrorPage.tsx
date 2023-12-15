@@ -1,6 +1,6 @@
 import { Button } from '@gravity-ui/uikit'
 import { useNavigate } from 'react-router-dom'
-import notFound from '../../assets/images/notFound.png'
+import notFound from '@assets/images/notFound.png'
 import styles from './errorPage.module.scss'
 
 export const ErrorPage = () => {
@@ -13,10 +13,7 @@ export const ErrorPage = () => {
           Упс... <br />
           Что-то пошло не так
         </h2>
-        <Button
-          size="xl"
-          className={styles.button}
-          onClick={() => navigate(-1)}>
+        <Button size="xl" className={styles.button} onClick={() => navigate(-1)}>
           Вернуться назад
         </Button>
       </div>
