@@ -1,35 +1,36 @@
 .button {
-  background-color: var(--colors-green);
+  inline-size: 250px;
+  margin-block-start: 60px;
   color: var(--colors-gray-light);
-  margin-top: 60px;
-  width: 250px;
+  background-color: var(--colors-green);
 
   &:hover {
-    opacity: 0.8;
     color: var(--colors-gray-light);
+    opacity: 0.8;
   }
 }
 
 .action {
-  margin: 0 0 0 60px;
-  max-width: 500px;
+  max-inline-size: 500px;
+  margin: 0;
+  margin-block-end: 60px;
 }
 
 .title {
   margin: 0;
   color: var(--colors-green);
+  font-weight: 400;
   font-size: 48px;
   font-style: normal;
-  font-weight: 400;
   line-height: normal;
 }
 
 .container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
 .image {
-  max-height: 100vh;
+  max-block-size: 100vh;
 }

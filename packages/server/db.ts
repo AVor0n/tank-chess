@@ -1,7 +1,6 @@
-import { Client } from 'pg'
+import { Client, type QueryResultRow } from 'pg'
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
 
 export const createClientAndConnect = async (): Promise<Client | null> => {
   try {
@@ -15,7 +14,7 @@ export const createClientAndConnect = async (): Promise<Client | null> => {
 
     await client.connect()
 
-    const res = await client.query('SELECT NOW()')
+    const res = await client.query<QueryResultRow>('SELECT NOW()')
     console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now)
     client.end()
 
