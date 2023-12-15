@@ -1,10 +1,9 @@
+import { Button, Pagination, type PaginationProps } from '@gravity-ui/uikit'
 import { useState } from 'react'
-import styles from './startModal.module.scss'
-import ModalOverlay from '../modalOverlay/modalOverlay'
 import { RULES_LIST } from '../../utils/constants'
-import { Button } from '@gravity-ui/uikit'
+import ModalOverlay from '../modalOverlay/modalOverlay'
 import GameRule from './gameRule'
-import { Pagination, PaginationProps } from '@gravity-ui/uikit'
+import styles from './startModal.module.scss'
 
 interface StartModalProps {
   closeModal: () => void

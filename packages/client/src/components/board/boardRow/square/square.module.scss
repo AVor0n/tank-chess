@@ -1,81 +1,85 @@
 @mixin square-props($var) {
-  background-color: $var;
-  width: 60px;
-  height: 60px;
-  border: 1px solid var(--colors-chess-dark);
   position: relative;
+  inline-size: 60px;
+  block-size: 60px;
+  border: 1px solid var(--colors-chess-dark);
+  background-color: $var;
 }
 
 @mixin numbers-letters() {
   position: absolute;
-  font-size: 12px;
   color: var(--colors-white);
+  font-size: 12px;
 }
 
-.blackSquare {
+.black-square {
   @include square-props(var(--colors-chess-square-dark));
 }
 
-.lightSquare {
+.light-square {
   @include square-props(var(--colors-chess-square-light));
 }
 
 .left {
-  border-left: 19px solid var(--colors-chess-dark);
+  border-inline-start: 19px solid var(--colors-chess-dark);
 }
 
 .right {
-  border-right: 19px solid var(--colors-chess-dark);
+  border-inline-end: 19px solid var(--colors-chess-dark);
 }
 
 .upper {
-  border-top: 19px solid var(--colors-chess-dark);
+  border-block-start: 19px solid var(--colors-chess-dark);
 }
 
 .lower {
-  border-bottom: 19px solid var(--colors-chess-dark);
+  border-block-end: 19px solid var(--colors-chess-dark);
 }
 
-.leftUpper {
-  border-left: 19px solid var(--colors-chess-dark);
-  border-top: 19px solid var(--colors-chess-dark);
+.left-upper {
+  border-inline-start: 19px solid var(--colors-chess-dark);
+  border-block-start: 19px solid var(--colors-chess-dark);
 }
 
-.rightUpper {
-  border-right: 19px solid var(--colors-chess-dark);
-  border-top: 19px solid var(--colors-chess-dark);
+.right-upper {
+  border-inline-end: 19px solid var(--colors-chess-dark);
+  border-block-start: 19px solid var(--colors-chess-dark);
 }
 
-.leftLower {
-  border-left: 19px solid var(--colors-chess-dark);
-  border-bottom: 19px solid var(--colors-chess-dark);
+.left-lower {
+  border-inline-start: 19px solid var(--colors-chess-dark);
+  border-block-end: 19px solid var(--colors-chess-dark);
 }
 
-.rightLower {
-  border-right: 19px solid var(--colors-chess-dark);
-  border-bottom: 19px solid var(--colors-chess-dark);
+.right-lower {
+  border-inline-end: 19px solid var(--colors-chess-dark);
+  border-block-end: 19px solid var(--colors-chess-dark);
 }
 
-.upperLetter {
-  @include numbers-letters();
-  top: -26px;
-  left: 25px;
+.upper-letter {
+  @include numbers-letters;
+
+  inset-block-start: -26px;
+  inset-inline-start: 25px;
 }
 
-.lowerLetter {
-  @include numbers-letters();
-  bottom: -28px;
-  left: 25px;
+.lower-letter {
+  @include numbers-letters;
+
+  inset-block-end: -28px;
+  inset-inline-start: 25px;
 }
 
-.leftNumber {
-  @include numbers-letters();
-  top: 10px;
-  left: -13px;
+.left-number {
+  @include numbers-letters;
+
+  inset-block-start: 10px;
+  inset-inline-start: -13px;
 }
 
-.rightNumber {
-  @include numbers-letters();
-  top: 10px;
-  right: -12px;
+.right-number {
+  @include numbers-letters;
+
+  inset-block-start: 10px;
+  inset-inline-end: -12px;
 }

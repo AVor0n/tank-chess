@@ -1,40 +1,47 @@
-.title {
-  font-family: 'Bebas Neue';
-  font-size: 32px;
-  font-style: normal;
+@mixin font-props() {
   font-weight: 400;
+  font-family: 'Bebas Neue', Helvetica, Arial, sans-serif;
+  font-style: normal;
   line-height: normal;
-  margin: 25px 0 0 0;
+}
+
+.title {
+  @include font-props;
+
+  margin-block: 25px 0;
+  margin-inline: 0;
+  font-size: 32px;
 }
 
 .subtitle {
-  font-family: 'Bebas Neue';
+  @include font-props;
+
+  margin-block: 25px 0;
+  margin-inline: 0;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin: 25px 0 0 0;
 }
 
 .box {
-  height: inherit;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  block-size: inherit;
 }
 
 .text {
+  margin-block: 25px 0;
+  margin-inline: 0;
+  font-weight: 400;
   font-size: 18px;
   font-style: normal;
-  font-weight: 400;
   line-height: normal;
-  margin: 25px 0 0 0;
-  text-align: start;
   letter-spacing: 0.5px;
+  text-align: start;
 }
 
 .image {
-  max-width: 300px;
-  margin: 25px 0 0 0;
+  max-inline-size: 300px;
+  margin-block: 25px 0;
+  margin-inline: 0;
 }

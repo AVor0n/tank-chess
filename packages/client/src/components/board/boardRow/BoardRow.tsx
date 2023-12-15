@@ -1,9 +1,8 @@
-import { BOARD_ROWS } from '../../../utils/constants'
-import styles from './boardRow.module.scss'
+import { BOARD_ROWS, MAX_ROW_NUMBER, MIN_ROW_NUMBER } from '../../../utils/constants'
 import Square from './square'
-import { MAX_ROW_NUMBER, MIN_ROW_NUMBER } from '../../../utils/constants'
+import styles from './boardRow.module.scss'
 
-type BoardRowProps = {
+interface BoardRowProps {
   rowNumber: number
 }
 
@@ -22,17 +21,9 @@ export const BoardRow = ({ rowNumber }: BoardRowProps) => {
         default:
           type = row === MIN_ROW_NUMBER ? 'upper' : 'lower'
       }
-    } else if (
-      column === MIN_ROW_NUMBER &&
-      row !== MIN_ROW_NUMBER &&
-      row !== MAX_ROW_NUMBER
-    ) {
+    } else if (column === MIN_ROW_NUMBER && row !== MIN_ROW_NUMBER && row !== MAX_ROW_NUMBER) {
       type = 'left'
-    } else if (
-      column === MAX_ROW_NUMBER &&
-      row !== MIN_ROW_NUMBER &&
-      row !== MAX_ROW_NUMBER
-    ) {
+    } else if (column === MAX_ROW_NUMBER && row !== MIN_ROW_NUMBER && row !== MAX_ROW_NUMBER) {
       type = 'right'
     }
 

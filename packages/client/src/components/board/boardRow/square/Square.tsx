@@ -1,18 +1,14 @@
 import * as cn from 'classnames'
-import styles from './square.module.scss'
 import { COLUMNS_LETTERS } from '../../../../utils/constants'
+import styles from './square.module.scss'
 
-type SquareProps = {
+interface SquareProps {
   columnNumber: number
   rowNumber: number
   squareType: string
 }
 
-export const Square = ({
-  rowNumber,
-  columnNumber,
-  squareType,
-}: SquareProps) => {
+export const Square = ({ rowNumber, columnNumber, squareType }: SquareProps) => {
   const isDark = (rowNumber + columnNumber) % 2 !== 0
 
   const isUpper = squareType === 'upper'
@@ -27,61 +23,45 @@ export const Square = ({
   return (
     <div
       className={cn(styles.squareType, {
-        [styles.blackSquare]: isDark,
-        [styles.lightSquare]: !isDark,
+        [styles['black-square']]: isDark,
+        [styles['light-square']]: !isDark,
         [styles.left]: isLeft,
         [styles.right]: isRight,
         [styles.upper]: isUpper,
         [styles.lower]: isLower,
-        [styles.leftUpper]: isLeftUpper,
-        [styles.rightUpper]: isRightUpper,
-        [styles.leftLower]: isLeftLower,
-        [styles.rightLower]: isRightLower,
+        [styles['left-upper']]: isLeftUpper,
+        [styles['right-upper']]: isRightUpper,
+        [styles['left-lower']]: isLeftLower,
+        [styles['right-lower']]: isRightLower,
       })}>
-      {isLeftUpper && (
+      {isLeftUpper ? (
         <>
-          <p className={styles.upperLetter}>
-            {COLUMNS_LETTERS[String(columnNumber)]}
-          </p>
-          <p className={styles.leftNumber}>{rowNumber}</p>
+          <p className={styles['upper-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p>
+          <p className={styles['left-number']}>{rowNumber}</p>
         </>
-      )}
-      {isLeft && <p className={styles.leftNumber}>{rowNumber}</p>}
-      {isLeftLower && (
+      ) : null}
+      {isLeft ? <p className={styles['left-number']}>{rowNumber}</p> : null}
+      {isLeftLower ? (
         <>
-          <p className={styles.lowerLetter}>
-            {COLUMNS_LETTERS[String(columnNumber)]}
-          </p>
-          <p className={styles.leftNumber}>{rowNumber}</p>
+          <p className={styles['lower-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p>
+          <p className={styles['left-number']}>{rowNumber}</p>
         </>
-      )}
-      {isRight && <p className={styles.rightNumber}>{rowNumber}</p>}
-      {isUpper && (
-        <p className={styles.upperLetter}>
-          {COLUMNS_LETTERS[String(columnNumber)]}
-        </p>
-      )}
-      {isRightUpper && (
+      ) : null}
+      {isRight ? <p className={styles['right-number']}>{rowNumber}</p> : null}
+      {isUpper ? <p className={styles['upper-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p> : null}
+      {isRightUpper ? (
         <>
-          <p className={styles.upperLetter}>
-            {COLUMNS_LETTERS[String(columnNumber)]}
-          </p>
-          <p className={styles.rightNumber}>{rowNumber}</p>
+          <p className={styles['upper-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p>
+          <p className={styles['right-number']}>{rowNumber}</p>
         </>
-      )}
-      {isRightLower && (
+      ) : null}
+      {isRightLower ? (
         <>
-          <p className={styles.lowerLetter}>
-            {COLUMNS_LETTERS[String(columnNumber)]}
-          </p>
-          <p className={styles.rightNumber}>{rowNumber}</p>
+          <p className={styles['lower-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p>
+          <p className={styles['right-number']}>{rowNumber}</p>
         </>
-      )}
-      {isLower && (
-        <p className={styles.lowerLetter}>
-          {COLUMNS_LETTERS[String(columnNumber)]}
-        </p>
-      )}
+      ) : null}
+      {isLower ? <p className={styles['lower-letter']}>{COLUMNS_LETTERS[String(columnNumber)]}</p> : null}
     </div>
   )
 }

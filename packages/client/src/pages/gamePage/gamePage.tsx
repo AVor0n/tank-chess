@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import styles from '/gamePage.module.scss'
-import Board from '../../components/board'
 import { Modal } from '@gravity-ui/uikit'
+import React, { useEffect, useState } from 'react'
+import Board from '../../components/board'
 import StartModal from '../../components/startModal'
+import styles from './gamePage.module.scss'
 
-const modalContainer = document.getElementById('modal') as HTMLElement
+const modalContainer = document.getElementById('modal')!
 
 export const GamePage = () => {
-  const [gameStarted, setIsGameStarted] = useState(false)
+  const [, setIsGameStarted] = useState(false)
   const [open, setOpen] = React.useState(false)
 
   useEffect(() => {
@@ -20,17 +20,9 @@ export const GamePage = () => {
 
   return (
     <section className={styles.container}>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        children={
-          <StartModal
-            startGame={handleGameStart}
-            closeModal={() => setOpen(false)}
-          />
-        }
-        container={modalContainer}
-      />
+      <Modal open={open} onClose={() => setOpen(false)} container={modalContainer}>
+        <StartModal startGame={handleGameStart} closeModal={() => setOpen(false)} />
+      </Modal>
       <Board />
     </section>
   )
