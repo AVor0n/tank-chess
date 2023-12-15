@@ -1,21 +1,13 @@
 .form{
     padding: 30px 0;
-    .inputContainer {
-        padding-bottom: 20px;
-    }
-
+    display: block;
     .submitBtn {
         margin-top: 10px;
     }
-    
+
     .addLink {
         margin-top: 20px;
         text-align: center;
         
     }
-    .note{
-        color: var(--colors-gray-dark);
-        margin: 20px 0 10px 0;
-    }
-}
-
+} 
