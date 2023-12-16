@@ -5,11 +5,11 @@
   inline-size: 100%;
   block-size: 100vh;
   background: var(--colors-gray-light);
-}
 
-.card {
-  inline-size: 300px;
-  margin-block-start: 0;
-  padding: 30px;
-  background: var(--colors-white);
+  .card {
+    inline-size: 300px;
+    margin-block-start: 0;
+    padding: 30px;
+    background: var(--colors-white);
+  }
 }
