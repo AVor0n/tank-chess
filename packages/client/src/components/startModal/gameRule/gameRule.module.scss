@@ -1,0 +1,47 @@
+@mixin font-props() {
+  font-weight: 400;
+  font-family: 'Bebas Neue', Helvetica, Arial, sans-serif;
+  font-style: normal;
+  line-height: normal;
+}
+
+.title {
+  @include font-props;
+
+  margin-block: 25px 0;
+  margin-inline: 0;
+  font-size: 32px;
+}
+
+.subtitle {
+  @include font-props;
+
+  margin-block: 25px 0;
+  margin-inline: 0;
+  font-size: 24px;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  block-size: inherit;
+}
+
+.text {
+  margin-block: 25px 0;
+  margin-inline: 0;
+  font-weight: 400;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.5px;
+  text-align: start;
+}
+
+.image {
+  max-inline-size: 300px;
+  margin-block: 25px 0;
+  margin-inline: 0;
+}
