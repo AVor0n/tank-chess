@@ -1,7 +1,9 @@
-.form{
-    padding: 30px 0;
-    display: block;
-    .submitBtn {
-        margin-top: 10px;
-    }
-}    
+.form {
+  display: block;
+  padding-block: 30px;
+  padding-inline: 0;
+
+  .submitBtn {
+    margin-block-start: 10px;
+  }
+}

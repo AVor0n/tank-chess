@@ -1,16 +1,16 @@
-import { FC, useState } from 'react'
 import { Link, Button } from '@gravity-ui/uikit'
-import styles from './ SignUp.module.scss'
+import { type FC, useState } from 'react'
 import FormInput from '../../../components/FormInput'
-import { signUpDataType } from '../../../utils/types'
+import { type signUpDataType } from '../../../utils/types'
+import styles from './ SignUp.module.scss'
 
 interface SignUpProps {
   backSignIn?: () => void
 }
 
-const submit = (data: signUpDataType) => {
-  console.log(data)
-}
+const submit = (data: signUpDataType) =>
+  //data.append
+  data
 
 export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
   const [signUpData, signUpDataSet] = useState({
@@ -26,16 +26,12 @@ export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
       <FormInput
         placeholder="Имя"
         name="first_name"
-        onChange={(first_name: string) =>
-          signUpDataSet({ ...signUpData, first_name })
-        }
+        onChange={(first_name: string) => signUpDataSet({ ...signUpData, first_name })}
       />
       <FormInput
         placeholder="Фамилия"
         name="second_name"
-        onChange={(second_name: string) =>
-          signUpDataSet({ ...signUpData, second_name })
-        }
+        onChange={(second_name: string) => signUpDataSet({ ...signUpData, second_name })}
       />
       <FormInput
         placeholder="Логин"
@@ -56,9 +52,7 @@ export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
         placeholder="Пароль"
         name="password"
         type="password"
-        onChange={(password: string) =>
-          signUpDataSet({ ...signUpData, password })
-        }
+        onChange={(password: string) => signUpDataSet({ ...signUpData, password })}
       />
 
       <Button
@@ -72,11 +66,11 @@ export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
         }}>
         Зарегистрироваться
       </Button>
-      {backSignIn && (
+      {backSignIn ? (
         <div className={styles.addLink}>
           <Link onClick={backSignIn}>Авторизация</Link>
         </div>
-      )}
+      ) : null}
     </form>
   )
 }

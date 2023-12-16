@@ -1,9 +1,8 @@
-import React, { FC, ComponentProps, useState } from 'react'
-import styles from './FormInput.module.scss'
 import { TextInput } from '@gravity-ui/uikit'
+import { type FC, type ComponentProps, useState } from 'react'
+import styles from './FormInput.module.scss'
 
-interface InputProps
-  extends Omit<ComponentProps<typeof TextInput>, 'onChange'> {
+interface InputProps extends Omit<ComponentProps<typeof TextInput>, 'onChange'> {
   onChange?: (currentValue: string) => void
 }
 
@@ -32,9 +31,7 @@ export const FormInput: FC<InputProps> = ({
         pin={pin}
         type={type}
         name={name}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          changeHandler(event.target.value)
-        }
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => changeHandler(event.target.value)}
         {...props}
       />
     </div>

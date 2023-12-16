@@ -1,7 +1,7 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
-import MainPage from './pages/mainPage'
-import AuthPage from './pages/AuthPage'
 import ErrorPage from '@pages/errorPage'
+import AuthPage from './pages/AuthPage'
+import MainPage from './pages/mainPage'
 
 const router = createBrowserRouter([
   {

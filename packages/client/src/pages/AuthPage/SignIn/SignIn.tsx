@@ -1,12 +1,10 @@
-import React, { FC, useState, useMemo } from 'react'
 import { Button } from '@gravity-ui/uikit'
+import { type FC, useState } from 'react'
 import FormInput from '../../../components/FormInput'
+import { type signInDataType } from '../../../utils/types'
 import styles from './signin.module.scss'
-import { signInDataType } from '../../../utils/types'
 
-const submit = (data: signInDataType) => {
-  console.log(data)
-}
+const submit = (data: signInDataType) => data
 
 export const SignIn: FC = () => {
   const [signInData, setSignInData] = useState({
@@ -26,9 +24,7 @@ export const SignIn: FC = () => {
         placeholder="Пароль"
         name="password"
         type="password"
-        onChange={(password: string) =>
-          setSignInData({ ...signInData, password })
-        }
+        onChange={(password: string) => setSignInData({ ...signInData, password })}
       />
       <Button
         className={styles.submitBtn}

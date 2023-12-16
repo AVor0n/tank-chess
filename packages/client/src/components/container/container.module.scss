@@ -1,18 +1,15 @@
 .cardContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-    background: var(--colors-gray-light);
-
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100vh;
+  background: var(--colors-gray-light);
 }
+
 .card {
-    width: 300px;
-    margin-top: 0px;
-    background: var(--colors-white);
-    padding: 30px;
-
+  inline-size: 300px;
+  margin-block-start: 0;
+  padding: 30px;
+  background: var(--colors-white);
 }
-
-
