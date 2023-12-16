@@ -1,4 +1,4 @@
-import { RULES_LIST } from '../../../utils/constants'
+import { RULES_LIST } from '../constants'
 import styles from './gameRule.module.scss'
 
 interface GameRuleProps {
