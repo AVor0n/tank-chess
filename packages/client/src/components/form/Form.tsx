@@ -1,15 +1,9 @@
-import { useState, PropsWithChildren, FormEvent } from 'react'
+import { useState, useMemo, type PropsWithChildren, type FormEvent } from 'react'
 import { FormContext } from '../../context/formContext'
 import { useFormValidate } from '../../hook/useFormValidate'
-import { useToaster } from '@gravity-ui/uikit'
-import { ToastProps } from '@gravity-ui/uikit/build/esm/components/Toaster/types'
 
-type OwnProps = {
-  onSubmit?: (
-    data: Record<string, any>,
-    toaster: (props: ToastProps) => void
-  ) => void
-  onChange?: () => void
+interface OwnProps {
+  onSubmit?: (data: Record<string, File | string>) => void
   children: JSX.Element | JSX.Element[]
 }
 
@@ -25,15 +19,13 @@ export const Form = ({ children, onSubmit }: FormProps) => {
   const [touched, setTouched] = useState(false)
   const [error, isValid, validate] = useFormValidate()
 
-  const { add: toaster } = useToaster()
-
   const onSubmitForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.target as HTMLFormElement)
     const data = Object.fromEntries(formData)
     const isValidate = validate(data)
     if (isValidate && onSubmit) {
-      onSubmit(data, toaster)
+      onSubmit(data)
     }
     setState(data)
   }
@@ -45,17 +37,14 @@ export const Form = ({ children, onSubmit }: FormProps) => {
   const onChange = (event: FormEvent<HTMLFormElement>) => {
     const target = event.target as HTMLFormElement
     const { name, value } = target
-    setState({ ...state, [name]: value })
+    setState({ ...state, [name]: value as string })
     setTouched(true)
   }
 
   return (
-    <form
-      action="#"
-      onSubmit={onSubmitForm}
-      onChange={onChange}
-      onBlur={onBlur}>
-      <FormContext.Provider value={{ state, isValid, error, touched }}>
+    <form action="#" onSubmit={onSubmitForm} onChange={onChange} onBlur={onBlur}>
+      <FormContext.Provider
+        value={useMemo(() => ({ state, isValid, error, touched }), [state, isValid, error, touched])}>
         {children}
       </FormContext.Provider>
     </form>

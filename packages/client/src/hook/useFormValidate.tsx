@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import formValidate from '../utils/validate'
 
-type data = Record<string, any>
+type data = Record<string, File | string>
 type validate = (data: data) => boolean
 
 export const useFormValidate = (): [data, boolean, validate] => {
