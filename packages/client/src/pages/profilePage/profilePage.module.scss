@@ -1,0 +1,41 @@
+.main {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-around;
+  color: var(--colors-green-text);
+}
+
+.content {
+  margin: 280px 5em;
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  flex-grow: 1;
+  align-content: center;
+  margin: 0 5px;
+}
+
+.profile h3 {
+  margin: 0.5em 0;
+}
+
+.profile__about {
+  margin: 0 3em;
+  display: grid;
+  gap: 0.5em
+}
+
+.profile__password {
+  display: grid;
+  gap: 0.5em
+}
+
+.muted {
+  color:  var(--colors-gray-dark)
+}
+
