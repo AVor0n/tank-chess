@@ -4,7 +4,7 @@ import GamePage from '@pages/gamePage'
 import MainPage from '@pages/mainPage'
 import ProfilePage from '@pages/profilePage'
 import { UserContext } from './context/userContext'
-import { User } from './types/types'
+import { type User } from './types/types'
 
 const router = createBrowserRouter([
   {
@@ -21,11 +21,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: (
-      <UserContext.Consumer>
-        {(value: User) => <ProfilePage {...value} />}
-      </UserContext.Consumer>
-    ),
+    element: <UserContext.Consumer>{(value: User) => <ProfilePage {...value} />}</UserContext.Consumer>,
   },
   {
     path: '/rating',

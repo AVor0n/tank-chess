@@ -1,12 +1,11 @@
-import { ThemeProvider } from '@gravity-ui/uikit'
+import { ToasterComponent, ToasterProvider, ThemeProvider } from '@gravity-ui/uikit'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
+import { UserContext } from './context/userContext'
 import router from './router'
 import './assets/styles/index.css'
-import { UserContext } from './context/userContext'
-import { ToasterComponent, ToasterProvider } from '@gravity-ui/uikit'
-import { User } from './types/types'
+import { type User } from './types/types'
 
 // Мок без авторизации
 const user: User = {
@@ -29,5 +28,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         ,
       </UserContext.Provider>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

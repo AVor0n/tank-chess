@@ -1,6 +1,6 @@
 // Контекст активного пользователя
 import React from 'react'
-import { User } from '../types/types'
+import { type User } from '../types/types'
 
 const userDefault: User = {
   id: null,

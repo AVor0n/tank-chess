@@ -1,41 +1,44 @@
 .main {
-  max-width: 100%;
   display: flex;
   justify-content: space-around;
+  max-inline-size: 100%;
   color: var(--colors-green-text);
 }
 
 .content {
-  margin: 280px 5em;
   display: flex;
   flex-grow: 1;
   align-content: center;
   align-items: center;
+  margin-block: 280px;
+  margin-inline: 5em;
 }
 
 .profile {
   display: flex;
   flex-grow: 1;
   align-content: center;
-  margin: 0 5px;
+  margin-block: 0;
+  margin-inline: 5px;
 }
 
 .profile h3 {
-  margin: 0.5em 0;
+  margin-block: 0.5em;
+  margin-inline: 0;
 }
 
-.profile__about {
-  margin: 0 3em;
+.about {
   display: grid;
-  gap: 0.5em
+  gap: 0.5em;
+  margin-block: 0;
+  margin-inline: 3em;
 }
 
-.profile__password {
+.password {
   display: grid;
-  gap: 0.5em
+  gap: 0.5em;
 }
 
 .muted {
-  color:  var(--colors-gray-dark)
+  color: var(--colors-gray-dark);
 }
-
