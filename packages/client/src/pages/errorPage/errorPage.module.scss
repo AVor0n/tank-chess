@@ -25,6 +25,14 @@
   line-height: normal;
 }
 
+.subtitle {
+  margin-block: 10px;
+  margin-inline: 0;
+  color: var(--colors-green);
+  font-weight: 400;
+  font-size: 16px;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
