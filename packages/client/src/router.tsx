@@ -37,11 +37,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/500',
-    element: <p>Страница 500</p>,
+    element: <ErrorPage type="Server Error" />,
   },
   {
     path: '*',
-    element: <ErrorPage />,
+    element: <ErrorPage type="Not Found" />,
   },
 ])
 
