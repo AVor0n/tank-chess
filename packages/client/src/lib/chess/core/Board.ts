@@ -1,18 +1,6 @@
-import { type BoardPosition } from '../types'
+import { type ItemOnBoard, type BoardPosition } from '../types'
 import { getNextCell } from '../utils/step'
 import { type Tank } from './Tank'
-
-export type ItemOnBoard =
-  | {
-      type: 'empty'
-    }
-  | {
-      type: 'wall'
-    }
-  | {
-      type: 'tank'
-      data: Tank
-    }
 
 export class Board {
   private _size = 0

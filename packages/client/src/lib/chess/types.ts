@@ -1,3 +1,5 @@
+import { type Tank } from './core'
+
 /** Действия, которые может совершить танк */
 export const enum ACTION_TYPE {
   /** Выстрел прямо */
@@ -35,3 +37,18 @@ export interface BoardPosition {
   /** коэффициент поворота от 0 до 7. Для перевода в градусы умножить на 45° */
   rotation: number
 }
+
+export interface EmptyCell {
+  type: 'empty'
+}
+
+export interface WallCell {
+  type: 'wall'
+}
+
+export interface TankCell {
+  type: 'tank'
+  data: Tank
+}
+
+export type ItemOnBoard = EmptyCell | WallCell | TankCell
