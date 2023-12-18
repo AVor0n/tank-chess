@@ -1,9 +1,9 @@
 export interface User {
-  id: null | string
-  phone: null | string
-  second_name: null | string
-  avatar?: null | string
-  login: null | string
-  first_name: null | string
-  email: null | string
+  id: string
+  phone: string
+  second_name: string
+  avatar?: string
+  login: string
+  first_name: string
+  email: string
 }

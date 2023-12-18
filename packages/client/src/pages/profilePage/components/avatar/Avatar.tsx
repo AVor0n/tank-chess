@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { URL_RESOURCES } from '@utils/constants'
-import userService from '../service'
+import userService from '../../../../service'
 import noAvatar from '@assets/images/no_avatar.svg'
 import styles from './avatar.module.scss'
 
@@ -22,7 +22,7 @@ export const Avatar = ({ url }: AvatarProps) => {
 
   return (
     <div className={styles.avatar}>
-      <label htmlFor="upload-photo">
+      <label className={styles.label} htmlFor="upload-photo">
         <img src={link} alt="" />
       </label>
       <input type="file" name="avatar" id="upload-photo" onChange={onChange} className={styles.upload} />
