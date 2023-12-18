@@ -97,6 +97,7 @@ module.exports = (async () => {
             optionalDependencies: false,
           },
         ],
+        'import/no-unresolved': 'off',
       },
     },
     clientConfig,
