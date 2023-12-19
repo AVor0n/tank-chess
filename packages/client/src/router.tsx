@@ -2,6 +2,9 @@ import { createBrowserRouter, useParams } from 'react-router-dom'
 import ErrorPage from '@pages/errorPage'
 import GamePage from '@pages/gamePage'
 import MainPage from '@pages/mainPage'
+import ProfilePage from '@pages/profilePage'
+import { UserContext } from './context/userContext'
+import { type User } from './types/types'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +21,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <p>Cтраница профиля</p>,
+    element: <UserContext.Consumer>{(value: User) => <ProfilePage {...value} />}</UserContext.Consumer>,
   },
   {
     path: '/rating',
