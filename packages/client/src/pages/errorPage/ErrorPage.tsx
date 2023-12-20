@@ -1,9 +1,14 @@
 import { Button } from '@gravity-ui/uikit'
 import { useNavigate } from 'react-router-dom'
 import notFound from '@assets/images/notFound.png'
+import serverError from '@assets/images/serverError.png'
 import styles from './errorPage.module.scss'
 
-export const ErrorPage = () => {
+interface ErrorPageProps {
+  type: string
+}
+
+export const ErrorPage = ({ type }: ErrorPageProps) => {
   const navigate = useNavigate()
 
   return (
@@ -16,8 +21,9 @@ export const ErrorPage = () => {
         <Button size="xl" className={styles.button} onClick={() => navigate(-1)}>
           Вернуться назад
         </Button>
+        <p className={styles.subtitle}>или попробуйте позже</p>
       </div>
-      <img src={notFound} alt="Not Found" className={styles.image} />
+      <img src={type === 'Server Error' ? serverError : notFound} alt={type} className={styles.image} />
     </section>
   )
 }
