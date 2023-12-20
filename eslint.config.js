@@ -97,7 +97,7 @@ module.exports = (async () => {
             optionalDependencies: false,
           },
         ],
-        'import/no-unresolved': [2, { caseSensitive: false }],
+        'import/no-unresolved': [2, { caseSensitive: true }],
       },
     },
     clientConfig,
