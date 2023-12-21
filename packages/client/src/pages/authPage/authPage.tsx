@@ -1,8 +1,8 @@
 import { Tabs } from '@gravity-ui/uikit'
 import { useState } from 'react'
-import Container from '../../components/Container'
-import SignIn from './SignIn'
-import SignUp from './SignUp'
+import Container from '../../components/container'
+import SignIn from './signIn'
+import SignUp from './signUp'
 
 export const AuthPage = () => {
   const [activeTab, setActiveTab] = useState('signin')

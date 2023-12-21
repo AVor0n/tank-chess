@@ -1,6 +1,6 @@
 import { type TANK_TYPE } from 'lib/chess'
 import { tankTypeToName } from '../../constants'
-import styles from './TankInfo.module.scss'
+import styles from './tankInfo.module.scss'
 
 interface TankInfoProps {
   type: TANK_TYPE

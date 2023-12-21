@@ -2,9 +2,9 @@ import { EventBus } from '../../eventBus'
 import { CHARS, PLAYER_COLORS, START_BOARD_TEMPLATE, CHAR_TO_TANK_TYPE } from '../constants'
 import { ACTION_TYPE, TANK_TYPE } from '../types'
 import { getNextCell } from '../utils/step'
-import { Board } from './Board'
-import { Player } from './Player'
-import { Tank } from './Tank'
+import { Board } from './board'
+import { Player } from './player'
+import { Tank } from './tank'
 
 export class Game extends EventBus<{
   /** Срабатывает прямо перед тем, как танк совершит действие */

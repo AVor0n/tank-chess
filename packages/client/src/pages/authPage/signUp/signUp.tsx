@@ -1,8 +1,8 @@
 import { Link, Button } from '@gravity-ui/uikit'
 import { type FC, useState } from 'react'
-import FormInput from '../../../components/FormInput'
+import FormInput from '../../../components/formInput'
 import { type signUpDataType } from '../../../utils/types'
-import styles from './SignUp.module.scss'
+import styles from './signUp.module.scss'
 
 interface SignUpProps {
   backSignIn?: () => void
