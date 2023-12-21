@@ -1,3 +1,3 @@
-import { ProfilePage } from './ProfilePage'
+import { ProfilePage } from './profilePage'
 
 export default ProfilePage

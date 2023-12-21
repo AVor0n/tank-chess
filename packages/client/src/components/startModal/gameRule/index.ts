@@ -1,3 +1,3 @@
-import { GameRule } from './GameRule'
+import { GameRule } from './gameRule'
 
 export default GameRule

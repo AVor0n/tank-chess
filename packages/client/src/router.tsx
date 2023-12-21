@@ -1,5 +1,5 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
-import AuthPage from '@pages/AuthPage'
+import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
 import GamePage from '@pages/gamePage'
 import MainPage from '@pages/mainPage'

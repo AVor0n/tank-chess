@@ -1,6 +1,6 @@
 import { TextInput } from '@gravity-ui/uikit'
 import { type FC, type ComponentProps, useState } from 'react'
-import styles from './FormInput.module.scss'
+import styles from './formInput.module.scss'
 
 interface InputProps extends Omit<ComponentProps<typeof TextInput>, 'onChange'> {
   onChange?: (currentValue: string) => void

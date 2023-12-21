@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { type Game } from 'lib/chess'
-import { TankController } from '../TankController'
-import { TankInfo } from '../TankInfo'
-import styles from './Info.module.scss'
+import { TankController } from '../tankController'
+import { TankInfo } from '../tankInfo'
+import styles from './info.module.scss'
 
 export const GameInfo = ({ game }: { game: Game }) => {
   const [update, setUpdate] = useState(0)

@@ -1,8 +1,8 @@
 import { Button } from '@gravity-ui/uikit'
 import { type FC, useState } from 'react'
-import FormInput from '../../../components/FormInput'
+import FormInput from '../../../components/formInput'
 import { type signInDataType } from '../../../utils/types'
-import styles from './signin.module.scss'
+import styles from './signIn.module.scss'
 
 const submit = (data: signInDataType) => data
 

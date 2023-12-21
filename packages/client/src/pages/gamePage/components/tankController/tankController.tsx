@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import styles from './TankController.module.scss'
+import styles from './tankController.module.scss'
 
 interface TankControllerProps {
   canEndMove: boolean

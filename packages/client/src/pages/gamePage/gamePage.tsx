@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import StartModal from '@components/startModal'
 import { Game } from '@lib/chess'
 import { ChessCanvasUI } from '@lib/reactChessUI'
-import { GameInfo } from './components/Info'
-import styles from './GamePage.module.scss'
+import { GameInfo } from './components/info'
+import styles from './gamePage.module.scss'
 
 const game = new Game()
 const gameOptions = {
