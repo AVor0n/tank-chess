@@ -1,0 +1,19 @@
+@import url(../fonts/index.css);
+
+.g-root {
+  --g-font-family-sans: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  --g-text-header-font-weight: 600;
+  --g-text-subheader-font-weight: 600;
+  --g-text-display-font-weight: 600;
+  --g-text-accent-font-weight: 600;
+
+  --g-color-base-brand: #749080;
+  --g-color-base-brand-hover: #68866f;
+  --g-color-base-selection: #19241d;
+  --g-color-base-selection-hover: #19241d;
+  --g-color-line-brand: #5b7c6c;
+  --g-color-text-brand: #5b7c6c;
+  --g-color-text-brand-contrast: #fff;
+  --g-color-text-link: #68866f;
+  --g-color-text-link-hover: #68866f;
+}

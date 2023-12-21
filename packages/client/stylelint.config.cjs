@@ -19,6 +19,7 @@ module.exports = {
     'liberty/use-logical-spec': true,
     'plugin/declaration-block-no-ignored-properties': true,
     'order/properties-order': propertyOrdering,
+    'selector-class-pattern': null
   },
   customSyntax: 'postcss-scss',
   defaultSeverity: 'error',

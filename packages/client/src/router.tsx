@@ -1,4 +1,5 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
+import AuthPage from '@pages/AuthPage'
 import ErrorPage from '@pages/errorPage'
 import GamePage from '@pages/gamePage'
 import MainPage from '@pages/mainPage'
@@ -10,7 +11,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <p>Cтраница входа и регистрации</p>,
+    element: <AuthPage />,
   },
   {
     path: '/game',
