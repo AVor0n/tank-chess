@@ -1,0 +1,12 @@
+.loaderContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100vh;
+  background: var(--colors-gray-dark);
+}
+
+.loader {
+  inline-size: 50px;
+}

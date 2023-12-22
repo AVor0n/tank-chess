@@ -3,7 +3,7 @@ import React from 'react'
 import { type User } from '../types/types'
 
 const userDefault: User = {
-  id: '',
+  id: 0,
   phone: '',
   second_name: '',
   login: '',
