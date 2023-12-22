@@ -1,5 +1,6 @@
-import { Modal, Button, Pagination, type PaginationProps } from '@gravity-ui/uikit'
-import { useCallback, useState } from 'react'
+import { Modal, Button, Pagination } from '@gravity-ui/uikit'
+import { useState } from 'react'
+import { usePagination } from 'hook/usePagination'
 import { RULES_LIST } from './constants'
 import GameRule from './gameRule'
 import styles from './startModal.module.scss'
@@ -10,14 +11,7 @@ interface StartModalProps {
 
 export const StartModal = ({ startGame }: StartModalProps) => {
   const [open, setOpen] = useState(true)
-  const [currentPage, setCurrentPage] = useState({
-    page: 1,
-    pageSize: 1,
-  })
-
-  const handleUpdate: PaginationProps['onUpdate'] = useCallback((page, pageSize) => {
-    setCurrentPage(prevState => ({ ...prevState, page, pageSize }))
-  }, [])
+  const [currentPage, handleUpdate] = usePagination(1)
 
   const handleStartButton = () => {
     setOpen(false)
