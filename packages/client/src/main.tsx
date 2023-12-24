@@ -26,7 +26,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <RouterProvider router={router} />
           <ToasterComponent className="optional additional classes" />
         </ToasterProvider>
-        ,
       </UserContext.Provider>
     </ThemeProvider>
   </React.StrictMode>,
