@@ -6,7 +6,7 @@ import Container from '../../components/container'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
 import AuthService from '../../service/auth.service'
-import { type LocationState, type signUpDataType, type signInDataType } from '../../types/types'
+import { type LocationState, type SignUpDataType, type SignInDataType } from '../../types/types'
 import SignIn from './components/signIn'
 import SignUp from './components/signUp'
 
@@ -27,14 +27,14 @@ export const AuthPage = () => {
   })
 
   const submitLogin = (data: Record<string, string | File>) => {
-    AuthService.signIn(data as unknown as signInDataType, () => {
+    AuthService.signIn(data as unknown as SignInDataType, () => {
       setAuth(true)
       navigate(from, { replace: true })
     })
   }
 
   const submitReg = (data: Record<string, string | File>) => {
-    AuthService.signUp(data as unknown as signUpDataType, () => {
+    AuthService.signUp(data as unknown as SignUpDataType, () => {
       setAuth(true)
       navigate(from, { replace: true })
     })

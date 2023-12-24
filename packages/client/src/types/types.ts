@@ -8,7 +8,7 @@ export interface User {
   email: string
 }
 
-export interface signUpDataType {
+export interface SignUpDataType {
   first_name: string
   second_name: string
   login: string
@@ -17,7 +17,7 @@ export interface signUpDataType {
   password: string
 }
 
-export interface signInDataType {
+export interface SignInDataType {
   login: string
   password: string
 }

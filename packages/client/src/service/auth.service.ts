@@ -1,11 +1,11 @@
-import { type signUpDataType, type signInDataType, type User, type ErrorResponse } from '../types/types'
+import { type SignUpDataType, type SignInDataType, type User, type ErrorResponse } from '../types/types'
 import { BASE_URL } from '../utils/constants'
 
 /* eslint-disable no-console*/
 class AuthService {
   baseURL: string = BASE_URL
 
-  async signUp(data: signUpDataType, afterSignUp: (login: string, password: string) => void): Promise<void> {
+  async signUp(data: SignUpDataType, afterSignUp: (login: string, password: string) => void): Promise<void> {
     try {
       const response: Response = await fetch(this.baseURL + '/auth/signup', {
         method: 'POST',
@@ -28,7 +28,7 @@ class AuthService {
     }
   }
 
-  async signIn(data: signInDataType, afterSignIn: () => void): Promise<void> {
+  async signIn(data: SignInDataType, afterSignIn: () => void): Promise<void> {
     try {
       const response = await fetch(this.baseURL + '/auth/signin', {
         method: 'POST',
