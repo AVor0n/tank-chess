@@ -1,17 +1,10 @@
-import { Link, Button } from '@gravity-ui/uikit'
-import { type FC, useState, useContext } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import FormInput from '../../../components/formInput'
-import AuthContext from '../../../context/authContext'
-import AuthService from '../../../service/auth.service'
-import { type signUpDataType, type LocationState } from '../../../types/types'
+import { Button } from '@gravity-ui/uikit'
+import { useState } from 'react'
+import FormInput from '@components/formInput'
+import { type FormProps } from '../../../../types/types'
 import styles from './signUp.module.scss'
 
-interface SignUpProps {
-  backSignIn?: () => void
-}
-
-export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
+export const SignUp = ({ state, error, isValid, touched }: FormProps) => {
   const [signUpData, setSignUpData] = useState({
     first_name: '',
     second_name: '',
@@ -20,50 +13,57 @@ export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
     phone: '',
     password: '',
   })
-  const { setAuth } = useContext(AuthContext)
-  const location = useLocation()
-  const navigate = useNavigate()
-  const prevAddress = (location?.state as LocationState)?.location?.pathname
-  const from: string = prevAddress ? prevAddress : '/'
 
-  const submit = (data: signUpDataType, changeAuth: (statement: boolean) => void) => {
-    AuthService.signUp(data, () => {
-      changeAuth(true)
-      navigate(from, { replace: true })
-    })
-  }
   return (
-    <form className={styles.form}>
+    <div className={styles.form}>
       <FormInput
         placeholder="Имя"
         name="first_name"
         onChange={(first_name: string) => setSignUpData({ ...signUpData, first_name })}
+        value={state.first_name}
+        errorMessage={error.first_name}
+        validationState={error.first_name ? 'invalid' : undefined}
       />
       <FormInput
         placeholder="Фамилия"
         name="second_name"
         onChange={(second_name: string) => setSignUpData({ ...signUpData, second_name })}
+        value={state.second_name}
+        errorMessage={error.second_name}
+        validationState={error.second_name ? 'invalid' : undefined}
       />
       <FormInput
         placeholder="Логин"
         name="login"
         onChange={(login: string) => setSignUpData({ ...signUpData, login })}
+        value={state.login}
+        errorMessage={error.login}
+        validationState={error.login ? 'invalid' : undefined}
       />
       <FormInput
         placeholder="E-mail"
         name="email"
         onChange={(email: string) => setSignUpData({ ...signUpData, email })}
+        value={state.email}
+        errorMessage={error.email}
+        validationState={error.email ? 'invalid' : undefined}
       />
       <FormInput
         placeholder="Телефон"
-        name="password"
+        name="phone"
         onChange={(phone: string) => setSignUpData({ ...signUpData, phone })}
+        value={state.phone}
+        errorMessage={error.phone}
+        validationState={error.phone ? 'invalid' : undefined}
       />
       <FormInput
         placeholder="Пароль"
         name="password"
         type="password"
         onChange={(password: string) => setSignUpData({ ...signUpData, password })}
+        value={state.password}
+        errorMessage={error.password}
+        validationState={error.password ? 'invalid' : undefined}
       />
 
       <Button
@@ -72,16 +72,10 @@ export const SignUp: FC<SignUpProps> = ({ backSignIn }) => {
         width="max"
         pin="brick-brick"
         size="xl"
-        onClick={() => {
-          submit(signUpData, setAuth)
-        }}>
+        type="submit"
+        disabled={!touched || !isValid}>
         Зарегистрироваться
       </Button>
-      {backSignIn ? (
-        <div className={styles.addLink}>
-          <Link onClick={backSignIn}>Авторизация</Link>
-        </div>
-      ) : null}
-    </form>
+    </div>
   )
 }

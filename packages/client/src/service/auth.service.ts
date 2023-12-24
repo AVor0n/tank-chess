@@ -5,52 +5,55 @@ import { BASE_URL } from '../utils/constants'
 class AuthService {
   baseURL: string = BASE_URL
 
-  public signUp(data: signUpDataType, afterSignUp: (login: string, password: string) => void): void {
-    fetch(this.baseURL + '/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-      .then(response => response.json())
-      .then(result => {
-        if ((result as User).id > 0) afterSignUp(data.login, data.password)
-        else {
-          throw new Error((result as ErrorResponse).reason)
-        }
+  async signUp(data: signUpDataType, afterSignUp: (login: string, password: string) => void): Promise<void> {
+    try {
+      const response: Response = await fetch(this.baseURL + '/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        mode: 'cors',
       })
-      .catch(error => console.log(error))
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result: User | ErrorResponse = await response?.json()
+      if ((result as User).id > 0) afterSignUp(data.login, data.password)
+      else {
+        throw new Error((result as ErrorResponse).reason)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  public signIn(data: signInDataType, afterSignIn: () => void): void {
-    fetch(this.baseURL + '/auth/signin', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-      .then(response => {
-        if (response.status !== 200) {
-          return response.json()
-        }
-        return response.text()
+  async signIn(data: signInDataType, afterSignIn: () => void): Promise<void> {
+    try {
+      const response = await fetch(this.baseURL + '/auth/signin', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        mode: 'cors',
       })
-      .then(result => {
-        if ((result as string) === 'OK') {
-          afterSignIn()
-        } else {
-          throw new Error((result as ErrorResponse).reason)
-        }
-      })
-      .catch(error => console.log(error))
+      let result: string | ErrorResponse
+      if (response?.status !== 200) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        result = await response.json()
+      } else result = await response.text()
+
+      if (result === 'OK') {
+        afterSignIn()
+      } else {
+        throw new Error((result as ErrorResponse).reason)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async logout() {
@@ -65,22 +68,6 @@ class AuthService {
     if (response.status !== 200) {
       throw new Error('Ошибка!')
     }
-
-    /*
-      return await fetch(this.baseURL + '/auth/logout', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        credentials: 'include',
-        mode: 'cors',
-      })
-        .then(async response => {
-          if (response.status !== 200) {
-            throw new Error('Ошибка!')
-          }
-        })
-        .catch(error => console.log(error))*/
   }
 
   async getUser(): Promise<User | void> {

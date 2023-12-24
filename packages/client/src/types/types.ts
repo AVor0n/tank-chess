@@ -30,3 +30,10 @@ export interface ErrorResponse {
 export interface LocationState {
   location: Location
 }
+
+export interface FormProps {
+  state: Record<string, string>
+  error: Record<string, string>
+  isValid: boolean
+  touched: boolean
+}
