@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  color: var(--colors-green-text);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  margin-inline: 0;
+  font-weight: 600;
+  font-size: 48px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.table {
+  min-block-size: 80%;
+  margin-block: 50px;
+  margin-inline: 0;
+  font-size: 18px;
+
+  table {
+    inline-size: 100%;
+  }
+}
+
+.link {
+  color: inherit;
+  font-weight: 600;
+  font-size: 24px;
+  font-style: normal;
+  line-height: normal;
+  text-decoration: none;
+}
+
+.paginator {
+  align-self: center;
+}

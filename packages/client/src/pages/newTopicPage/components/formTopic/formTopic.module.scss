@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-block: 50px 0;
+  margin-inline: 0;
+  padding: 10px;
+  color: var(--colors-green-text);
+  border: 1px solid var(--colors-green-light);
+  border-radius: 5px;
+}
+
+.title {
+  margin-block: 10px 0;
+  margin-inline: 0;
+  color: var();
+  font-weight: 600;
+  font-size: 32px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.text {
+  inline-size: 100%;
+}

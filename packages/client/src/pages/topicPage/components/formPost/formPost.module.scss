@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  inline-size: 50%;
+  padding: 10px;
+  border: 1px solid var(--colors-green-light);
+  border-radius: 5px;
+}
+
+.title {
+  margin-block: 10px 0;
+  margin-inline: 0;
+  font-weight: 400;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.text {
+  inline-size: 100%;
+}

@@ -9,7 +9,7 @@ import './assets/styles/index.css'
 import { type User } from './types/types'
 
 // Мок без авторизации
-const user: User = {
+export const user: User = {
   id: '423',
   first_name: 'Petya',
   second_name: 'Pupkin',
