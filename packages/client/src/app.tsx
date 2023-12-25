@@ -19,19 +19,21 @@ const user: User = {
 }
 
 const App = () => {
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [isAuth, setAuth] = useState<boolean>(false)
   const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
   useEffect(() => {
     AuthService.getUser()
       .then(user => {
         if (user && user?.id > 0) setAuth(true)
-        setLoading(true)
+        setLoading(false)
       })
-      .catch(() => setLoading(true))
-  })
+      .catch(() => setLoading(false))
+  }, [])
 
   return loading ? (
+    <PageLoader />
+  ) : (
     <React.StrictMode>
       <ThemeProvider theme="light">
         <AuthContext.Provider value={authInfo}>
@@ -44,8 +46,6 @@ const App = () => {
         </AuthContext.Provider>
       </ThemeProvider>
     </React.StrictMode>
-  ) : (
-    <PageLoader />
   )
 }
 

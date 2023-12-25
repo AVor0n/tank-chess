@@ -2,6 +2,7 @@ import { createBrowserRouter, useParams } from 'react-router-dom'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
 import GamePage from '@pages/gamePage'
+import Leaderboard from '@pages/leaderboad'
 import MainPage from '@pages/mainPage'
 import ProfilePage from '@pages/profilePage'
 import PrivateRoute from './components/privateRoute'
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/rating',
-        element: <p>Cтраница лидерборда</p>,
+        element: <Leaderboard />,
       },
       {
         path: '/forum',
