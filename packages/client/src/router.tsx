@@ -1,11 +1,15 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
+import ForumPage from '@pages/forumPage'
 import GamePage from '@pages/gamePage'
 import Leaderboard from '@pages/leaderboad'
 import MainPage from '@pages/mainPage'
+import NewTopicPage from '@pages/newTopicPage'
 import ProfilePage from '@pages/profilePage'
+
 import PrivateRoute from './components/privateRoute'
+import TopicPage from '@pages/topicPage'
 import { UserContext } from './context/userContext'
 import { type User } from './types/types'
 
@@ -21,7 +25,7 @@ const router = createBrowserRouter([
         path: '/',
         element: <MainPage />,
       },
-      {
+      {    
         path: '/game',
         element: <GamePage />,
       },
@@ -35,14 +39,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/forum',
-        element: <p>Страница форума</p>,
+        element: <ForumPage />,
       },
       {
         path: '/forum/:topicId',
         Component: () => {
           const { topicId } = useParams()
-          return <p>Страница форума, тема {topicId}</p>
+          return <TopicPage topicId={topicId!} />
         },
+      },
+      {
+        path: '/forum/add-new-topic',
+        Component: () => <NewTopicPage />,
       },
       {
         path: '/500',
@@ -51,9 +59,9 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <ErrorPage type="Not Found" />,
-      },
-    ],
-  },
+      }
+    ]
+  }
 ])
 
 export default router

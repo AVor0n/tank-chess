@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--colors-green-text);
+  border-block-end: 1px solid var(--colors-gray);
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 28px;
+  font-style: normal;
+  line-height: normal;
+}
+
+.text {
+  margin-block: 50px 0;
+  margin-inline: 0;
+  padding-block: 15px;
+  padding-inline: 0;
+}
+
+.info {
+  min-inline-size: 150px;
+  margin-block: 50px 0;
+  margin-inline: 0;
+}
+
+.message {
+  margin-block: 10px 0;
+  margin-inline: 0;
+  font-weight: 400;
+  font-size: 18px;
+  font-style: normal;
+  line-height: normal;
+}
