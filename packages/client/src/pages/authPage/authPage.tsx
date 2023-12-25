@@ -24,7 +24,7 @@ export const AuthPage = () => {
 
   useEffect(() => {
     if (isAuth) navigate(from, { replace: true }) //
-  }, [isAuth, from])
+  }, [isAuth, from, navigate])
 
   const submitLogin = (data: Record<string, string | File>) => {
     AuthService.signIn(data as unknown as SignInDataType, () => {
