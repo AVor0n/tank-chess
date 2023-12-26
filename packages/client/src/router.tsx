@@ -1,4 +1,5 @@
 import { createBrowserRouter, useParams } from 'react-router-dom'
+import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
 import ForumPage from '@pages/forumPage'
@@ -13,48 +14,53 @@ import { type User } from './types/types'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <MainPage />,
-  },
-  {
     path: '/login',
     element: <AuthPage />,
   },
   {
-    path: '/game',
-    element: <GamePage />,
-  },
-  {
-    path: '/profile',
-    element: <UserContext.Consumer>{(value: User) => <ProfilePage {...value} />}</UserContext.Consumer>,
-  },
-  {
-    path: '/rating',
-    element: <Leaderboard />,
-  },
-  {
-    path: '/forum',
-    element: <ForumPage />,
-  },
-  {
-    path: '/forum/:topicId',
-    Component: () => {
-      const { topicId } = useParams()
-      return <TopicPage topicId={topicId!} />
-    },
-  },
-  {
-    path: '/forum/add-new-topic',
-    Component: () => <NewTopicPage />,
-  },
-  {
-    path: '/500',
-    element: <ErrorPage type="Server Error" />,
-  },
-  {
-    path: '*',
-    element: <ErrorPage type="Not Found" />,
-  },
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />,
+      },
+      {    
+        path: '/game',
+        element: <GamePage />,
+      },
+      {
+        path: '/profile',
+        element: <UserContext.Consumer>{(value: User) => <ProfilePage {...value} />}</UserContext.Consumer>,
+      },
+      {
+        path: '/rating',
+        element: <Leaderboard />,
+      },
+      {
+        path: '/forum',
+        element: <ForumPage />,
+      },
+      {
+        path: '/forum/:topicId',
+        Component: () => {
+          const { topicId } = useParams()
+          return <TopicPage topicId={topicId!} />
+        },
+      },
+      {
+        path: '/forum/add-new-topic',
+        Component: () => <NewTopicPage />,
+      },
+      {
+        path: '/500',
+        element: <ErrorPage type="Server Error" />,
+      },
+      {
+        path: '*',
+        element: <ErrorPage type="Not Found" />,
+      }
+    ]
+  }
 ])
 
 export default router

@@ -1,23 +1,25 @@
 import { Button } from '@gravity-ui/uikit'
-import { type FC, useState } from 'react'
-import FormInput from '../../../components/formInput'
-import { type signInDataType } from '../../../utils/types'
+import { useState } from 'react'
+import FormInput from '@components/formInput'
+import { type FormProps } from '../../../../types/types'
 import styles from './signIn.module.scss'
 
-const submit = (data: signInDataType) => data
-
-export const SignIn: FC = () => {
+export const SignIn = ({ state, error, isValid, touched }: FormProps) => {
   const [signInData, setSignInData] = useState({
     login: '',
     password: '',
   })
+
   return (
-    <form className={styles.form}>
+    <div className={styles.form}>
       <FormInput
         key="login"
         placeholder="Логин"
         name="login"
         onChange={(login: string) => setSignInData({ ...signInData, login })}
+        value={state.login}
+        errorMessage={error.login}
+        validationState={error.login ? 'invalid' : undefined}
       />
       <FormInput
         key="password"
@@ -25,6 +27,9 @@ export const SignIn: FC = () => {
         name="password"
         type="password"
         onChange={(password: string) => setSignInData({ ...signInData, password })}
+        value={state.password}
+        errorMessage={error.password}
+        validationState={error.password ? 'invalid' : undefined}
       />
       <Button
         className={styles.submitBtn}
@@ -32,9 +37,10 @@ export const SignIn: FC = () => {
         width="max"
         pin="brick-brick"
         size="xl"
-        onClick={() => submit(signInData)}>
+        type="submit"
+        disabled={!touched || !isValid}>
         Войти
       </Button>
-    </form>
+    </div>
   )
 }

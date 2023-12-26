@@ -21,3 +21,6 @@ export const MAX_LENGTH = 'maxLength'
 export const errors = {
   default: 'Проверьте правильность поля',
 }
+
+/* URLS */
+export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
