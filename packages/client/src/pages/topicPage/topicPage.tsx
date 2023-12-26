@@ -27,7 +27,7 @@ const POSTS: PostDto[] = [
     id: '1',
     topicId: '1',
     user: {
-      id: '423',
+      id: 423,
       first_name: 'Petya',
       second_name: 'Pupkin',
       phone: '+79001001100',
@@ -43,7 +43,7 @@ const POSTS: PostDto[] = [
     id: '2',
     topicId: '1',
     user: {
-      id: '423',
+      id: 423,
       first_name: 'Petya',
       second_name: 'Pupkin',
       phone: '+79001001100',
@@ -70,7 +70,7 @@ export const TopicPage = ({ topicId }: TopicProps) => {
       ...data,
       topicId,
       user: {
-        id: '423',
+        id: 423,
         first_name: 'Petya',
         second_name: 'Pupkin',
         phone: '+79001001100',
