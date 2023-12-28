@@ -1,22 +1,24 @@
 import { ToasterComponent, ToasterProvider, ThemeProvider } from '@gravity-ui/uikit'
 import React, { useState, useEffect, useMemo } from 'react'
+import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import PageLoader from './components/pageLoader'
 import AuthContext from './context/authContext'
-import { UserContext } from './context/userContext'
+//import { UserContext } from './context/userContext'
 import router from './router'
 import AuthService from './service/auth.service'
-import { type User } from './types/types'
+//import { type User } from './types/types'
+import store from './store'
 
 // Мок без авторизации
-const user: User = {
+/*const user: User = {
   id: 423,
   first_name: 'Petya',
   second_name: 'Pupkin',
   phone: '+79001001100',
   login: 'userLogin',
   email: 'string@ya.ru',
-}
+}*/
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true)
@@ -31,21 +33,23 @@ const App = () => {
       .catch(() => setLoading(false))
   }, [])
 
-  return loading ? (
-    <PageLoader />
-  ) : (
-    <React.StrictMode>
-      <ThemeProvider theme="light">
-        <AuthContext.Provider value={authInfo}>
-          <UserContext.Provider value={user}>
-            <ToasterProvider>
-              <RouterProvider router={router} />
-              <ToasterComponent className="optional additional classes" />
-            </ToasterProvider>
-          </UserContext.Provider>
-        </AuthContext.Provider>
-      </ThemeProvider>
-    </React.StrictMode>
+  return (
+    <Provider store={store}>
+      {loading ? (
+        <PageLoader />
+      ) : (
+        <React.StrictMode>
+          <ThemeProvider theme="light">
+            <AuthContext.Provider value={authInfo}>
+              <ToasterProvider>
+                <RouterProvider router={router} />
+                <ToasterComponent className="optional additional classes" />
+              </ToasterProvider>
+            </AuthContext.Provider>
+          </ThemeProvider>
+        </React.StrictMode>
+      )}
+    </Provider>
   )
 }
 

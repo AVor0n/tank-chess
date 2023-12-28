@@ -9,8 +9,7 @@ import MainPage from '@pages/mainPage'
 import NewTopicPage from '@pages/newTopicPage'
 import ProfilePage from '@pages/profilePage'
 import TopicPage from '@pages/topicPage'
-import { UserContext } from './context/userContext'
-import { type User } from './types/types'
+import store from 'store'
 
 const router = createBrowserRouter([
   {
@@ -24,13 +23,18 @@ const router = createBrowserRouter([
         path: '/',
         element: <MainPage />,
       },
-      {    
+      {
         path: '/game',
         element: <GamePage />,
       },
       {
         path: '/profile',
-        element: <UserContext.Consumer>{(value: User) => <ProfilePage {...value} />}</UserContext.Consumer>,
+        Component: () =>
+          store.getState().user.userInfo ? (
+            <ProfilePage {...store.getState().user.userInfo!} />
+          ) : (
+            <ErrorPage type="Not Found" />
+          ),
       },
       {
         path: '/rating',
@@ -58,9 +62,9 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <ErrorPage type="Not Found" />,
-      }
-    ]
-  }
+      },
+    ],
+  },
 ])
 
 export default router
