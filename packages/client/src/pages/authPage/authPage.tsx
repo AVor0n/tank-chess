@@ -32,7 +32,6 @@ export const AuthPage = () => {
   const from: string = prevAddress ? prevAddress : '/'
 
   /**redux */
-  //const dispatch = useDispatch();
   useEffect(() => {
     if (isAuth) navigate(from, { replace: true }) //
   }, [isAuth, from, navigate])

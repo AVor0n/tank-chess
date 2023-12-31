@@ -59,7 +59,6 @@ class AuthService {
   }
 
   async logout(callback: () => void) {
-    console.log(123)
     store.dispatch(pending())
     try {
       const response = await fetch(this.baseURL + '/auth/logout', {

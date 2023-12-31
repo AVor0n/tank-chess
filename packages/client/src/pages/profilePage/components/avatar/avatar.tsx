@@ -12,7 +12,6 @@ interface AvatarProps {
 
 export const Avatar = ({ url }: AvatarProps) => {
   const link = url ? `${URL_RESOURCES}/${url}` : noAvatar
-  // const [link, setLink] = useState(defaultLink)
   const onChange = (event: FormEvent<HTMLInputElement>) => {
     const formData = new FormData()
     const files = (event.target as HTMLInputElement).files
