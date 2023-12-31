@@ -25,7 +25,6 @@ export const AuthPage = () => {
    */
 
   const { isAuth, setAuth } = useContext(AuthContext)
-
   /**redirect */
   const location = useLocation()
   const navigate = useNavigate()

@@ -2,12 +2,11 @@ import { ToasterComponent, ToasterProvider, ThemeProvider } from '@gravity-ui/ui
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
-import { setUserContext, pending, result } from 'reducers/user'
 import PageLoader from './components/pageLoader'
 import AuthContext from './context/authContext'
 import router from './router'
 import AuthService from './service/auth.service'
-import store, { type RootStateType } from './store'
+import { type RootStateType } from './store'
 
 const App = () => {
   const loading = useSelector((state: RootStateType) => state.user.loading)
@@ -16,14 +15,8 @@ const App = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        store.dispatch(pending())
-        const user = await AuthService.getUser()
-        if (user && user.id > 0) setAuth(true)
-        store.dispatch(setUserContext(user))
-      } finally {
-        store.dispatch(result())
-      }
+      const user = await AuthService.getUser()
+      if (user && user.id > 0) setAuth(true)
     }
     fetchUser()
   }, [])

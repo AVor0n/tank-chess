@@ -1,4 +1,4 @@
-import { createBrowserRouter, useParams } from 'react-router-dom'
+import { createBrowserRouter, useParams, Navigate } from 'react-router-dom'
 import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
           store.getState().user.userInfo ? (
             <ProfilePage {...store.getState().user.userInfo!} />
           ) : (
-            <ErrorPage type="Not Found" />
+            <Navigate to="/login" replace />
           ),
       },
       {

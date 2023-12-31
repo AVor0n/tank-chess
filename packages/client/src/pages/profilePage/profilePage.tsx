@@ -1,9 +1,12 @@
-import { Table } from '@gravity-ui/uikit'
+import { Table, Button } from '@gravity-ui/uikit'
+import { useContext } from 'react'
 import { Menu } from '@components/menu'
 import { MAIN_MENU_LINKS } from '@utils/constants'
 import Form from '../../components/form'
+import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
 import userService from '../../service'
+import AuthService from '../../service/auth.service'
 import { type UserProfile } from '../../types/types'
 import Avatar from './components/avatar'
 import FormPassword from './components/formPassword'
@@ -24,7 +27,7 @@ const onSendFormChangePassword = (data: Record<string, File | string>) => {
 }
 
 export const ProfilePage = ({ login, first_name, second_name, phone, email, avatar }: UserProfile) => {
-  console.log({ login, first_name, second_name, phone, email, avatar })
+  const { setAuth } = useContext(AuthContext)
   return (
     <section className={styles.main}>
       <div>
@@ -62,6 +65,19 @@ export const ProfilePage = ({ login, first_name, second_name, phone, email, avat
             <Form onSubmit={onSendFormChangePassword}>
               <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
             </Form>
+            <div className={styles.logout}>
+              <Button
+                view="action"
+                width="max"
+                size="xl"
+                onClick={() => () =>
+                  AuthService.logout(() => {
+                    setAuth(false)
+                  })
+                }>
+                Выйти
+              </Button>
+            </div>
           </div>
         </div>
       </div>

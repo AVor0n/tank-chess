@@ -1,4 +1,4 @@
-import { URL_RESOURCES } from '@utils/constants'
+import { BASE_URL, URL_RESOURCES } from '@utils/constants'
 
 type data = Record<string, string>
 type callback = (data: data) => void
@@ -8,12 +8,14 @@ const cbError = (error: Error) => console.log('error', error)
 
 const userService = {
   changeAvatar: (data: FormData, cb: callback) =>
-    fetch(`${URL_RESOURCES}user/profile/avatar`, {
+    fetch(`${BASE_URL}/user/profile/avatar`, {
       method: 'PUT',
       body: data,
       headers: {
-        mode: 'no-cors',
+        Accept: 'application/json',
       },
+      credentials: 'include',
+      mode: 'cors',
     })
       .then(async data => {
         if (data.status === 200) {

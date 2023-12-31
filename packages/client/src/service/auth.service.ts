@@ -1,3 +1,5 @@
+import { setUserContext, pending, result } from 'reducers/user'
+import store from 'store'
 import { type SignUpDataType, type SignInDataType, type User, type ErrorResponse, type Nullable } from '../types/types'
 import { BASE_URL } from '../utils/constants'
 
@@ -56,21 +58,32 @@ class AuthService {
     }
   }
 
-  async logout() {
-    const response = await fetch(this.baseURL + '/auth/logout', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-    if (response.status !== 200) {
-      throw new Error('Ошибка!')
+  async logout(callback: () => void) {
+    console.log(123)
+    store.dispatch(pending())
+    try {
+      const response = await fetch(this.baseURL + '/auth/logout', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        mode: 'cors',
+      })
+      if (response.status !== 200) {
+        throw new Error('Ошибка!')
+      } else {
+        callback()
+        store.dispatch(setUserContext(null))
+      }
+    } finally {
+      store.dispatch(result())
     }
   }
 
   async getUser(): Promise<Nullable<User>> {
+    let user: User | null
+    store.dispatch(pending())
     try {
       const response: Response = await fetch(this.baseURL + '/auth/user', {
         method: 'GET',
@@ -80,15 +93,17 @@ class AuthService {
         credentials: 'include',
         mode: 'cors',
       })
-      //console.log(response);
       if (response.status !== 200) {
-        return null
+        user = null
       }
-      const user: User = (await response.json()) as User
-      return user
+      user = (await response.json()) as User
     } catch (error) {
-      return null
+      user = null
+    } finally {
+      store.dispatch(result())
     }
+    store.dispatch(setUserContext(user))
+    return user
   }
 }
 

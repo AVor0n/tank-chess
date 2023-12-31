@@ -1,5 +1,7 @@
 .avatar img {
   min-inline-size: 128px;
+  max-inline-size: 128px;
+  max-block-size: 128;
   border: 4px solid #66885c;
   border-radius: 50%;
 }
