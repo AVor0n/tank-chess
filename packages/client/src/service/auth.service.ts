@@ -80,8 +80,9 @@ class AuthService {
         credentials: 'include',
         mode: 'cors',
       })
+      //console.log(response);
       if (response.status !== 200) {
-        throw new Error('Ошибка!')
+        return null
       }
       const user: User = (await response.json()) as User
       return user
@@ -91,5 +92,5 @@ class AuthService {
   }
 }
 
-const authServ = new AuthService()
-export default authServ
+const AuthServiceInstance = new AuthService()
+export default AuthServiceInstance

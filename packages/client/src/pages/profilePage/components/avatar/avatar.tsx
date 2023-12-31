@@ -1,5 +1,7 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent } from 'react'
 import { URL_RESOURCES } from '@utils/constants'
+import { pending, result, changeAvatar } from 'reducers/user'
+import store from 'store'
 import userService from '../../../../service'
 import noAvatar from '@assets/images/no_avatar.svg'
 import styles from './avatar.module.scss'
@@ -9,14 +11,18 @@ interface AvatarProps {
 }
 
 export const Avatar = ({ url }: AvatarProps) => {
-  const defaultLink = url ? `${URL_RESOURCES}/${url}` : noAvatar
-  const [link, setLink] = useState(defaultLink)
+  const link = url ? `${URL_RESOURCES}/${url}` : noAvatar
+  // const [link, setLink] = useState(defaultLink)
   const onChange = (event: FormEvent<HTMLInputElement>) => {
     const formData = new FormData()
     const files = (event.target as HTMLInputElement).files
     if (files) {
       formData.append('avatar', files?.[0])
-      userService.changeAvatar(formData, data => setLink(data.avatar))
+      store.dispatch(pending())
+      userService.changeAvatar(formData, data => {
+        store.dispatch(changeAvatar(data.avatar))
+        store.dispatch(result())
+      })
     }
   }
 

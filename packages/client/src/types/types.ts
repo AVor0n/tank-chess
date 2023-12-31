@@ -41,3 +41,10 @@ export interface FormProps {
 }
 
 export type Nullable<T> = T | null
+
+export interface AppState {
+  user: {
+    userInfo: Nullable<User>
+    loaded: boolean
+  }
+}

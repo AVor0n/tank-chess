@@ -1,48 +1,33 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import AuthService from '../service/auth.service'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type User, type Nullable } from '../types/types'
 
 interface UserState {
   userInfo: Nullable<User>
+  loading: boolean
 }
 const defaultState: UserState = {
-  userInfo: {
-    id: 0,
-    first_name: '',
-    second_name: '',
-    phone: '',
-    login: '',
-    email: '',
-  },
+  userInfo: null,
+  loading: false,
 }
-
-export const setUserContext = createAsyncThunk('user/setUserContext', async () => {
-  const user: Nullable<User> = await AuthService.getUser()
-  return user
-})
-
-/*
-export const clearUser = createAsyncThunk("user/clearUserContext", async () => {
-    const user: Nullable<User> = await AuthService.logout();
-    return user;
-});
-*/
 
 const userSlice = createSlice({
   name: 'user',
   initialState: defaultState,
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      .addCase(setUserContext.fulfilled, (state: UserState, action) => {
-        state.userInfo = action.payload
-      })
-      .addCase(setUserContext.rejected, (state: UserState) => {
-        state.userInfo = null
-      })
+  reducers: {
+    pending: state => {
+      state.loading = true
+    },
+    result: state => {
+      state.loading = false
+    },
+    setUserContext: (state, action: PayloadAction<Nullable<User>>) => {
+      state.userInfo = action.payload
+    },
+    changeAvatar: (state, action: PayloadAction<string | undefined>) => {
+      if (state.userInfo) state.userInfo.avatar = action.payload
+    },
   },
 })
 
 export default userSlice.reducer
-export const userInfo = (state: UserState) => state.userInfo
-//export const {setUser} = userSlice.actions;
+export const { setUserContext, pending, result, changeAvatar } = userSlice.actions

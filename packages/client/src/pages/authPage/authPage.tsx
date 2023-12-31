@@ -6,12 +6,17 @@ import store from 'store'
 import Container from '../../components/container'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
-import { setUserContext } from '../../reducers/user'
+import { setUserContext, pending, result } from '../../reducers/user'
 import AuthService from '../../service/auth.service'
-import { type LocationState, type SignUpDataType, type SignInDataType } from '../../types/types'
+import {
+  type LocationState,
+  type SignUpDataType,
+  type SignInDataType,
+  type Nullable,
+  type User,
+} from '../../types/types'
 import SignIn from './components/signIn'
 import SignUp from './components/signUp'
-//import {useDispatch} from 'react-redux'
 
 export const AuthPage = () => {
   const [activeTab, setActiveTab] = useState('signin')
@@ -34,29 +39,49 @@ export const AuthPage = () => {
   }, [isAuth, from, navigate])
 
   const submitLogin = async (data: Record<string, string | File>) => {
-    await AuthService.signIn(data as unknown as SignInDataType, () => {
-      //setLoading(false) to do!
-      try {
-        //const user: User | null = await AuthService.getUser();
-        //if (user && user?.id > 0) {
-        setAuth(true)
-        //setLoading(false)
-        store.dispatch(setUserContext())
-        //console.log('in auth after');
-        //console.log(store.getState().user);
-        navigate(from, { replace: true })
-        //}
-      } catch {
-        throw new Error('Ошибка!')
-      }
-    })
+    try {
+      store.dispatch(pending())
+      await AuthService.signIn(data as unknown as SignInDataType, () => {
+        const func = async () => {
+          try {
+            const user: Nullable<User> = await AuthService.getUser()
+            store.dispatch(setUserContext(user))
+            if (user && user.id > 0) {
+              setAuth(true)
+              navigate(from, { replace: true })
+            }
+          } catch {
+            throw new Error('Ошибка!')
+          } finally {
+            store.dispatch(result())
+          }
+        }
+        func()
+      })
+    } catch {
+      throw new Error('Ошибка!')
+    }
   }
 
-  const submitReg = (data: Record<string, string | File>) => {
-    AuthService.signUp(data as unknown as SignUpDataType, () => {
-      setAuth(true)
-      navigate(from, { replace: true })
-    })
+  const submitReg = async (data: Record<string, string | File>) => {
+    try {
+      store.dispatch(pending())
+      await AuthService.signUp(data as unknown as SignUpDataType, () => {
+        const func = async () => {
+          const user: Nullable<User> = await AuthService.getUser()
+          store.dispatch(setUserContext(user))
+          if (user && user.id > 0) {
+            setAuth(true)
+            navigate(from, { replace: true })
+          }
+        }
+        func()
+      })
+    } catch {
+      throw new Error('Ошибка!')
+    } finally {
+      store.dispatch(result())
+    }
   }
 
   return (
@@ -66,11 +91,12 @@ export const AuthPage = () => {
         <Tabs.Item key="signup" id="signup" title="Регистрация" onClick={() => setActiveTab('signup')} />
       </Tabs>
       {activeTab === 'signin' ? (
-        <Form onSubmit={() => submitLogin}>
+        /* eslint-disable @typescript-eslint/no-misused-promises*/
+        <Form onSubmit={submitLogin}>
           <FormContext.Consumer>{state => <SignIn {...state} />}</FormContext.Consumer>
         </Form>
       ) : (
-        <Form onSubmit={() => submitReg}>
+        <Form onSubmit={submitReg}>
           <FormContext.Consumer>{state => <SignUp {...state} />}</FormContext.Consumer>
         </Form>
       )}
