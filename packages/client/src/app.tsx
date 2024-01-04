@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import PageLoader from './components/pageLoader'
 import AuthContext from './context/authContext'
+import { selectUserLoading } from './reducers/user'
 import router from './router'
 import AuthService from './service/auth.service'
-import { type RootStateType } from './store'
 
 const App = () => {
-  const loading = useSelector((state: RootStateType) => state.user.loading)
+  const loading = useSelector(selectUserLoading)
   const [isAuth, setAuth] = useState<boolean>(false)
   const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
 

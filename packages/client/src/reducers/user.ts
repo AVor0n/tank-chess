@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { type RootStateType } from '../store'
 import { type User, type Nullable } from '../types/types'
 
 interface UserState {
@@ -31,3 +32,6 @@ const userSlice = createSlice({
 
 export default userSlice.reducer
 export const { setUserContext, pending, result, changeAvatar } = userSlice.actions
+
+/**seelectors */
+export const selectUserLoading = (state: RootStateType) => state.user.loading
