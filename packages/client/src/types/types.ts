@@ -8,6 +8,8 @@ export interface User {
   email: string
 }
 
+export type UserProfile = Omit<User, 'id'>
+
 export interface SignUpDataType {
   first_name: string
   second_name: string
@@ -36,4 +38,13 @@ export interface FormProps {
   error: Record<string, string>
   isValid: boolean
   touched: boolean
+}
+
+export type Nullable<T> = T | null
+
+export interface AppState {
+  user: {
+    userInfo: Nullable<User>
+    loaded: boolean
+  }
 }

@@ -9,7 +9,6 @@ export const SignIn = ({ state, error, isValid, touched }: FormProps) => {
     login: '',
     password: '',
   })
-
   return (
     <div className={styles.form}>
       <FormInput

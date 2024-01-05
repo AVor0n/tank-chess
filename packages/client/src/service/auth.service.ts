@@ -1,4 +1,6 @@
-import { type SignUpDataType, type SignInDataType, type User, type ErrorResponse } from '../types/types'
+import { setUserContext, pending, result } from 'reducers/user'
+import store from 'store'
+import { type SignUpDataType, type SignInDataType, type User, type ErrorResponse, type Nullable } from '../types/types'
 import { BASE_URL } from '../utils/constants'
 
 /* eslint-disable no-console*/
@@ -56,36 +58,53 @@ class AuthService {
     }
   }
 
-  async logout() {
-    const response = await fetch(this.baseURL + '/auth/logout', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-    if (response.status !== 200) {
-      throw new Error('Ошибка!')
+  async logout(callback: () => void) {
+    store.dispatch(pending())
+    try {
+      const response = await fetch(this.baseURL + '/auth/logout', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        mode: 'cors',
+      })
+      if (response.status !== 200) {
+        throw new Error('Ошибка!')
+      } else {
+        callback()
+        store.dispatch(setUserContext(null))
+      }
+    } finally {
+      store.dispatch(result())
     }
   }
 
-  async getUser(): Promise<User | void> {
-    const response: Response = await fetch(this.baseURL + '/auth/user', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-    if (response.status !== 200) {
-      throw new Error('Ошибка!')
+  async getUser(): Promise<Nullable<User>> {
+    let user: User | null
+    store.dispatch(pending())
+    try {
+      const response: Response = await fetch(this.baseURL + '/auth/user', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        mode: 'cors',
+      })
+      if (response.status !== 200) {
+        user = null
+      }
+      user = (await response.json()) as User
+    } catch (error) {
+      user = null
+    } finally {
+      store.dispatch(result())
     }
-    const user: User = (await response.json()) as User
+    store.dispatch(setUserContext(user))
     return user
   }
 }
 
-const authServ = new AuthService()
-export default authServ
+const AuthServiceInstance = new AuthService()
+export default AuthServiceInstance
