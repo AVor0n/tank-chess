@@ -81,8 +81,8 @@ class AuthService {
   }
 
   async getUser(): Promise<Nullable<User>> {
-    let user: User | null
-    store.dispatch(pending())
+    let user: User | null = null
+    //store.dispatch(pending())
     try {
       const response: Response = await fetch(this.baseURL + '/auth/user', {
         method: 'GET',
@@ -99,9 +99,10 @@ class AuthService {
     } catch (error) {
       user = null
     } finally {
-      store.dispatch(result())
+      //store.dispatch(result())
+      //store.dispatch(setUserContext(user))
     }
-    store.dispatch(setUserContext(user))
+
     return user
   }
 }

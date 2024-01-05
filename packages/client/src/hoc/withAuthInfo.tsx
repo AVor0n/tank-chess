@@ -2,12 +2,12 @@ import { useState, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PageLoader from '../components/pageLoader'
 import AuthContext from '../context/authContext'
+import { selectUserLoading } from '../reducers/user'
 import AuthService from '../service/auth.service'
-import { type RootStateType } from '../store'
 
 const withAuthInfo = (OriginalComponent: React.ComponentType) => {
   const ComponentWithAuth = () => {
-    const loading = useSelector((state: RootStateType) => state.user.loading)
+    const loading = useSelector(selectUserLoading)
     const [isAuth, setAuth] = useState<boolean>(false)
     const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
 

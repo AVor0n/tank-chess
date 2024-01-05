@@ -4,7 +4,7 @@ import FormInput from '@components/formInput'
 import { type FormProps } from '../../../../types/types'
 import styles from './signUp.module.scss'
 
-export const SignUp = ({ state, error, isValid, touched }: FormProps) => {
+export const SignUp = ({ state, error }: FormProps) => {
   const [signUpData, setSignUpData] = useState({
     first_name: '',
     second_name: '',
@@ -66,14 +66,7 @@ export const SignUp = ({ state, error, isValid, touched }: FormProps) => {
         validationState={error.password ? 'invalid' : undefined}
       />
 
-      <Button
-        className={styles.submitBtn}
-        view="action"
-        width="max"
-        pin="brick-brick"
-        size="xl"
-        type="submit"
-        disabled={!touched || !isValid}>
+      <Button className={styles.submitBtn} view="action" width="max" pin="brick-brick" size="xl" type="submit">
         Зарегистрироваться
       </Button>
     </div>
