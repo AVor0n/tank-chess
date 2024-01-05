@@ -2,9 +2,11 @@ import { Tabs } from '@gravity-ui/uikit'
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Form from '@components/form'
+import store from 'store'
 import Container from '../../components/container'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
+import { setUserContext, pending, result } from '../../reducers/user'
 import AuthService from '../../service/auth.service'
 import {
   type LocationState,

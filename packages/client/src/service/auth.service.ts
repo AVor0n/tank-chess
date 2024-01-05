@@ -102,7 +102,6 @@ class AuthService {
       store.dispatch(result())
       store.dispatch(setUserContext(user))
     }
-
     return user
   }
 }
