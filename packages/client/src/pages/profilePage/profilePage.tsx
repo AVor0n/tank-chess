@@ -71,7 +71,6 @@ export const ProfilePage = ({ login, first_name, second_name, phone, email, avat
                 width="max"
                 size="xl"
                 onClick={() => {
-                  //console.log(123123);
                   AuthService.logout(() => {
                     setAuth(false)
                   })
