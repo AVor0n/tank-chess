@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 import { createBrowserRouter, useParams, Navigate } from 'react-router-dom'
 import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
@@ -9,7 +10,7 @@ import MainPage from '@pages/mainPage'
 import NewTopicPage from '@pages/newTopicPage'
 import ProfilePage from '@pages/profilePage'
 import TopicPage from '@pages/topicPage'
-import store from 'store'
+import { selectUserUserInfo } from 'reducers/user'
 
 const router = createBrowserRouter([
   {
@@ -29,12 +30,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/profile',
-        Component: () =>
-          store.getState().user.userInfo ? (
-            <ProfilePage {...store.getState().user.userInfo!} />
-          ) : (
-            <Navigate to="/login" replace />
-          ),
+        Component: () => {
+          const userProps = useSelector(selectUserUserInfo)
+          return userProps ? <ProfilePage {...userProps} /> : <Navigate to="/login" replace />
+        },
       },
       {
         path: '/rating',

@@ -35,3 +35,4 @@ export const { setUserContext, pending, result, changeAvatar } = userSlice.actio
 
 /**Selectors */
 export const selectUserLoading = (state: RootStateType) => state.user.loading
+export const selectUserUserInfo = (state: RootStateType) => state.user.userInfo
