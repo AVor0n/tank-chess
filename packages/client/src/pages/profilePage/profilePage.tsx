@@ -70,11 +70,11 @@ export const ProfilePage = ({ login, first_name, second_name, phone, email, avat
                 view="action"
                 width="max"
                 size="xl"
-                onClick={() => () =>
+                onClick={() => {
                   AuthService.logout(() => {
                     setAuth(false)
                   })
-                }>
+                }}>
                 Выйти
               </Button>
             </div>

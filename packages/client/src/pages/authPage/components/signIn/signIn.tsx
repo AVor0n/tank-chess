@@ -4,7 +4,7 @@ import FormInput from '@components/formInput'
 import { type FormProps } from '../../../../types/types'
 import styles from './signIn.module.scss'
 
-export const SignIn = ({ state, error, isValid, touched }: FormProps) => {
+export const SignIn = ({ state, error }: FormProps) => {
   const [signInData, setSignInData] = useState({
     login: '',
     password: '',
@@ -30,14 +30,7 @@ export const SignIn = ({ state, error, isValid, touched }: FormProps) => {
         errorMessage={error.password}
         validationState={error.password ? 'invalid' : undefined}
       />
-      <Button
-        className={styles.submitBtn}
-        view="action"
-        width="max"
-        pin="brick-brick"
-        size="xl"
-        type="submit"
-        disabled={!touched || !isValid}>
+      <Button className={styles.submitBtn} view="action" width="max" pin="brick-brick" size="xl" type="submit">
         Войти
       </Button>
     </div>

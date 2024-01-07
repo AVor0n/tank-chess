@@ -2,11 +2,9 @@ import { Tabs } from '@gravity-ui/uikit'
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Form from '@components/form'
-import store from 'store'
 import Container from '../../components/container'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
-import { setUserContext, pending, result } from '../../reducers/user'
 import AuthService from '../../service/auth.service'
 import {
   type LocationState,
@@ -38,36 +36,30 @@ export const AuthPage = () => {
 
   const submitLogin = async (data: Record<string, string | File>) => {
     try {
-      store.dispatch(pending())
       await AuthService.signIn(data as unknown as SignInDataType, () => {
         const func = async () => {
           try {
             const user: Nullable<User> = await AuthService.getUser()
-            store.dispatch(setUserContext(user))
             if (user && user.id > 0) {
               setAuth(true)
               navigate(from, { replace: true })
             }
           } catch {
-            throw new Error('Ошибка!')
-          } finally {
-            store.dispatch(result())
+            throw new Error('Ошибка авторизации!')
           }
         }
         func()
       })
     } catch {
-      throw new Error('Ошибка!')
+      throw new Error('Ошибка авторизации!')
     }
   }
 
   const submitReg = async (data: Record<string, string | File>) => {
     try {
-      store.dispatch(pending())
       await AuthService.signUp(data as unknown as SignUpDataType, () => {
         const func = async () => {
           const user: Nullable<User> = await AuthService.getUser()
-          store.dispatch(setUserContext(user))
           if (user && user.id > 0) {
             setAuth(true)
             navigate(from, { replace: true })
@@ -77,8 +69,6 @@ export const AuthPage = () => {
       })
     } catch {
       throw new Error('Ошибка!')
-    } finally {
-      store.dispatch(result())
     }
   }
 

@@ -33,5 +33,7 @@ const userSlice = createSlice({
 export default userSlice.reducer
 export const { setUserContext, pending, result, changeAvatar } = userSlice.actions
 
-/**seelectors */
+/**Selectors */
 export const selectUserLoading = (state: RootStateType) => state.user.loading
+export const selectUserUserInfo = (state: RootStateType) => state.user.userInfo
+
