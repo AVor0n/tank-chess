@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { defineConfig } from 'vite'
 import checker from 'vite-plugin-checker'
 import typescriptPaths from 'vite-tsconfig-paths'
+import path from 'path'
 
 dotenv.config()
 
@@ -21,4 +22,16 @@ export default defineConfig({
       typescript: true,
     }),
   ],
+  build: {
+    outDir: path.join(__dirname, '/dist'),
+    rollupOptions: {
+      input: {
+        app: './index.html',
+        serviceWorker: './src/service-worker.ts',
+      },
+      output: {
+        entryFileNames: chunkInfo => (chunkInfo.name === 'serviceWorker' ? '[name].js' : '[name]-[hash].js'),
+      },
+    },
+  },
 })
