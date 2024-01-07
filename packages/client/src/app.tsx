@@ -1,30 +1,32 @@
 import { ThemeProvider } from '@gravity-ui/uikit'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { toggleFullScreen } from '@utils/webApi'
 import withAuthInfo from 'hoc/withAuthInfo'
 import router from './router'
 
-useEffect(() => {
-  const onPressKey = (event: KeyboardEvent) => {
-    if (event.ctrlKey && event.key === 'Enter') {
-      toggleFullScreen(null)
+const App = () => {
+  useEffect(() => {
+    const onPressKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'Enter') {
+        toggleFullScreen(null)
+      }
     }
-  }
 
-  document.addEventListener('keyup', onPressKey)
+    document.addEventListener('keyup', onPressKey)
 
-  return () => {
-    document.removeEventListener('keyup', onPressKey)
-  }
-}, [])
+    return () => {
+      document.removeEventListener('keyup', onPressKey)
+    }
+  }, [])
 
-const App = () => (
-  <React.StrictMode>
-    <ThemeProvider theme="light">
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>
-)
+  return (
+    <React.StrictMode>
+      <ThemeProvider theme="light">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </React.StrictMode>
+  )
+}
 
 export default withAuthInfo(App)
