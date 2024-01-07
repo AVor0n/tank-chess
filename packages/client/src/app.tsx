@@ -1,8 +1,8 @@
 import { ThemeProvider } from '@gravity-ui/uikit'
 import React from 'react'
 import { RouterProvider } from 'react-router-dom'
-import withAuthInfo from 'hoc/withAuthInfo'
 import { toggleFullScreen } from '@utils/webApi'
+import withAuthInfo from 'hoc/withAuthInfo'
 import router from './router'
 
 useEffect(() => {
