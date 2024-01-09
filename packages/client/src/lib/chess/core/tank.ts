@@ -40,6 +40,11 @@ export class Tank {
     return this._color
   }
 
+  /** Танк имеет полный заряд энергии, т.е. не совершал действия в этом ходу */
+  get hasFullEnergy() {
+    return this._energy === this.movement
+  }
+
   /**
    * @param type тип танка
    * @param playerId id игрока, который управляет танком
@@ -90,6 +95,7 @@ export class Tank {
   /** Едет назад на 1 шаг */
   public reverse() {
     this.doStep(-1)
+    this._energy = 0
   }
 
   /** Поворачивает влево на 45° */

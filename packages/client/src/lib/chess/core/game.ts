@@ -105,7 +105,7 @@ export class Game extends EventBus<{
     }
 
     const backCell = getNextCell(tank.position, -1)
-    if (this.board.getCellAt(backCell)?.type === 'empty') {
+    if (this.board.getCellAt(backCell)?.type === 'empty' && tank.hasFullEnergy) {
       actions.push(ACTION_TYPE.REVERSE)
     }
 
