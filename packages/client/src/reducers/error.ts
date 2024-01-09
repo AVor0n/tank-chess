@@ -19,7 +19,8 @@ const errorSlice = createSlice({
       state.hasError = true
     },
     resetError: (state: ErrorState) => {
-      ;(state.message = ''), (state.hasError = false)
+      state.message = ''
+      state.hasError = false
     },
   },
 })

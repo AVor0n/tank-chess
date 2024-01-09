@@ -24,8 +24,7 @@ class AuthService {
       else {
         throw new Error((result as ErrorResponse).reason)
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof Error) store.dispatch(setError(error.message))
     }
   }
@@ -53,8 +52,7 @@ class AuthService {
       } else {
         throw new Error((result as ErrorResponse).reason)
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof Error) store.dispatch(setError(error.message))
     }
   }
