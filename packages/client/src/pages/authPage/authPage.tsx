@@ -18,6 +18,7 @@ import SignUp from './components/signUp'
 
 export const AuthPage = () => {
   const [activeTab, setActiveTab] = useState('signin')
+
   /**
    * если пользователь авторизован, то на эту страницу не зайти
    */

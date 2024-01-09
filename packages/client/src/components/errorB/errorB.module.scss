@@ -1,0 +1,23 @@
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  block-size: 100vh;
+}
+
+.errorInner {
+  inline-size: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 24px;
+  line-height: 1.5;
+  text-align: center;
+  background: var(--colors-light-red);
+  border-block-start: 1px solid var(--colors-red);
+  border-block-end: 1px solid var(--colors-red);
+}
+
+.errorHeader {
+  font-weight: 800;
+}
