@@ -10,49 +10,50 @@ import MainPage from '@pages/mainPage'
 import NewTopicPage from '@pages/newTopicPage'
 import ProfilePage from '@pages/profilePage'
 import TopicPage from '@pages/topicPage'
+import withErrorInfo from 'hoc/withErrorInfo'
 import { selectUserUserInfo } from 'reducers/user'
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <AuthPage />,
+    Component: withErrorInfo(AuthPage),
   },
   {
     element: <PrivateRoute />,
     children: [
       {
         path: '/',
-        element: <MainPage />,
+        Component: withErrorInfo(MainPage),
       },
       {
         path: '/game',
-        element: <GamePage />,
+        Component: withErrorInfo(GamePage),
       },
       {
         path: '/profile',
-        Component: () => {
+        Component: withErrorInfo(() => {
           const userProps = useSelector(selectUserUserInfo)
           return userProps ? <ProfilePage {...userProps} /> : <Navigate to="/login" replace />
-        },
+        }),
       },
       {
         path: '/rating',
-        element: <Leaderboard />,
+        Component: withErrorInfo(Leaderboard),
       },
       {
         path: '/forum',
-        element: <ForumPage />,
+        Component: withErrorInfo(ForumPage),
       },
       {
         path: '/forum/:topicId',
-        Component: () => {
+        Component: withErrorInfo(() => {
           const { topicId } = useParams()
           return <TopicPage topicId={topicId!} />
-        },
+        }),
       },
       {
         path: '/forum/add-new-topic',
-        Component: () => <NewTopicPage />,
+        Component: withErrorInfo(NewTopicPage),
       },
       {
         path: '/500',

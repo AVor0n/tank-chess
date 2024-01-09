@@ -1,12 +1,11 @@
+import { setError } from 'reducers/error'
 import { setUserContext, pending, result } from 'reducers/user'
 import store from 'store'
 import { type SignUpDataType, type SignInDataType, type User, type ErrorResponse, type Nullable } from '../types/types'
 import { BASE_URL } from '../utils/constants'
 
-/* eslint-disable no-console*/
 class AuthService {
   baseURL: string = BASE_URL
-
   async signUp(data: SignUpDataType, afterSignUp: (login: string, password: string) => void): Promise<void> {
     try {
       const response: Response = await fetch(this.baseURL + '/auth/signup', {
@@ -26,7 +25,7 @@ class AuthService {
         throw new Error((result as ErrorResponse).reason)
       }
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) store.dispatch(setError(error.message))
     }
   }
 
@@ -54,7 +53,7 @@ class AuthService {
         throw new Error((result as ErrorResponse).reason)
       }
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) store.dispatch(setError(error.message))
     }
   }
 
@@ -70,6 +69,7 @@ class AuthService {
         mode: 'cors',
       })
       if (response.status !== 200) {
+        store.dispatch(setError('Ошибка!'))
         throw new Error('Ошибка!')
       } else {
         callback()

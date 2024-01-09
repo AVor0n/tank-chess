@@ -1,9 +1,16 @@
+'use client'
 import { ThemeProvider } from '@gravity-ui/uikit'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
+import Error from '@components/error'
 import { toggleFullScreen } from '@utils/webApi'
 import withAuthInfo from 'hoc/withAuthInfo'
 import router from './router'
+import registerServiceWorker from './utils/serviceWorker'
+
+if (process.env.NODE_ENV === 'production') {
+  registerServiceWorker()
+}
 
 const App = () => {
   useEffect(() => {
@@ -19,14 +26,13 @@ const App = () => {
       document.removeEventListener('keyup', onPressKey)
     }
   }, [])
-
   return (
-    <React.StrictMode>
-      <ThemeProvider theme="light">
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </React.StrictMode>
+    <ThemeProvider theme="light">
+      <RouterProvider router={router} />
+      <Error />
+    </ThemeProvider>
   )
 }
+
 
 export default withAuthInfo(App)
