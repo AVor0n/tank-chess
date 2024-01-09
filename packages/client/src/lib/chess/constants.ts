@@ -1,7 +1,7 @@
 import { TANK_TYPE } from './types'
 
 /** Цвета для раскраски танков разных игроков */
-export const PLAYER_COLORS = ['red', 'blue']
+export const PLAYER_COLORS = ['#ffffff', '#000000']
 
 /** Соответствие типа танка и его характеристик */
 export const TANK_TYPE_TO_PROPS: Record<

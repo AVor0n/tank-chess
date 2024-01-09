@@ -1,11 +1,6 @@
 import { type Game, type Tank, TANK_TYPE, ACTION_TYPE } from '../chess'
-
-const tankTypeToImage: Record<TANK_TYPE, string> = {
-  [TANK_TYPE.LT]: '🠑',
-  [TANK_TYPE.MT]: '⤊',
-  [TANK_TYPE.HT]: '⟰',
-  [TANK_TYPE.CLT]: '⥉',
-}
+import { colors } from './constants'
+import { getContrast } from './utils'
 
 export class ChessCanvasUI {
   /** объект содержащий всю логику игры */
@@ -18,6 +13,9 @@ export class ChessCanvasUI {
 
   /** Размер одной клетки поля в px */
   cellSize: number
+
+  /** Ширина границы доски */
+  boardBorderWidth = 20
 
   /** Поле повернуто на 180° */
   isInverted: boolean
@@ -63,7 +61,7 @@ export class ChessCanvasUI {
     this.game = game
     this.ctx = canvas.getContext('2d')!
     this.canvasSize = canvasSize
-    this.cellSize = canvasSize / this.game.board.size
+    this.cellSize = (canvasSize - this.boardBorderWidth * 2) / this.game.board.size
     this.isInverted = false
 
     this.game.on('startGame', this.refresh)
@@ -77,19 +75,19 @@ export class ChessCanvasUI {
 
   /**
    * Преобразует абсолютные координаты (точка отсчета - левый верхний угол экрана)
-   * в относительные (точка отсчета - левый верхний угол canvas элемента)
+   * в относительные (точка отсчета - левый верхний угол левой верхней клетки доски)
    * @param event - событие мыши
    */
   private getBoardRelativePixel(event: React.MouseEvent) {
     const { x, y } = (event.target as HTMLCanvasElement).getBoundingClientRect()
     return this.isInverted
       ? {
-          xPixel: this.canvasSize - (event.clientX - x),
-          yPixel: this.canvasSize - (event.clientY - y),
+          xPixel: this.canvasSize - (event.clientX - x + this.boardBorderWidth),
+          yPixel: this.canvasSize - (event.clientY - y + this.boardBorderWidth),
         }
       : {
-          xPixel: event.clientX - x,
-          yPixel: event.clientY - y,
+          xPixel: event.clientX - x - this.boardBorderWidth,
+          yPixel: event.clientY - y - this.boardBorderWidth,
         }
   }
 
@@ -246,8 +244,10 @@ export class ChessCanvasUI {
   /** Рисует пустую клетку доски. Темную или светлую в зависимости от позиции */
   private drawEmptyCell(x: number, y: number) {
     this.ctx.save()
-    this.ctx.fillStyle = (x + y) % 2 ? '#464646' : '#cacaca'
+    this.ctx.fillStyle = (x + y) % 2 ? colors.darkCell : colors.lightCell
+    this.ctx.strokeStyle = colors.cellBorder
     this.ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
+    this.ctx.strokeRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
     this.ctx.restore()
   }
 
@@ -263,31 +263,101 @@ export class ChessCanvasUI {
   /** Рисует препятствие на указанной позиции */
   private drawWall = (x: number, y: number) => {
     this.ctx.save()
-    this.ctx.fillStyle = 'saddlebrown'
+    this.ctx.fillStyle = colors.wall
+    this.ctx.strokeStyle = colors.wall
     this.ctx.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
+    this.ctx.strokeRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize)
     this.ctx.restore()
   }
 
   /** Рисует танк, позиция берется из данных танка */
-  private drawTank = ({ type, position, color }: Tank) => {
+  private drawTank = ({ type, position, color, isAlive }: Tank) => {
+    const body = new Path2D(
+      'M18.867 18.685h-.25v.9c0 .853.687 1.548 1.539 1.548.851 0 1.538-.695 1.538-1.549v-.899h-2.827Zm22.16.25v-.25H37.95v.9c0 .853.687 1.548 1.539 1.548.852 0 1.539-.695 1.539-1.549v-.649ZM15.25 15.039c0-.94.755-1.698 1.683-1.698h25.134a1.69 1.69 0 0 1 1.683 1.698v9.49h-.395a.897.897 0 0 0-.894.9v3.896c0 .495.399.899.895.899h.394v7.942h-.394a.897.897 0 0 0-.895.899v3.896c0 .495.399.9.895.9h.394v8.19a1.69 1.69 0 0 1-1.683 1.699H16.933a1.69 1.69 0 0 1-1.683-1.698V43.86h.394a.897.897 0 0 0 .895-.899v-3.896c0-.495-.399-.9-.895-.9h-.394v-7.941h.394a.897.897 0 0 0 .895-.9v-3.896c0-.494-.399-.899-.895-.899h-.394v-9.49Zm10.956 30.844a.574.574 0 0 0-.573-.575h-3.866a.574.574 0 0 0-.573.575c0 .316.255.575.573.575h3.866c.318 0 .573-.26.573-.575Zm0 1.299a.574.574 0 0 0-.573-.575h-3.866a.574.574 0 0 0-.573.575c0 .315.255.575.573.575h3.866c.318 0 .573-.26.573-.575Zm0 1.298a.574.574 0 0 0-.573-.574h-3.866a.574.574 0 0 0-.573.575c0 .315.255.574.573.574h3.866c.318 0 .573-.259.573-.575Zm12.244-2.597a.573.573 0 0 0-.572-.575H34.01a.573.573 0 0 0-.572.575c0 .316.254.575.572.575h3.867c.318 0 .572-.26.572-.575Zm0 1.299a.573.573 0 0 0-.572-.575H34.01a.573.573 0 0 0-.572.575c0 .315.254.575.572.575h3.867c.318 0 .572-.26.572-.575Zm0 1.298a.573.573 0 0 0-.572-.574H34.01a.573.573 0 0 0-.572.575c0 .315.254.574.572.574h3.867c.318 0 .572-.259.572-.575Z',
+    )
+    const tower = new Path2D(
+      'M30.789 7h-1.934v14h1.934V7ZM31.433 22.506h-3.222v3.247h3.222v-3.247ZM26.176 27.052h7.292c.74 0 1.384.507 1.563 1.23l1.548 6.238-1.548 6.237a1.613 1.613 0 0 1-1.563 1.23h-7.292c-.74 0-1.384-.507-1.563-1.23l-1.548-6.237 1.548-6.238c.18-.723.824-1.23 1.563-1.23Z',
+    )
+    const hatch = new Path2D('M32.75 35A2.75 2.75 0 1,1 32.75 34.99Z')
+    const shine = new Path2D('M31 34 h.1v2h-.1Z')
+    const mediumTracks = new Path2D(
+      'M50.75 13a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 17a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 21a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 25a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 29a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 33a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 37a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 41a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 45a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 49a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM50.75 53a.75.75 0 0 0-.75-.75h-4.75v2.5H50a.75.75 0 0 0 .75-.75v-1ZM8.25 13a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 17a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 21a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 25a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 29a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 33a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 37a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 41a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 45a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 49a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1ZM8.25 53a.75.75 0 0 1 .75-.75h4.75v2.5H9a.75.75 0 0 1-.75-.75v-1Z',
+    )
+    const heavyTracks = new Path2D(
+      'M12.75 7a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 14a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 21a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 28a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 35a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 42a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 49a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM12.75 56a.75.75 0 0 0-.75-.75H3a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 7a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 14a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 21a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 28a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 35a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 42a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 49a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75ZM57.75 56a.75.75 0 0 0-.75-.75h-9a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 .75.75h9a.75.75 0 0 0 .75-.75Z',
+    )
+
     this.ctx.save()
     this.ctx.translate(position.x * this.cellSize + this.cellSize / 2, position.y * this.cellSize + this.cellSize / 2)
     this.ctx.rotate((Math.PI / 4) * position.rotation)
+    this.ctx.translate(-30, -32)
 
-    const tankCharImage = tankTypeToImage[type]
-    const fontSize = this.cellSize * 0.75
-    this.ctx.font = `${fontSize}px Arial`
-    this.ctx.fillStyle = color
-    this.ctx.textAlign = 'center'
-    this.ctx.textBaseline = 'middle'
-    this.ctx.fillText(tankCharImage, 0, 0)
+    const baseColor = isAlive ? color : colors.destroyedTank
+    const contrastColor = getContrast(baseColor)
+    this.ctx.fillStyle = baseColor
+    this.ctx.strokeStyle = contrastColor
+
+    this.ctx.stroke(body)
+    this.ctx.fill(body)
+
+    if (type === TANK_TYPE.HT) {
+      this.ctx.stroke(heavyTracks)
+      this.ctx.fill(heavyTracks)
+    }
+
+    if (type === TANK_TYPE.MT) {
+      this.ctx.stroke(mediumTracks)
+      this.ctx.fill(mediumTracks)
+    }
+
+    if (isAlive) {
+      this.ctx.save()
+      if (type === TANK_TYPE.CLT) {
+        this.ctx.fillStyle = colors.commanderTankTower
+      } else if (type === TANK_TYPE.MT) {
+        this.ctx.fillStyle = contrastColor
+        this.ctx.strokeStyle = baseColor
+      }
+
+      this.ctx.stroke(tower)
+      this.ctx.fill(tower)
+      this.ctx.restore()
+    }
+
+    this.ctx.stroke(hatch)
+    this.ctx.fill(hatch)
+    this.ctx.lineWidth = 0.5
+    this.ctx.stroke(shine)
 
     this.ctx.restore()
   }
 
   /** Рисует статическую часть доски: клетки и препятствия */
   private drawBoard = () => {
-    this.ctx.save()
+    this.ctx.resetTransform()
+    this.ctx.fillStyle = colors.boardBorder
+    this.ctx.fillRect(0, 0, this.canvasSize, this.canvasSize)
+    this.ctx.translate(this.boardBorderWidth, this.boardBorderWidth)
+
+    const fontSize = this.boardBorderWidth / 2
+    this.ctx.fillStyle = 'white'
+    this.ctx.font = `${fontSize}px 'Bebas Neue', 'Helvetica Neue', sans-serif`
+    this.ctx.textAlign = 'center'
+    this.ctx.textBaseline = 'middle'
+
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    for (let i = 0; i < this.game.board.size; i++) {
+      const startOfBoard = -this.boardBorderWidth * 0.5
+      const endOfBoard = this.canvasSize - this.boardBorderWidth * 1.5
+      const centerOfCell = i * this.cellSize + this.cellSize / 2
+
+      this.ctx.fillText(letters[i], centerOfCell, startOfBoard)
+      this.ctx.fillText(letters[i], centerOfCell, endOfBoard)
+      this.ctx.fillText(`${i + 1}`, startOfBoard, centerOfCell)
+      this.ctx.fillText(`${i + 1}`, endOfBoard, centerOfCell)
+    }
+
     this.game.board.grid.forEach((row, y) =>
       row.forEach((cell, x) => {
         if (cell.type === 'empty') {
@@ -298,7 +368,6 @@ export class ChessCanvasUI {
         }
       }),
     )
-    this.ctx.restore()
   }
 
   /** Рисует танки на доске */
