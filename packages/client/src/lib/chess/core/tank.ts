@@ -112,6 +112,5 @@ export class Tank {
   /** Уничтожает танк */
   public destroy() {
     this.alive = false
-    this._color = 'black'
   }
 }
