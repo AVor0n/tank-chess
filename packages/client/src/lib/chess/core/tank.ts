@@ -16,6 +16,7 @@ export class Tank {
   private y = 0
   private rotation = 0
   private alive = true
+  private _startPosition: BoardPosition
 
   /** Танк исправен */
   public get isAlive() {
@@ -30,6 +31,16 @@ export class Tank {
     return { x: this.x, y: this.y, rotation: this.rotation }
   }
 
+  /** Позиция с которой начался ход */
+  public get startPosition() {
+    return this._startPosition
+  }
+
+  /** Танк имеет полный заряд энергии, т.е. не совершал действия в этом ходу */
+  get hasFullEnergy() {
+    return this._energy === this.movement
+  }
+
   /** Оставшаяся энергия для совершения действий */
   public get energy() {
     return this._energy
@@ -38,11 +49,6 @@ export class Tank {
   /** Цвет танка */
   public get color() {
     return this._color
-  }
-
-  /** Танк имеет полный заряд энергии, т.е. не совершал действия в этом ходу */
-  get hasFullEnergy() {
-    return this._energy === this.movement
   }
 
   /**
@@ -64,6 +70,7 @@ export class Tank {
     this.x = position.x
     this.y = position.y
     this.rotation = position.rotation
+    this._startPosition = structuredClone(this.position)
   }
 
   private doStep(direction: 1 | -1) {
@@ -85,6 +92,7 @@ export class Tank {
   /** Восстанавливает энергию */
   public charge() {
     this._energy = this.movement
+    this._startPosition = structuredClone(this.position)
   }
 
   /** Едет вперед на 1 шаг */
@@ -111,7 +119,7 @@ export class Tank {
   /** Совершает выстрел */
   public shoot() {
     if (this.energy < 1) throw new Error('Не хватает энергии для выстрела')
-    this._energy--
+    this._energy = 0
     return this
   }
 
