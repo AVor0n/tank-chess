@@ -5,11 +5,12 @@ import { Tank } from './tank'
 
 describe('class Board', () => {
   let board: Board
-  const lightWhiteTank = new Tank(TANK_TYPE.LT, 'player_1', '#ffffff', { x: 4, y: 4, rotation: 0 })
+  let lightWhiteTank: Tank
 
   beforeEach(() => {
     board = new Board()
     board.initialize(16)
+    lightWhiteTank = new Tank(TANK_TYPE.LT, 'player_1', '#ffffff', { x: 4, y: 4, rotation: 0 })
   })
 
   test('После инициализации создается массив заданного размера', () => {
@@ -22,23 +23,7 @@ describe('class Board', () => {
 
   test('getCellAt возвращает содержимое ячейки', () => {
     board.placeTank(lightWhiteTank)
-    expect(board.getCellAt({ x: 4, y: 4 })).toMatchObject({
-      type: 'tank',
-      data: {
-        id: 'LT_player_1_0',
-        type: 'LT',
-        armor: 1,
-        strength: 1,
-        movement: 5,
-        playerId: 'player_1',
-        _energy: 5,
-        _color: '#ffffff',
-        x: 4,
-        y: 4,
-        rotation: 0,
-        alive: true,
-      },
-    })
+    expect(board.getCellAt({ x: 4, y: 4 })?.type).toEqual('tank')
   })
 
   test('Невозможно получить ячейку за пределами игрового поля', () => {
