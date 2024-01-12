@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { type Game } from 'lib/chess'
+import { ACTION_TYPE, type Game } from 'lib/chess'
 import { TankController } from '../tankController'
 import { TankInfo } from '../tankInfo'
 import styles from './info.module.scss'
@@ -31,7 +31,10 @@ export const GameInfo = ({ game }: { game: Game }) => {
             energy={activeTank.energy}
             strength={activeTank.strength}
           />
-          <TankController canEndMove={activeTank.energy !== activeTank.movement} onEndMove={onEndMove} />
+          <TankController
+            canEndMove={game.getAvailableActions(activeTank).includes(ACTION_TYPE.STOP)}
+            onEndMove={onEndMove}
+          />
         </>
       ) : (
         <h2>Выберите танк</h2>
