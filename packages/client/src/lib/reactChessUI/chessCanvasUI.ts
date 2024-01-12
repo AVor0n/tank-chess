@@ -20,41 +20,23 @@ export class ChessCanvasUI {
   /** Поле повернуто на 180° */
   isInverted: boolean
 
-  private _cache: {
-    activeTank: Tank | null
-    availableAction: Set<ACTION_TYPE> | null
+  private cache: {
+    availableActions: Set<ACTION_TYPE> | null
     target: Tank | null
   } = {
-    activeTank: null,
-    availableAction: null,
+    availableActions: null,
     target: null,
   }
 
-  /** Кешированное значение доступных действий для танка */
-  private get availableActions() {
-    if (!this.game.activeTank) return null
-    if (this._cache.activeTank !== this.game.activeTank) {
-      this._cache.activeTank = this.game.activeTank
-      this._cache.availableAction = new Set(this.game.getAvailableActions(this.game.activeTank))
-    }
-    return this._cache.availableAction
-  }
-
-  /** Кешированная информации о цели */
-  private get target() {
-    if (!this.game.activeTank) return null
-
-    if (
-      this.game.activeTank.position.x === this._cache.activeTank?.position.x &&
-      this.game.activeTank.position.y === this._cache.activeTank?.position.y &&
-      this.game.activeTank.position.rotation === this._cache.activeTank?.position.rotation
-    ) {
+  private updateCache() {
+    if (this.game.activeTank) {
       const target = this.game.board.getTarget(this.game.activeTank.position)
-      this._cache.target = target?.type === 'tank' ? target.data : null
-      this._cache.availableAction = new Set(this.game.getAvailableActions(this.game.activeTank))
+      this.cache.target = target?.type === 'tank' ? target.data : null
+      this.cache.availableActions = new Set(this.game.getAvailableActions(this.game.activeTank))
+    } else {
+      this.cache.availableActions = null
+      this.cache.target = null
     }
-
-    return this._cache.target
   }
 
   constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number) {
@@ -65,10 +47,13 @@ export class ChessCanvasUI {
     this.isInverted = false
 
     this.game.on('startGame', this.refresh)
-    this.game.on('didPerformAction', this.refresh)
-    this.game.on('onChangeActiveTank', this.refresh)
-    this.game.on('onChangeActivePlayer', () => {
-      this.flip()
+    this.game.on('onChangeActivePlayer', this.refresh)
+    this.game.on('onChangeActiveTank', () => {
+      this.updateCache()
+      this.refresh()
+    })
+    this.game.on('didPerformAction', () => {
+      this.updateCache()
       this.refresh()
     })
   }
@@ -139,10 +124,10 @@ export class ChessCanvasUI {
   }
 
   /** Поворачивает доску на 180 градусов */
-  private flip() {
-    this.isInverted = !this.isInverted
-    this.ctx.canvas.style.transform = this.isInverted ? 'rotate(180deg)' : 'rotate(0deg)'
-  }
+  // private flip() {
+  //   this.isInverted = !this.isInverted
+  //   this.ctx.canvas.style.transform = this.isInverted ? 'rotate(180deg)' : 'rotate(0deg)'
+  // }
 
   /** Рисует стрелку вверх */
   private drawArrowUp() {
@@ -410,8 +395,7 @@ export class ChessCanvasUI {
     this.ctx.translate(x * this.cellSize + this.cellSize / 2, y * this.cellSize + this.cellSize / 2)
     this.ctx.rotate((Math.PI / 4) * rotation)
 
-    const availableActions = this.game.getAvailableActions(tank)
-    availableActions.forEach(action => {
+    this.cache.availableActions?.forEach(action => {
       this.ctx.save()
       switch (action) {
         case ACTION_TYPE.DRIVE:
@@ -479,8 +463,8 @@ export class ChessCanvasUI {
     const innerRadius = this.cellSize * 0.5
     const outerRadius = this.cellSize * 1.5
 
-    if (this.target) {
-      const { x, y, rotation } = this.target.position
+    if (this.cache.target) {
+      const { x, y, rotation } = this.cache.target.position
       const cellTargetRelative = this.getCellRelativePixel(event, x, y, rotation)
       if (
         cellTargetRelative.x >= -innerRadius &&
@@ -516,7 +500,7 @@ export class ChessCanvasUI {
   public onMouseClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (this.game.activeTank) {
       const action = this.getActionUnderCursor(event)
-      if (action) {
+      if (action && this.cache.availableActions?.has(action)) {
         this.game.makeMove(action)
       }
       return
@@ -535,11 +519,12 @@ export class ChessCanvasUI {
     const hoveredAction = this.getActionUnderCursor(event)
     this.drawAvailableActionsForTank(this.game.activeTank, {
       highlight: {
-        DRIVE: this.availableActions?.has(ACTION_TYPE.DRIVE) && hoveredAction === ACTION_TYPE.DRIVE,
-        REVERSE: this.availableActions?.has(ACTION_TYPE.REVERSE) && hoveredAction === ACTION_TYPE.REVERSE,
-        TURN_LEFT: this.availableActions?.has(ACTION_TYPE.TURN_LEFT) && hoveredAction === ACTION_TYPE.TURN_LEFT,
-        TURN_RIGHT: this.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.TURN_RIGHT,
-        FIRE: this.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.FIRE,
+        DRIVE: this.cache.availableActions?.has(ACTION_TYPE.DRIVE) && hoveredAction === ACTION_TYPE.DRIVE,
+        REVERSE: this.cache.availableActions?.has(ACTION_TYPE.REVERSE) && hoveredAction === ACTION_TYPE.REVERSE,
+        FIRE: this.cache.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.FIRE,
+        TURN_LEFT: this.cache.availableActions?.has(ACTION_TYPE.TURN_LEFT) && hoveredAction === ACTION_TYPE.TURN_LEFT,
+        TURN_RIGHT:
+          this.cache.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.TURN_RIGHT,
       },
     })
   }

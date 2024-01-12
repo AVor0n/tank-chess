@@ -1,6 +1,7 @@
 import { EventBus } from '../../eventBus'
 import { CHARS, PLAYER_COLORS, START_BOARD_TEMPLATE, CHAR_TO_TANK_TYPE } from '../constants'
 import { ACTION_TYPE, TANK_TYPE } from '../types'
+import { isEqual } from '../utils/isEqual'
 import { getNextCell } from '../utils/step'
 import { Board } from './board'
 import { Player } from './player'
@@ -89,35 +90,66 @@ export class Game extends EventBus<{
     this.emit('onChangeActiveTank', this.activeTank)
   }
 
-  /** Возвращает доступные действия для указного танка */
-  public getAvailableActions(tank: Tank) {
-    if (!tank.energy) return []
+  private isLeftTurnAvailable(tank: Tank) {
+    if (tank.energy === 0) return false
+    if (tank.energy > 1) return true
+    const newPosition = { ...tank.position, rotation: (tank.position.rotation - 1) % 8 }
+    return !isEqual(newPosition, tank.startPosition)
+  }
 
-    const actions: ACTION_TYPE[] = [ACTION_TYPE.TURN_LEFT, ACTION_TYPE.TURN_RIGHT]
+  private isRightTurnAvailable(tank: Tank) {
+    if (tank.energy === 0) return false
+    if (tank.energy > 1) return true
+    const newPosition = { ...tank.position, rotation: (tank.position.rotation + 1) % 8 }
+    return !isEqual(newPosition, tank.startPosition)
+  }
 
-    if (tank.energy < tank.movement) {
-      actions.push(ACTION_TYPE.STOP)
-    }
+  private isStopAvailable(tank: Tank) {
+    return !tank.hasFullEnergy && !isEqual(tank.position, tank.startPosition)
+  }
+
+  private isDriveAvailable(tank: Tank) {
+    if (tank.energy === 0) return false
 
     const nextCell = getNextCell(tank.position, 1)
-    if (this.board.getCellAt(nextCell)?.type === 'empty') {
-      actions.push(ACTION_TYPE.DRIVE)
-    }
+    return this.board.getCellAt(nextCell)?.type === 'empty'
+  }
 
-    const backCell = getNextCell(tank.position, -1)
-    if (this.board.getCellAt(backCell)?.type === 'empty') {
-      actions.push(ACTION_TYPE.REVERSE)
-    }
+  private isReverseAvailable(tank: Tank) {
+    if (!tank.hasFullEnergy) return false
 
+    const nextCell = getNextCell(tank.position, -1)
+    return this.board.getCellAt(nextCell)?.type === 'empty'
+  }
+
+  private isFireAvailable(tank: Tank) {
+    if (tank.energy === 0) return false
     const objectOnBoard = this.board.getTarget(tank.position)
     if (objectOnBoard && objectOnBoard.type === 'tank') {
       const target = this.tanksMap[objectOnBoard.data.id]
-      if (target && target.playerId !== tank.playerId && tank.strength >= target.armor) {
-        actions.push(ACTION_TYPE.FIRE)
-      }
+      if (!target) return false
+      const hasEnemy = target.playerId !== tank.playerId
+      const hasStrength = tank.strength >= target?.armor
+      const nextCell = getNextCell(tank.position, 1)
+      const hasDistance = target.position.x !== nextCell.x || target.position.y !== nextCell.y
+      return hasEnemy && hasStrength && hasDistance
     }
+    return false
+  }
 
-    return actions
+  /** Возвращает доступные действия для указного танка */
+  public getAvailableActions(tank: Tank) {
+    if (!tank.energy) return []
+    const availableActions: ACTION_TYPE[] = []
+
+    if (this.isFireAvailable(tank)) availableActions.push(ACTION_TYPE.FIRE)
+    if (this.isStopAvailable(tank)) availableActions.push(ACTION_TYPE.STOP)
+    if (this.isDriveAvailable(tank)) availableActions.push(ACTION_TYPE.DRIVE)
+    if (this.isReverseAvailable(tank)) availableActions.push(ACTION_TYPE.REVERSE)
+    if (this.isLeftTurnAvailable(tank)) availableActions.push(ACTION_TYPE.TURN_LEFT)
+    if (this.isRightTurnAvailable(tank)) availableActions.push(ACTION_TYPE.TURN_RIGHT)
+
+    return availableActions
   }
 
   /** Выполнить движение танком, который выбран в качестве активного */
