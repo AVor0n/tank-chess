@@ -59,5 +59,6 @@
     "vite": "5.0.7",
     "vite-plugin-checker": "0.6.2",
     "vite-tsconfig-paths": "4.2.2"
+    
   }
 }
