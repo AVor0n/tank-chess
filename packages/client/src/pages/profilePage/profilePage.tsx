@@ -38,28 +38,32 @@ export const ProfilePage = ({ login, first_name, second_name, phone, email, avat
         <div className={styles.content}>
           <div className={styles.profile}>
             <h1 className={styles.title}>Профиль пользователя</h1>
-            <div>
-              <Avatar url={avatar ?? null} />
+            <div className={styles.blockProfile}>
+              <div>
+                <Avatar url={avatar ?? null} />
+              </div>
+              <div className={styles.about}>
+                <div>
+                  <span className={styles.muted}>Логин:</span> {login}
+                </div>
+                <div>
+                  <span className={styles.muted}>Имя:</span> {first_name}
+                </div>
+                <div>
+                  <span className={styles.muted}>Фамилия:</span> {second_name}
+                </div>
+                <div>
+                  <span className={styles.muted}>email:</span>
+                  {email}
+                </div>
+                <div>
+                  <span className={styles.muted}>Телефон:</span>
+                  {phone}
+                </div>
+              </div>
             </div>
-            <div className={styles.about}>
-              <h3 className={styles.title}>Профиль</h3>
-              <div>
-                <span className={styles.muted}>Логин:</span> {login}
-              </div>
-              <div>
-                <span className={styles.muted}>Имя:</span> {first_name}
-              </div>
-              <div>
-                <span className={styles.muted}>Фамилия:</span> {second_name}
-              </div>
-              <div>
-                <span className={styles.muted}>email:</span>
-                {email}
-              </div>
-              <div>
-                <span className={styles.muted}>Телефон:</span>
-                {phone}
-              </div>
+
+            <div>
               <hr />
               <h3 className={styles.title}>Мои достижения</h3>
               <Table data={data} columns={columns} />

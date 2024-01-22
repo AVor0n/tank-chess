@@ -7,9 +7,6 @@
   .leftMenu {
     padding-inline-end: 40px;
     border-inline-end: 1px solid var(--colors-gray-light);
-    box-shadow:
-      0 1px 3px rgb(0 0 0 / 12%),
-      0 1px 2px rgb(0 0 0 / 24%);
   }
 }
 
@@ -18,28 +15,35 @@
   flex-grow: 1;
   align-content: center;
   align-items: center;
-  margin-block: 280px;
+  margin-block: 20px;
   margin-inline: 5em;
 }
 
 .profile {
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   align-content: center;
   margin-block: 0;
   margin-inline: 5px;
-}
 
-.profile .title {
-  margin-block: 0.5em;
-  margin-inline: 0;
-}
+  .title {
+    margin-block: 0.5em;
+    margin-inline: 0;
+    font-size: 30px;
+  }
 
-.about {
-  display: grid;
-  gap: 0.5em;
-  margin-block: 0;
-  margin-inline: 3em;
+  .blockProfile {
+    display: flex;
+    flex-direction: row;
+
+    .about {
+      display: grid;
+      gap: 0.5em;
+      margin-block: 0;
+      margin-inline: 3em;
+    }
+  }
 }
 
 .password {
