@@ -13,3 +13,20 @@
     background: var(--colors-white);
   }
 }
+
+.pageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100vh;
+  background: var(--colors-white);
+
+  .page {
+    inline-size: 94%;
+    max-inline-size: 1;
+    margin-block-start: 0;
+    padding: 30px;
+    background: var(--colors-white);
+  }
+}

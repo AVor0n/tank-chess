@@ -1,6 +1,7 @@
 import { Table, Button } from '@gravity-ui/uikit'
 import { useContext } from 'react'
-import { Menu } from '@components/menu'
+import Container from '@components/container'
+import MenuInner from '@components/menuInner'
 import { MAIN_MENU_LINKS } from '@utils/constants'
 import Form from '../../components/form'
 import AuthContext from '../../context/authContext'
@@ -29,58 +30,60 @@ const onSendFormChangePassword = (data: Record<string, File | string>) => {
 export const ProfilePage = ({ login, first_name, second_name, phone, email, avatar }: UserProfile) => {
   const { setAuth } = useContext(AuthContext)
   return (
-    <section className={styles.main}>
-      <div>
-        <h1 className={styles.title}>Профиль пользователя</h1>
-        <Menu title="Основное меню" links={MAIN_MENU_LINKS} />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.profile}>
-          <div>
-            <Avatar url={avatar ?? null} />
-          </div>
-          <div className={styles.about}>
-            <h3 className={styles.title}>Профиль</h3>
+    <Container>
+      <section className={styles.main}>
+        <div className={styles.leftMenu}>
+          <MenuInner links={MAIN_MENU_LINKS} />
+        </div>
+        <div className={styles.content}>
+          <div className={styles.profile}>
+            <h1 className={styles.title}>Профиль пользователя</h1>
             <div>
-              <span className={styles.muted}>Логин:</span> {login}
+              <Avatar url={avatar ?? null} />
             </div>
-            <div>
-              <span className={styles.muted}>Имя:</span> {first_name}
-            </div>
-            <div>
-              <span className={styles.muted}>Фамилия:</span> {second_name}
-            </div>
-            <div>
-              <span className={styles.muted}>email:</span>
-              {email}
-            </div>
-            <div>
-              <span className={styles.muted}>Телефон:</span>
-              {phone}
-            </div>
-            <hr />
-            <h3 className={styles.title}>Мои достижения</h3>
-            <Table data={data} columns={columns} />
-            <hr />
-            <Form onSubmit={onSendFormChangePassword}>
-              <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
-            </Form>
-            <div className={styles.logout}>
-              <Button
-                view="action"
-                width="max"
-                size="xl"
-                onClick={() => {
-                  AuthService.logout(() => {
-                    setAuth(false)
-                  })
-                }}>
-                Выйти
-              </Button>
+            <div className={styles.about}>
+              <h3 className={styles.title}>Профиль</h3>
+              <div>
+                <span className={styles.muted}>Логин:</span> {login}
+              </div>
+              <div>
+                <span className={styles.muted}>Имя:</span> {first_name}
+              </div>
+              <div>
+                <span className={styles.muted}>Фамилия:</span> {second_name}
+              </div>
+              <div>
+                <span className={styles.muted}>email:</span>
+                {email}
+              </div>
+              <div>
+                <span className={styles.muted}>Телефон:</span>
+                {phone}
+              </div>
+              <hr />
+              <h3 className={styles.title}>Мои достижения</h3>
+              <Table data={data} columns={columns} />
+              <hr />
+              <Form onSubmit={onSendFormChangePassword}>
+                <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
+              </Form>
+              <div className={styles.logout}>
+                <Button
+                  view="action"
+                  width="max"
+                  size="xl"
+                  onClick={() => {
+                    AuthService.logout(() => {
+                      setAuth(false)
+                    })
+                  }}>
+                  Выйти
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Container>
   )
 }

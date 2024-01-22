@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import styles from './menu.module.scss'
+import styles from './menuInner.module.scss'
 
 interface Link {
   label: string
@@ -10,7 +10,7 @@ interface MenuProps {
   links: Link[]
 }
 
-export const Menu = ({ links }: MenuProps) => (
+export const MenuInner = ({ links }: MenuProps) => (
   <nav className={styles.menu}>
     <ul className={styles.links}>
       {links.map(link => (
