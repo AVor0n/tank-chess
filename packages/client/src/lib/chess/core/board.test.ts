@@ -34,7 +34,7 @@ describe('class Board', () => {
     expect(board.getCellAt({ x: -17, y: 1 })).toBe(null)
   })
 
-  test('checkBounds вернет false, если задать координаты за пределами массива', () => {
+  test('Размеры массива игрового поля устанавливаются верно', () => {
     expect(board.grid.length).toBe(16)
   })
 

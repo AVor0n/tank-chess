@@ -258,5 +258,3 @@ describe('class Tank - командирский танк', () => {
     }).toThrow()
   })
 })
-
-export {}

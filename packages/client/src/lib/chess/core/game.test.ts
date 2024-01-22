@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals'
-import { type ACTION_TYPE, type TankCell } from '../types'
+import { ACTION_TYPE, type TankCell } from '../types'
 import { Board } from './board'
 import { Game } from './game'
 import { Player } from './player'
@@ -191,17 +191,17 @@ describe('Тестирование действий', () => {
   test('Перед ходом танку не доступно действие "Завершить ход"', () => {
     game.setActiveTank(testWhiteTank.id)
     const availableActArr = game.getAvailableActions(game.activeTank!)
-    expect(availableActArr.indexOf('STOP' as ACTION_TYPE)).toBe(-1)
+    expect(availableActArr.indexOf(ACTION_TYPE.STOP)).toBe(-1)
   })
 
   test('При первом ходе танку доступны поворот, движение вперед и назад', () => {
     game.setActiveTank(testWhiteTank.id)
     const availableActArr = game.getAvailableActions(game.activeTank!)
     expect(
-      availableActArr.indexOf('TURN_LEFT' as ACTION_TYPE) > -1 &&
-        availableActArr.indexOf('TURN_LEFT' as ACTION_TYPE) > -1 &&
-        availableActArr.indexOf('DRIVE' as ACTION_TYPE) > -1 &&
-        availableActArr.indexOf('REVERSE' as ACTION_TYPE) > -1,
+      availableActArr.indexOf(ACTION_TYPE.TURN_LEFT) > -1 &&
+        availableActArr.indexOf(ACTION_TYPE.TURN_LEFT) > -1 &&
+        availableActArr.indexOf(ACTION_TYPE.DRIVE) > -1 &&
+        availableActArr.indexOf(ACTION_TYPE.REVERSE) > -1,
     ).toBeTruthy()
   })
 
@@ -213,7 +213,7 @@ describe('Тестирование действий', () => {
   test('При совершении действия срабатывает событие willPerformAction', () => {
     game.setActiveTank(testWhiteTank.id)
     game.emit = jest.fn()
-    game.makeMove('DRIVE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.DRIVE)
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(game.emit).toHaveBeenNthCalledWith(1, 'willPerformAction', 'DRIVE')
   })
@@ -221,61 +221,61 @@ describe('Тестирование действий', () => {
   test('При совершении действия срабатывает событие didPerformAction', () => {
     game.setActiveTank(testWhiteTank.id)
     game.emit = jest.fn()
-    game.makeMove('DRIVE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.DRIVE)
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(game.emit).toHaveBeenNthCalledWith(2, 'didPerformAction', 'DRIVE')
   })
 
   test('Перед началом хода энергия танка восстанавлтивается до максимального значения', () => {
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('REVERSE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.REVERSE)
     game.setActiveTank(testBlackTank.id)
-    game.makeMove('DRIVE' as ACTION_TYPE)
-    game.makeMove('STOP' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.DRIVE)
+    game.makeMove(ACTION_TYPE.STOP)
     game.setActiveTank(testWhiteTank.id)
     expect(testWhiteTank.energy).toBe(MAX_LIGHT_TANK_ENERGY)
   })
 
   test('После совершения хода энергия уменьшается на 1', () => {
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('DRIVE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.DRIVE)
     expect(testWhiteTank.energy).toBe(MAX_LIGHT_TANK_ENERGY - 1)
   })
 
   test('Обратный ход обнуляет энергию', () => {
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('REVERSE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.REVERSE)
     expect(testWhiteTank.energy).toBe(0)
   })
 
   test('Нельзя, чтобы после завершения хода танк не изменил позицию', () => {
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('TURN_LEFT' as ACTION_TYPE)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_LEFT)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
     const availableActArr = game.getAvailableActions(game.activeTank!)
-    expect(availableActArr.indexOf('STOP' as ACTION_TYPE)).toBe(-1)
+    expect(availableActArr.indexOf(ACTION_TYPE.STOP)).toBe(-1)
   })
 
   test('Движение за пределы поля запрещено [1]', () => {
     game.setActiveTank(testWhiteTankLine2.id)
     const availableActArr = game.getAvailableActions(game.activeTank!)
-    expect(availableActArr.indexOf('REVERSE' as ACTION_TYPE)).toBe(-1)
+    expect(availableActArr.indexOf(ACTION_TYPE.REVERSE)).toBe(-1)
   })
 
   test('Движение за пределы поля запрещено [2]', () => {
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('TURN_LEFT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_LEFT)
     repeat(() => {
-      game.makeMove('DRIVE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.DRIVE)
     }, 2)
     const availableActArr = game.getAvailableActions(game.activeTank!)
-    expect(availableActArr.indexOf('DRIVE' as ACTION_TYPE)).toBe(-1)
+    expect(availableActArr.indexOf(ACTION_TYPE.DRIVE)).toBe(-1)
   })
 
   test('Невозможно выстрелить, если нет цели', () => {
     expect(() => {
       game.setActiveTank(testWhiteTank.id)
-      game.makeMove('FIRE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.FIRE)
     }).toThrow()
   })
 })
@@ -301,62 +301,60 @@ describe('Подбитие танка', () => {
 
     /**Путь белого танка до положения, позволяющего выстрелить по врагу */
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('TURN_LEFT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_LEFT)
     repeat(() => {
-      game.makeMove('DRIVE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.DRIVE)
     }, 2)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
-    game.makeMove('DRIVE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
+    game.makeMove(ACTION_TYPE.DRIVE)
     game.setActiveTank(testBlackTank.id)
-    game.makeMove('TURN_LEFT' as ACTION_TYPE)
-    game.makeMove('STOP' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_LEFT)
+    game.makeMove(ACTION_TYPE.STOP)
     game.setActiveTank(testWhiteTank.id)
     repeat(() => {
-      game.makeMove('DRIVE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.DRIVE)
     }, 5)
     game.setActiveTank(testBlackTank.id)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
-    game.makeMove('STOP' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
+    game.makeMove(ACTION_TYPE.STOP)
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
   })
 
   test('После выстрела  происходит завершение хода', () => {
     game.endMove = jest.fn()
-    game.makeMove('FIRE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.FIRE)
     expect(game.endMove).toHaveBeenCalled()
   })
 
   test('Свойство isAlive подбитого танка равно false', () => {
-    game.makeMove('FIRE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.FIRE)
     expect((game.board.grid[2][3] as TankCell).data.isAlive).toBeFalsy()
   })
 
   test('Если убит командирский танк - игра завершена', () => {
-    game.makeMove('FIRE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.FIRE)
     game.setActiveTank(testBlackComanderTank.id)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
-    game.makeMove('DRIVE' as ACTION_TYPE)
-    game.makeMove('TURN_LEFT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
+    game.makeMove(ACTION_TYPE.DRIVE)
+    game.makeMove(ACTION_TYPE.TURN_LEFT)
     repeat(() => {
-      game.makeMove('DRIVE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.DRIVE)
     }, 2)
     game.setActiveTank(testWhiteTank.id)
-    game.makeMove('DRIVE' as ACTION_TYPE)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.DRIVE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
     repeat(() => {
-      game.makeMove('DRIVE' as ACTION_TYPE)
+      game.makeMove(ACTION_TYPE.DRIVE)
     }, 3)
     game.setActiveTank(testBlackComanderTank.id)
-    game.makeMove('TURN_RIGHT' as ACTION_TYPE)
-    game.makeMove('DRIVE' as ACTION_TYPE)
-    game.makeMove('STOP' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.TURN_RIGHT)
+    game.makeMove(ACTION_TYPE.DRIVE)
+    game.makeMove(ACTION_TYPE.STOP)
     game.setActiveTank(testWhiteTank.id)
     game.emit = jest.fn()
-    game.makeMove('FIRE' as ACTION_TYPE)
+    game.makeMove(ACTION_TYPE.FIRE)
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(game.emit).toHaveBeenNthCalledWith(2, 'endGame', game.players[0])
   })
 })
-
-export {}
