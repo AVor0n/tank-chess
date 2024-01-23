@@ -29,8 +29,11 @@
 ## Тесты
 
 Для клиента используется [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro/)
+Для тестирования UI используется cypress [`cypress`](https://www.cypress.io/)
 
 ```yarn test```
+
+```yarn cypress:test```
 
 ## Линтинг
 

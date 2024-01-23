@@ -15,7 +15,7 @@ export const SignUp = ({ state, error }: FormProps) => {
   })
 
   return (
-    <div className={styles.form}>
+    <div className={styles.form} data-test="signup">
       <FormInput
         placeholder="Имя"
         name="first_name"
@@ -66,7 +66,14 @@ export const SignUp = ({ state, error }: FormProps) => {
         validationState={error.password ? 'invalid' : undefined}
       />
 
-      <Button className={styles.submitBtn} view="action" width="max" pin="brick-brick" size="xl" type="submit">
+      <Button
+        className={styles.submitBtn}
+        data-test="btn"
+        view="action"
+        width="max"
+        pin="brick-brick"
+        size="xl"
+        type="submit">
         Зарегистрироваться
       </Button>
     </div>
