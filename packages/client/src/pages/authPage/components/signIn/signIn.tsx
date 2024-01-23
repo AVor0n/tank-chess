@@ -10,7 +10,7 @@ export const SignIn = ({ state, error }: FormProps) => {
     password: '',
   })
   return (
-    <div className={styles.form}>
+    <div className={styles.form} data-test="signin">
       <FormInput
         key="login"
         placeholder="Логин"

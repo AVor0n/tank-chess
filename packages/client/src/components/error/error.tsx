@@ -29,7 +29,7 @@ export const Error = () => {
           }}>
           &times;
         </div>
-        <div className={styles.errorInner}>
+        <div data-test="error" className={styles.errorInner}>
           <div className={styles.errorHeader}>Что-то пошло не так...</div>
           <div className={styles.errorMessage}>{error.message}</div>
         </div>

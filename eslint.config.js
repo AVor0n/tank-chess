@@ -11,7 +11,7 @@ module.exports = (async () => {
   return [
     {
       files: ['packages/**/*.{js,mjs,cjs,ts,tsx}'],
-      ignores: ['**/dist/**', '**/*.config.{js,ts,cjs,mjs}', '**/ssr.tsx'],
+      ignores: ['**/dist/**', '**/*.config.{js,ts,cjs,mjs}', '**/ssr.tsx', '**/cypress/**'],
       languageOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
