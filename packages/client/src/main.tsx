@@ -5,7 +5,8 @@ import { Provider } from 'react-redux'
 import App from './app'
 import store from './store'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.hydrateRoot(
+  document.getElementById('root')!,
   <Provider store={store}>
     <App />
   </Provider>,
