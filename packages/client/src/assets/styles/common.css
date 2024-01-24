@@ -15,3 +15,12 @@
   --colors-chess-square-dark: #797468;
   --colors-chess-dark: #38322a;
 }
+
+/*
+.yc-button_view_normal.yc-button_selected{
+  --g-color-text-brand-heavy: #5b7c6c;
+  --g-color-base-selection: transparent;
+  --g-color-base-selection-hover: transparent;
+}
+
+*/

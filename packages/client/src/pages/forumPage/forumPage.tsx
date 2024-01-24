@@ -1,6 +1,7 @@
 import { Pagination, Table } from '@gravity-ui/uikit'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import LeftMenuPage from '@components/leftMenuPage'
 import { ROWS_PER_PAGE } from '@pages/leaderboad/constants'
 import { usePagination } from 'hook/usePagination'
 import { FORUM_PAGE_COLUMNS } from './constants'
@@ -50,26 +51,29 @@ export const ForumPage = () => {
   }
 
   return (
-    <section className={styles.container}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Форум</h2>
-        <Link className={styles.link} to="/forum/add-new-topic">
-          + Добавить топик
-        </Link>
+    <LeftMenuPage>
+      <div className={styles.forum}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Форум</h2>
+          <Link className={styles.link} to="/forum/add-new-topic">
+            + Добавить топик
+          </Link>
+        </div>
+        <Table
+          className={styles.table}
+          data={filteredTopics}
+          columns={FORUM_PAGE_COLUMNS}
+          onRowClick={handleTopicClick}
+          edgePadding={false}
+        />
+        <Pagination
+          className={styles.paginator}
+          page={currentPage.page}
+          pageSize={currentPage.pageSize}
+          total={topics.length}
+          onUpdate={handleUpdate}
+        />
       </div>
-      <Table
-        className={styles.table}
-        data={filteredTopics}
-        columns={FORUM_PAGE_COLUMNS}
-        onRowClick={handleTopicClick}
-      />
-      <Pagination
-        className={styles.paginator}
-        page={currentPage.page}
-        pageSize={currentPage.pageSize}
-        total={topics.length}
-        onUpdate={handleUpdate}
-      />
-    </section>
+    </LeftMenuPage>
   )
 }

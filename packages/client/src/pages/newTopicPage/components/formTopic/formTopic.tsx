@@ -10,7 +10,6 @@ interface FormProps {
 
 export const FormTopic = ({ state, error, isValid, touched }: FormProps) => (
   <div className={styles.container}>
-    <h3 className={styles.title}>Новый топик</h3>
     <div className={styles.text}>
       <TextInput
         name="theme"

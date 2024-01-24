@@ -1,5 +1,5 @@
 .menu {
-  margin-block-start: 20px;
+  margin-block-start: 25px;
   margin-inline: 0;
 }
 
@@ -17,8 +17,9 @@
   margin-block: 10px;
   margin-inline: 0;
   padding-inline-start: 25px;
-  color: inherit;
+  color: var(--colors-green-text);
   font-size: 26px;
+  font-family: var(--g-text-caption-font-family);
   line-height: 30px;
   text-decoration: none;
   background-size: 12px 16px;
@@ -37,6 +38,7 @@
   padding-inline-start: 25px;
   color: var(--colors-chess-block);
   font-size: 26px;
+  font-family: var(--g-text-caption-font-family);
   line-height: 30px;
   text-decoration: none;
   background: url('./images/arrow-selected.svg') left 5px no-repeat;

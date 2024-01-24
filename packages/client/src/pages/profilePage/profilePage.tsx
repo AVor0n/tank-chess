@@ -1,14 +1,12 @@
-import { Table, Button } from '@gravity-ui/uikit'
+import { Table } from '@gravity-ui/uikit'
 import { useContext } from 'react'
-import Container from '@components/container'
-import MenuInner from '@components/menuInner'
-import { MAIN_MENU_LINKS } from '@utils/constants'
+import LeftMenuPage from '@components/leftMenuPage'
 import Form from '../../components/form'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
 import userService from '../../service'
 import AuthService from '../../service/auth.service'
-import { type UserProfile } from '../../types/types'
+import { type UserProfile, type AlignTable } from '../../types/types'
 import Avatar from './components/avatar'
 import FormPassword from './components/formPassword'
 import styles from './profilePage.module.scss'
@@ -18,7 +16,10 @@ const data = [
   { name: 'Рыцарь башни и гусеницы ', score: '1000' },
   { name: 'Новичок', score: '100' },
 ]
-const columns = [{ id: 'name' }, { id: 'score' }]
+const columns = [
+  { id: 'name', width: 370, name: 'Имя противника', align: 'left' as AlignTable, primary: true },
+  { id: 'score', width: 370, name: 'Счет', align: 'right' as AlignTable },
+]
 
 const onSendFormChangePassword = (data: Record<string, File | string>) => {
   userService.changePassword(data, data => {
@@ -30,64 +31,58 @@ const onSendFormChangePassword = (data: Record<string, File | string>) => {
 export const ProfilePage = ({ login, first_name, second_name, phone, email, avatar }: UserProfile) => {
   const { setAuth } = useContext(AuthContext)
   return (
-    <Container>
-      <section className={styles.main}>
-        <div className={styles.leftMenu}>
-          <MenuInner links={MAIN_MENU_LINKS} />
-        </div>
-        <div className={styles.content}>
-          <div className={styles.profile}>
-            <h1 className={styles.title}>Профиль пользователя</h1>
-            <div className={styles.blockProfile}>
-              <div>
-                <Avatar url={avatar ?? null} />
-              </div>
-              <div className={styles.about}>
-                <div>
-                  <span className={styles.muted}>Логин:</span> {login}
-                </div>
-                <div>
-                  <span className={styles.muted}>Имя:</span> {first_name}
-                </div>
-                <div>
-                  <span className={styles.muted}>Фамилия:</span> {second_name}
-                </div>
-                <div>
-                  <span className={styles.muted}>email:</span>
-                  {email}
-                </div>
-                <div>
-                  <span className={styles.muted}>Телефон:</span>
-                  {phone}
-                </div>
-              </div>
+    <LeftMenuPage>
+      <div className={styles.profile}>
+        <h1 className={styles.title}>Профиль пользователя</h1>
+        <div className={styles.blockProfile}>
+          <div className={styles.avatar}>
+            <Avatar url={avatar ?? null} />
+          </div>
+          <div className={styles.about}>
+            <div className={styles.row}>
+              <div className={styles.muted}>Логин:</div> <div className={styles.personalValue}>{login}</div>
             </div>
-
-            <div>
-              <hr />
-              <h3 className={styles.title}>Мои достижения</h3>
-              <Table data={data} columns={columns} />
-              <hr />
-              <Form onSubmit={onSendFormChangePassword}>
-                <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
-              </Form>
-              <div className={styles.logout}>
-                <Button
-                  view="action"
-                  width="max"
-                  size="xl"
-                  onClick={() => {
-                    AuthService.logout(() => {
-                      setAuth(false)
-                    })
-                  }}>
-                  Выйти
-                </Button>
-              </div>
+            <div className={styles.row}>
+              <div className={styles.muted}>Имя:</div> <div className={styles.personalValue}>{first_name}</div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.muted}>Фамилия:</div> <div className={styles.personalValue}>{second_name}</div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.muted}>E-mail:</div>
+              <div className={styles.personalValue}>{email}</div>
+            </div>
+            <div className={styles.row}>
+              <div className={styles.muted}>Телефон:</div>
+              <div className={styles.personalValue}>{phone}</div>
             </div>
           </div>
         </div>
-      </section>
-    </Container>
+
+        <div className={styles.blockAchievment}>
+          <h3 className={styles.title}>Мои достижения</h3>
+          <Table data={data} columns={columns} edgePadding={false} />
+        </div>
+
+        <div className={styles.blockPassword}>
+          <div className={styles.blockPasswordInner}>
+            <Form onSubmit={onSendFormChangePassword}>
+              <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
+            </Form>
+          </div>
+        </div>
+        <div className={styles.logoutBlock}>
+          <span
+            className={styles.logoutBtn}
+            onClick={() => {
+              AuthService.logout(() => {
+                setAuth(false)
+              })
+            }}>
+            Выйти из профиля
+          </span>
+        </div>
+      </div>
+    </LeftMenuPage>
   )
 }

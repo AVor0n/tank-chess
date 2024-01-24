@@ -1,11 +1,18 @@
 @import url(../fonts/index.css);
 
 .g-root {
-  --g-font-family-sans: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  --g-font-family-sans: 'Roboto', 'Helvetica Neue', sans-serif;
+  --g-text-body-font-weight: 600;
+
+  --g-text-caption-font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  --g-text-header-font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+
+  --g-text-body-1-font-size: 16px;
+  --g-text-body-1-line-height: 20px;
   --g-text-header-font-weight: 600;
   --g-text-subheader-font-weight: 600;
   --g-text-display-font-weight: 600;
-  --g-text-accent-font-weight: 600;
+  --g-text-accent-font-weight: 800;
 
   --g-color-base-brand: #749080;
   --g-color-base-brand-hover: #68866f;

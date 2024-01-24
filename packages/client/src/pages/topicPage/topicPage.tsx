@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Form from '@components/form'
+import LeftMenuPage from '@components/leftMenuPage'
 import { TOPICS } from '@pages/forumPage/forumPage'
 import { FormContext } from 'context/formContext'
 import { type User } from 'types/types'
@@ -84,16 +85,18 @@ export const TopicPage = ({ topicId }: TopicProps) => {
   }
 
   return (
-    <section className={styles.container}>
-      <div>
-        <h6 className={styles.title}>{topicTitle}</h6>
-        {posts.map(post => (
-          <PostItem key={post.id} post={post} />
-        ))}
-      </div>
-      <Form onSubmit={onAddNewPost}>
-        <FormContext.Consumer>{state => <FormPost {...state} />}</FormContext.Consumer>
-      </Form>
-    </section>
+    <LeftMenuPage>
+      <section className={styles.container}>
+        <div>
+          <h1 className={styles.title}>{topicTitle}</h1>
+          {posts.map(post => (
+            <PostItem key={post.id} post={post} />
+          ))}
+        </div>
+        <Form onSubmit={onAddNewPost}>
+          <FormContext.Consumer>{state => <FormPost {...state} />}</FormContext.Consumer>
+        </Form>
+      </section>
+    </LeftMenuPage>
   )
 }
