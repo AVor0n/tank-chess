@@ -7,13 +7,11 @@ interface Link {
 }
 
 interface MenuProps {
-  title: string
   links: Link[]
 }
 
-export const Menu = ({ title, links }: MenuProps) => (
+export const Menu = ({ links }: MenuProps) => (
   <nav className={styles.menu}>
-    <h2 className={styles.subtitle}>{title}</h2>
     <ul className={styles.links}>
       {links.map(link => (
         <NavLink key={link.to} to={link.to} className={styles.link}>

@@ -1,5 +1,6 @@
 import { Loader, Pagination, Table } from '@gravity-ui/uikit'
 import { useEffect, useState } from 'react'
+import LeftMenuPage from '@components/leftMenuPage'
 import { usePagination } from 'hook/usePagination'
 import { ROWS_PER_PAGE, TABLE_HEADER } from './constants'
 import styles from './leaderboard.module.scss'
@@ -57,7 +58,8 @@ export const Leaderboard = () => {
     },
   ])
   const [currentPage, handleUpdate] = usePagination(ROWS_PER_PAGE)
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([])
 
   useEffect(() => {
     const startIndex = (currentPage.page - 1) * currentPage.pageSize
@@ -70,16 +72,18 @@ export const Leaderboard = () => {
   }
 
   return (
-    <section className={styles.container}>
-      <h2 className={styles.title}>Таблица лидеров</h2>
-      <Table data={filteredUsers} columns={TABLE_HEADER} className={styles.table} />
-      <Pagination
-        className={styles.paginator}
-        page={currentPage.page}
-        pageSize={currentPage.pageSize}
-        total={users.length}
-        onUpdate={handleUpdate}
-      />
-    </section>
+    <LeftMenuPage>
+      <div className={styles.leaderboard}>
+        <h1 className={styles.title}>Таблица лидеров</h1>
+        <Table data={filteredUsers} columns={TABLE_HEADER} className={styles.table} edgePadding={false} />
+        <Pagination
+          className={styles.paginator}
+          page={currentPage.page}
+          pageSize={currentPage.pageSize}
+          total={users.length}
+          onUpdate={handleUpdate}
+        />
+      </div>
+    </LeftMenuPage>
   )
 }

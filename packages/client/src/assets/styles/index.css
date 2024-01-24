@@ -15,3 +15,44 @@ body {
   max-width: 1440px;
   font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
 }
+
+h1,
+h2,
+h3 {
+  font-family: var(--g-text-caption-font-family);
+  color: var(--colors-green-text);
+}
+
+h1 {
+  font-size: 36px;
+  padding-bottom: 30px;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+
+/*Стилизауция пагинации*/
+.g-pagination {
+  background: transparent;
+}
+.g-pagination .yc-button_view_normal.yc-button_selected {
+  border: 1px solid var(--colors-black);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--colors-green-text);
+}
+.g-pagination .yc-button_view_normal.yc-button_selected:hover {
+  background: transparent;
+}
+.g-pagination .yc-button__text {
+  background: transparent;
+}
+.g-pagination .yc-button_selected .yc-button__text:hover {
+  color: var(--colors-white);
+}
+.g-pagination .yc-button::before {
+  background: transparent;
+}

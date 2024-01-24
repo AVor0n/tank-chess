@@ -1,7 +1,8 @@
-.container {
+.forum {
   display: flex;
   flex-direction: column;
-  color: var(--colors-green-text);
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .header {
@@ -11,14 +12,12 @@
 }
 
 .title {
+  margin-block: 0.5em;
   margin-inline: 0;
-  font-weight: 600;
-  font-size: 48px;
-  font-style: normal;
-  line-height: normal;
 }
 
 .table {
+  inline-size: 100%;
   min-block-size: 80%;
   margin-block: 50px;
   margin-inline: 0;
@@ -26,16 +25,25 @@
 
   table {
     inline-size: 100%;
+
+    .thTable {
+      color: var(--colors-green-text);
+    }
   }
 }
 
 .link {
   color: inherit;
+  color: var(--colors-green-text);
   font-weight: 600;
   font-size: 24px;
   font-style: normal;
   line-height: normal;
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .paginator {

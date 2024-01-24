@@ -4,16 +4,14 @@
   justify-content: space-between;
   inline-size: 100%;
   block-size: 90vh;
+  block-size: 100%;
   color: var(--colors-green-text);
 }
 
 .title {
-  margin-block: 50px 0;
+  margin-block: 0.5em;
   margin-inline: 0;
-  font-weight: 600;
-  font-size: 48px;
-  font-style: normal;
-  line-height: normal;
+  padding-block-end: 0;
 }
 
 .footer {

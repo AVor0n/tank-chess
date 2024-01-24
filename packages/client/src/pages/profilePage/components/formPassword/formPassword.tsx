@@ -1,4 +1,5 @@
-import { Button, TextInput } from '@gravity-ui/uikit'
+import { Button } from '@gravity-ui/uikit'
+import FormInput from '@components/formInput'
 import styles from '@pages/profilePage/profilePage.module.scss'
 
 interface FormProps {
@@ -12,30 +13,35 @@ export const FormPassword = ({ state, error, isValid, touched }: FormProps) => (
   <div className={styles.password}>
     <h3 className={styles.title}>Поменять пароль</h3>
     <div>
-      <TextInput
+      <FormInput
         name="oldPassword"
         placeholder="Текущий пароль"
         type="password"
         view="normal"
-        pin="round-round"
         value={state.oldPassword}
         errorMessage={error.oldPassword}
         validationState={error.oldPassword ? 'invalid' : undefined}
       />
-    </div>
-    <div>
-      <TextInput
+
+      <FormInput
         name="newPassword"
         view="normal"
         placeholder="Новый пароль"
         type="password"
-        pin="round-round"
         value={state.newPassword}
         errorMessage={error.newPassword}
         validationState={error.newPassword ? 'invalid' : undefined}
       />
     </div>
-    <Button view="action" size="l" type="submit" disabled={!touched || !isValid}>
+
+    <Button
+      className={styles.submitBtn}
+      view="action"
+      width="max"
+      size="xl"
+      pin="brick-brick"
+      type="submit"
+      disabled={!touched || !isValid}>
       Сохранить
     </Button>
   </div>

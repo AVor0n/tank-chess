@@ -74,7 +74,7 @@ export const AuthPage = () => {
   }
 
   return (
-    <Container>
+    <Container isCard>
       <Tabs activeTab={activeTab} size="xl">
         <Tabs.Item key="signin" id="signin" title="Авторизация" onClick={() => setActiveTab('signin')} />
         <Tabs.Item key="signup" id="signup" title="Регистрация" onClick={() => setActiveTab('signup')} />

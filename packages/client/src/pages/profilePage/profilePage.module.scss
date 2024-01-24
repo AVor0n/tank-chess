@@ -1,48 +1,83 @@
-.main {
-  display: flex;
-  justify-content: space-around;
-  max-inline-size: 100%;
-  color: var(--colors-green-text);
-}
-
-.content {
-  display: flex;
-  flex-grow: 1;
-  align-content: center;
-  align-items: center;
-  margin-block: 280px;
-  margin-inline: 5em;
-}
-
 .profile {
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   align-content: center;
   margin-block: 0;
   margin-inline: 5px;
-}
 
-.profile .title {
-  margin-block: 0.5em;
-  margin-inline: 0;
-}
+  .title {
+    margin-block: 0.5em;
+    margin-inline: 0;
+  }
 
-.about {
-  display: grid;
-  gap: 0.5em;
-  margin-block: 0;
-  margin-inline: 3em;
-}
+  .blockProfile {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin-block-end: 35px;
+    padding-block-end: 35px;
+    border-block-end: 1px solid var(--colors-gray-dark);
 
-.password {
-  display: grid;
-  gap: 0.5em;
-}
+    .avatar {
+      padding-inline-end: 50px;
+    }
 
-.muted {
-  color: var(--colors-gray-dark);
-}
+    .about {
+      margin-block: 0;
+      margin-inline: 3em;
 
-.logout {
-  margin-block-start: 20px;
+      .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        inline-size: 400px;
+        padding: 10px;
+        border-block-end: 1px solid var(--colors-gray-light);
+
+        &:last-child {
+          border-block-end: none;
+        }
+
+        .personalValue {
+          font-weight: 800;
+        }
+      }
+    }
+  }
+
+  .blockAchievment {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    margin-block-end: 35px;
+    padding-block-end: 30px;
+    border-block-end: 1px solid var(--colors-gray-dark);
+  }
+
+  .blockPassword {
+    inline-size: 100%;
+    margin-block-end: 35px;
+    padding-block-end: 30px;
+    border-block-end: 1px solid var(--colors-gray-dark);
+
+    .blockPasswordInner {
+      inline-size: 300px;
+    }
+  }
+
+  .logoutBlock {
+    .logoutBtn {
+      padding-inline-start: 15px;
+      color: var(--colors-red);
+      cursor: pointer;
+      border-inline-start: 3px solid var(--colors-green);
+
+      &:hover {
+        color: var(--colors-chess-dark);
+      }
+    }
+
+    padding-block-end: 50px;
+  }
 }

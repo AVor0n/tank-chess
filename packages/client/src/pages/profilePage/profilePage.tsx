@@ -1,7 +1,6 @@
-import { Table, Button } from '@gravity-ui/uikit'
+import { Table, type TableColumnConfig } from '@gravity-ui/uikit'
 import { useContext } from 'react'
-import { Menu } from '@components/menu'
-import { MAIN_MENU_LINKS } from '@utils/constants'
+import LeftMenuPage from '@components/leftMenuPage'
 import Form from '../../components/form'
 import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
@@ -12,12 +11,22 @@ import Avatar from './components/avatar'
 import FormPassword from './components/formPassword'
 import styles from './profilePage.module.scss'
 
-const data = [
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const data: any[] = [
   { name: 'Диванный танкист', score: '13000' },
   { name: 'Рыцарь башни и гусеницы ', score: '1000' },
   { name: 'Новичок', score: '100' },
 ]
-const columns = [{ id: 'name' }, { id: 'score' }]
+const columns: TableColumnConfig<{
+  id: string
+  width: number
+  align: string
+  name: string
+  score: string
+}>[] = [
+  { id: 'name', width: 370, name: 'Имя противника', align: 'left', primary: true },
+  { id: 'score', width: 370, name: 'Счет', align: 'right' },
+]
 
 const onSendFormChangePassword = (data: Record<string, File | string>) => {
   userService.changePassword(data, data => {
@@ -29,58 +38,58 @@ const onSendFormChangePassword = (data: Record<string, File | string>) => {
 export const ProfilePage = ({ login, first_name, second_name, phone, email, avatar }: UserProfile) => {
   const { setAuth } = useContext(AuthContext)
   return (
-    <section className={styles.main}>
-      <div>
+    <LeftMenuPage>
+      <div className={styles.profile}>
         <h1 className={styles.title}>Профиль пользователя</h1>
-        <Menu title="Основное меню" links={MAIN_MENU_LINKS} />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.profile}>
-          <div>
+        <div className={styles.blockProfile}>
+          <div className={styles.avatar}>
             <Avatar url={avatar ?? null} />
           </div>
           <div className={styles.about}>
-            <h3 className={styles.title}>Профиль</h3>
-            <div>
-              <span className={styles.muted}>Логин:</span> {login}
+            <div className={styles.row}>
+              <div className={styles.muted}>Логин:</div> <div className={styles.personalValue}>{login}</div>
             </div>
-            <div>
-              <span className={styles.muted}>Имя:</span> {first_name}
+            <div className={styles.row}>
+              <div className={styles.muted}>Имя:</div> <div className={styles.personalValue}>{first_name}</div>
             </div>
-            <div>
-              <span className={styles.muted}>Фамилия:</span> {second_name}
+            <div className={styles.row}>
+              <div className={styles.muted}>Фамилия:</div> <div className={styles.personalValue}>{second_name}</div>
             </div>
-            <div>
-              <span className={styles.muted}>email:</span>
-              {email}
+            <div className={styles.row}>
+              <div className={styles.muted}>E-mail:</div>
+              <div className={styles.personalValue}>{email}</div>
             </div>
-            <div>
-              <span className={styles.muted}>Телефон:</span>
-              {phone}
-            </div>
-            <hr />
-            <h3 className={styles.title}>Мои достижения</h3>
-            <Table data={data} columns={columns} />
-            <hr />
-            <Form onSubmit={onSendFormChangePassword}>
-              <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
-            </Form>
-            <div className={styles.logout}>
-              <Button
-                view="action"
-                width="max"
-                size="xl"
-                onClick={() => {
-                  AuthService.logout(() => {
-                    setAuth(false)
-                  })
-                }}>
-                Выйти
-              </Button>
+            <div className={styles.row}>
+              <div className={styles.muted}>Телефон:</div>
+              <div className={styles.personalValue}>{phone}</div>
             </div>
           </div>
         </div>
+
+        <div className={styles.blockAchievment}>
+          <h3 className={styles.title}>Мои достижения</h3>
+          <Table data={data} columns={columns} edgePadding={false} />
+        </div>
+
+        <div className={styles.blockPassword}>
+          <div className={styles.blockPasswordInner}>
+            <Form onSubmit={onSendFormChangePassword}>
+              <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
+            </Form>
+          </div>
+        </div>
+        <div className={styles.logoutBlock}>
+          <span
+            className={styles.logoutBtn}
+            onClick={() => {
+              AuthService.logout(() => {
+                setAuth(false)
+              })
+            }}>
+            Выйти из профиля
+          </span>
+        </div>
       </div>
-    </section>
+    </LeftMenuPage>
   )
 }

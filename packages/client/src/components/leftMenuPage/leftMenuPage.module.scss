@@ -1,0 +1,27 @@
+.main {
+  display: flex;
+  justify-content: space-around;
+  max-inline-size: 100%;
+  min-block-size: 100%;
+
+  .leftMenu {
+    min-inline-size: 150px;
+    max-inline-size: 200px;
+    padding-inline-end: 40px;
+    border-inline-end: 1px solid var(--colors-gray-dark);
+
+    nav {
+      position: fixed;
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-grow: 1;
+    place-content: center start;
+    align-items: center;
+    block-size: 100%;
+    margin-block: 20px;
+    margin-inline: 5em;
+  }
+}

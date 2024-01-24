@@ -1,18 +1,37 @@
 .main {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  max-inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 100vh;
   color: var(--colors-green-text);
+  background: #e1e4e6;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  inline-size: 50%;
+}
+
+.contentInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  inline-size: 80%;
 }
 
 .title {
-  inline-size: 523px;
   margin: 0;
-  margin-block-start: 165px;
   font-size: 128px;
-  font-family: 'Bebas Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--g-text-caption-font-family);
+  line-height: 160px;
 }
 
 .image {
-  inline-size: 100vh;
+  inline-size: 50%;
+  min-block-size: 100vh;
+  background: url('./../../assets/images/main.png') center center no-repeat;
+  background-size: cover;
 }
