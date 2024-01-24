@@ -1,4 +1,4 @@
-import { Table } from '@gravity-ui/uikit'
+import { Table, type TableColumnConfig } from '@gravity-ui/uikit'
 import { useContext } from 'react'
 import LeftMenuPage from '@components/leftMenuPage'
 import Form from '../../components/form'
@@ -6,19 +6,26 @@ import AuthContext from '../../context/authContext'
 import { FormContext } from '../../context/formContext'
 import userService from '../../service'
 import AuthService from '../../service/auth.service'
-import { type UserProfile, type AlignTable } from '../../types/types'
+import { type UserProfile } from '../../types/types'
 import Avatar from './components/avatar'
 import FormPassword from './components/formPassword'
 import styles from './profilePage.module.scss'
 
-const data = [
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const data: any[] = [
   { name: 'Диванный танкист', score: '13000' },
   { name: 'Рыцарь башни и гусеницы ', score: '1000' },
   { name: 'Новичок', score: '100' },
 ]
-const columns = [
-  { id: 'name', width: 370, name: 'Имя противника', align: 'left' as AlignTable, primary: true },
-  { id: 'score', width: 370, name: 'Счет', align: 'right' as AlignTable },
+const columns: TableColumnConfig<{
+  id: string
+  width: number
+  align: string
+  name: string
+  score: string
+}>[] = [
+  { id: 'name', width: 370, name: 'Имя противника', align: 'left', primary: true },
+  { id: 'score', width: 370, name: 'Счет', align: 'right' },
 ]
 
 const onSendFormChangePassword = (data: Record<string, File | string>) => {

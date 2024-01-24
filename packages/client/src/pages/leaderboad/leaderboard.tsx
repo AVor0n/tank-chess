@@ -58,7 +58,8 @@ export const Leaderboard = () => {
     },
   ])
   const [currentPage, handleUpdate] = usePagination(ROWS_PER_PAGE)
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([])
 
   useEffect(() => {
     const startIndex = (currentPage.page - 1) * currentPage.pageSize
