@@ -54,7 +54,7 @@ export const ForumPage = () => {
     <LeftMenuPage>
       <div className={styles.forum}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Форум</h2>
+          <h1 className={styles.title}>Форум</h1>
           <Link className={styles.link} to="/forum/add-new-topic">
             + Добавить топик
           </Link>

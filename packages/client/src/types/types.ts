@@ -48,5 +48,3 @@ export interface AppState {
     loaded: boolean
   }
 }
-
-export type AlignTable = 'left' | 'right' | 'center' | undefined
