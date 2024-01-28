@@ -16,24 +16,22 @@ export const Error = () => {
     }
   }, [])
 
-  return !error.hasError ? (
-    <> </>
-  ) : (
-    error.hasError && (
-      <div className={styles.errorContainer}>
-        <div
-          className={styles.resetError}
-          onClick={() => {
-            clearTimeout(timeoutId)
-            store.dispatch(resetError())
-          }}>
-          &times;
+  return !error.hasError
+    ? null
+    : error.hasError && (
+        <div className={styles.errorContainer}>
+          <div
+            className={styles.resetError}
+            onClick={() => {
+              clearTimeout(timeoutId)
+              store.dispatch(resetError())
+            }}>
+            &times;
+          </div>
+          <div data-test="error" className={styles.errorInner}>
+            <div className={styles.errorHeader}>Что-то пошло не так...</div>
+            <div className={styles.errorMessage}>{error.message}</div>
+          </div>
         </div>
-        <div data-test="error" className={styles.errorInner}>
-          <div className={styles.errorHeader}>Что-то пошло не так...</div>
-          <div className={styles.errorMessage}>{error.message}</div>
-        </div>
-      </div>
-    )
-  )
+      )
 }

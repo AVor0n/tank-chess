@@ -1,8 +1,9 @@
-import router from '../router'
+import { createBrowserRouter } from 'react-router-dom'
+import routes from '../router'
 
 const registerServiceWorker = async () => {
   const pageReload = () => {
-    router.navigate(0)
+    createBrowserRouter(routes).navigate(0)
   }
   if ('serviceWorker' in navigator) {
     try {

@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.0.0",
   "type": "module",
-  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build --config vite.config.ts",
@@ -53,6 +52,7 @@
     "postcss-scss": "4.0.9",
     "prettier": "3.1.0",
     "sass": "1.69.5",
+    "serialize-javascript": "^6.0.2",
     "stylelint": "15.11.0",
     "stylelint-config-standard-scss": "11.1.0",
     "stylelint-declaration-block-no-ignored-properties": "2.7.0",

@@ -2,19 +2,24 @@ import { useState, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PageLoader from '../components/pageLoader'
 import AuthContext from '../context/authContext'
-import { selectUserLoading } from '../reducers/user'
+import { selectUserLoading, selectUserUserInfo } from '../reducers/user'
 import AuthService from '../service/auth.service'
 
 const withAuthInfo = (OriginalComponent: React.ComponentType) => {
-  const ComponentWithAuth = () => {
+  const ComponentWithAuth = (props: Record<string, unknown>) => {
     const loading = useSelector(selectUserLoading)
-    const [isAuth, setAuth] = useState<boolean>(false)
+    const UserInfo = useSelector(selectUserUserInfo)
+    const [isAuth, setAuth] = useState<boolean>(!!UserInfo)
     const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
 
     useEffect(() => {
       const fetchUser = async () => {
         const user = await AuthService.getUser()
-        if (user && user.id > 0) setAuth(true)
+        if (user && user.id > 0) {
+          setAuth(true)
+          return
+        }
+        setAuth(false)
       }
       fetchUser()
     }, [])
@@ -25,7 +30,7 @@ const withAuthInfo = (OriginalComponent: React.ComponentType) => {
           <PageLoader />
         ) : (
           <AuthContext.Provider value={authInfo}>
-            <OriginalComponent />
+            <OriginalComponent {...props} />
           </AuthContext.Provider>
         )}
       </>
