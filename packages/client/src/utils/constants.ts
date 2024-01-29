@@ -24,3 +24,7 @@ export const errors = {
 
 /* URLS */
 export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
+
+
+/**for oAuth */
+export const REDIRECT_URL = 'http://localhost:3000';
