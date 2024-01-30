@@ -2,7 +2,7 @@ import { type ErrorResponse } from 'react-router-dom'
 import { setError } from 'reducers/error'
 import store from 'store'
 import { type Nullable } from '../types/types'
-import { BASE_URL, REDIRECT_URL } from '../utils/constants'
+import { BASE_URL } from '../utils/constants'
 
 interface ServiceIdResponse {
   service_id: string
@@ -10,7 +10,6 @@ interface ServiceIdResponse {
 
 class OAuthService {
   baseURL: string = BASE_URL
-  redirectUrl = REDIRECT_URL
 
   async getClientID() {
     try {
@@ -28,7 +27,8 @@ class OAuthService {
   async redirectYandexUrl(): Promise<string> {
     try {
       const clientId = await this.getClientID()
-      return `https://oauth.yandex.ru/authorize?response_type=code&client_id=${clientId}&redirect_uri=${this.redirectUrl}`
+      const redirectUrl = window.location.origin
+      return `https://oauth.yandex.ru/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUrl}`
     } catch (error) {
       if (error instanceof Error) store.dispatch(setError(error.message))
       return location.pathname
