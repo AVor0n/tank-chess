@@ -1,10 +1,9 @@
 import { Button } from '@gravity-ui/uikit'
 import { useState } from 'react'
 import FormInput from '@components/formInput'
-import oAuthService from "../../../../service/oauth.service"
+import oAuthService from '../../../../service/oauth.service'
 import { type FormProps } from '../../../../types/types'
 import styles from './signIn.module.scss'
- 
 
 export const SignIn = ({ state, error }: FormProps) => {
   const [signInData, setSignInData] = useState({
@@ -36,15 +35,17 @@ export const SignIn = ({ state, error }: FormProps) => {
         Войти
       </Button>
 
-      <Button className={styles.oAuthBtn} 
-        onClick={async () => {
-            window.location.replace(await oAuthService. redirectYandexUrl())
-        }} 
-        view="outlined" 
-        width="max" 
-        pin="brick-brick" 
-        size="xl"
-      >
+      <Button
+        className={styles.oAuthBtn}
+        onClick={() => {
+          ;(async () => {
+            window.location.replace(await oAuthService.redirectYandexUrl())
+          })()
+        }}
+        view="outlined"
+        width="max"
+        pin="brick-brick"
+        size="xl">
         Войти через Яндекс
       </Button>
     </div>

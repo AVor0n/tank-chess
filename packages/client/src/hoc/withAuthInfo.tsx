@@ -19,7 +19,6 @@ const withAuthInfo = (OriginalComponent: React.ComponentType) => {
         const code = urlParams.get('code')
         if (code) {
           await oAuthService.executeOAuth(code)
-          alert(1)
         }
         const user = await AuthService.getUser()
         if (user && user.id > 0) {
