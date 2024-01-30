@@ -9,6 +9,10 @@ pre-commit:
       root: 'packages/server'
       glob: '*.{ts,tsx}'
       run: yarn tsc -p ./tsconfig.json
+    eslint:
+      glob: '*.{ts,tsx}'
+      run: yarn eslint {staged_files} --fix --no-warn-ignored && yarn prettier -w {staged_files}
+      stage_fixed: true
     stylelint:
       glob: '*.{scss}'
       run: yarn stylelint {staged_files} --fix && yarn prettier -w {staged_files}

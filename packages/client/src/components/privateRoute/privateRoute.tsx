@@ -5,6 +5,7 @@ import AuthContext from '../../context/authContext'
 export const PrivateRoute = () => {
   const { isAuth } = useContext(AuthContext)
   const location = useLocation()
-
-  return isAuth ? <Outlet /> : <Navigate to="/login" state={{ location }} replace />
+  const urlParams = new URLSearchParams(window.location.search)
+  const code = urlParams.get('code')
+  return isAuth || code ? <Outlet /> : <Navigate to="/login" state={{ location }} replace />
 }
