@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { createBrowserRouter, useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate, json } from 'react-router-dom'
 import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
@@ -13,10 +13,13 @@ import TopicPage from '@pages/topicPage'
 import withErrorInfo from 'hoc/withErrorInfo'
 import { selectUserUserInfo } from 'reducers/user'
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: '/login',
-    Component: withErrorInfo(AuthPage),
+    Component: AuthPage,
+    loader() {
+      return json({ message: 'Пример данных, если нужно сделать запрос на этапе рендеринга на сервере' })
+    },
   },
   {
     element: <PrivateRoute />,
@@ -65,6 +68,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+]
 
-export default router
+export default routes
