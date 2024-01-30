@@ -38,7 +38,8 @@ export const SignIn = ({ state, error }: FormProps) => {
       <Button
         className={styles.oAuthBtn}
         onClick={() => {
-          ;(async () => window.location.replace(await oAuthService.redirectYandexUrl()))()
+          const oAuthRedirect = async () => window.location.replace(await oAuthService.redirectYandexUrl())
+          oAuthRedirect()
         }}
         view="outlined"
         width="max"
