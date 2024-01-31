@@ -25,7 +25,9 @@ const withAuthInfo = (OriginalComponent: React.ComponentType) => {
         if (user && user.id > 0) {
           store.dispatch(setUserContext(user))
           setAuth(true)
+          return
         }
+        setAuth(false)
       })()
     }, [])
 
