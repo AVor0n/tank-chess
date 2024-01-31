@@ -12,6 +12,9 @@ export default defineConfig({
       typescript: true,
     }),
   ],
+  ssr: {
+    format: 'cjs',
+  },
   build: {
     outDir: 'ssr-dist',
     ssr: true,
@@ -25,8 +28,5 @@ export default defineConfig({
         dir: 'ssr-dist',
       },
     },
-  },
-  ssr: {
-    format: 'cjs',
   },
 })

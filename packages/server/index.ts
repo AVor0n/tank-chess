@@ -2,8 +2,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import express from 'express'
+import express, { type Request } from 'express'
 import { createServer as createViteServer, type ViteDevServer } from 'vite'
+import { authMiddleware } from './middleware/auth.middleware'
 
 dotenv.config()
 
@@ -16,16 +17,18 @@ async function startServer() {
 
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
-  const srcPath = path.dirname(require.resolve('client/index.html'))
+  const srcPath = path.dirname(require.resolve('client'))
   const ssrClientPath = require.resolve('client/ssr-dist/ssr.cjs')
 
   if (isDev()) {
     vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: 'ssr' },
       root: srcPath,
       appType: 'custom',
+      ssr: {
+        noExternal: ['@gravity-ui/uikit'],
+      },
     })
-
     app.use(vite.middlewares)
   }
 
@@ -34,8 +37,10 @@ async function startServer() {
   })
 
   if (!isDev()) {
-    app.use('/assets', express.static(distPath, { index: false }))
+    app.use('/', express.static(distPath, { index: false }))
   }
+
+  app.use(authMiddleware)
 
   /* eslint-disable @typescript-eslint/no-misused-promises*/
   app.use('*', async (req, res, next) => {
@@ -53,7 +58,7 @@ async function startServer() {
       }
 
       interface SSRModule {
-        render: () => Promise<string>
+        render: (req: Request, preloadData?: Record<string, unknown>) => Promise<string>
       }
 
       let mod: SSRModule
@@ -61,12 +66,29 @@ async function startServer() {
       if (!isDev()) {
         mod = (await import(ssrClientPath)) as SSRModule
       } else {
-        mod = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))) as SSRModule
+        mod = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'), { fixStacktrace: true })) as SSRModule
       }
 
       const { render } = mod
-      const appHtml = await render()
 
+      // Мок для ssr страниц авторизации
+      const preloadedState = {
+        user: {
+          userInfo: {
+            id: 2,
+            first_name: 'Тест',
+            second_name: 'Тест',
+            display_name: null,
+            login: 'test',
+            avatar: null,
+            email: 'test@ya.ru',
+            phone: '89008008080',
+          },
+          loading: false,
+        },
+      }
+
+      const appHtml = await render(req, preloadedState)
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
@@ -79,7 +101,7 @@ async function startServer() {
   })
 
   app.listen(port, () => {
-    console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
+    console.log(`  ➜ 🎸 Server is listening on port: ${port}`, isDev())
   })
 }
 

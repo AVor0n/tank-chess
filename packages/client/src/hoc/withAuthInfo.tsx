@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { setUserContext, selectUserLoading } from 'reducers/user'
+import { setUserContext, selectUserLoading, selectUserUserInfo } from 'reducers/user'
 import store from 'store'
 import PageLoader from '../components/pageLoader'
 import AuthContext from '../context/authContext'
@@ -8,9 +8,10 @@ import AuthService from '../service/auth.service'
 import oAuthService from '../service/oauth.service'
 
 const withAuthInfo = (OriginalComponent: React.ComponentType) => {
-  const ComponentWithAuth = () => {
+  const ComponentWithAuth = (props: Record<string, unknown>) => {
     const loading = useSelector(selectUserLoading)
-    const [isAuth, setAuth] = useState<boolean>(false)
+    const UserInfo = useSelector(selectUserUserInfo)
+    const [isAuth, setAuth] = useState<boolean>(!!UserInfo)
     const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
 
     useEffect(() => {
@@ -34,7 +35,7 @@ const withAuthInfo = (OriginalComponent: React.ComponentType) => {
           <PageLoader />
         ) : (
           <AuthContext.Provider value={authInfo}>
-            <OriginalComponent />
+            <OriginalComponent {...props} />
           </AuthContext.Provider>
         )}
       </>
