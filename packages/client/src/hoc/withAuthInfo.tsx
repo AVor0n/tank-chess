@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { setUserContext, selectUserLoading, selectUserUserInfo } from 'reducers/user'
+import store from 'store'
 import PageLoader from '../components/pageLoader'
 import AuthContext from '../context/authContext'
-import { selectUserLoading, selectUserUserInfo } from '../reducers/user'
 import AuthService from '../service/auth.service'
+import oAuthService from '../service/oauth.service'
 
 const withAuthInfo = (OriginalComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: Record<string, unknown>) => {
@@ -13,15 +15,20 @@ const withAuthInfo = (OriginalComponent: React.ComponentType) => {
     const authInfo = useMemo(() => ({ isAuth, setAuth }), [isAuth])
 
     useEffect(() => {
-      const fetchUser = async () => {
+      ;(async () => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const code = urlParams.get('code')
+        if (code) {
+          await oAuthService.executeOAuth(code)
+        }
         const user = await AuthService.getUser()
         if (user && user.id > 0) {
+          store.dispatch(setUserContext(user))
           setAuth(true)
           return
         }
         setAuth(false)
-      }
-      fetchUser()
+      })()
     }, [])
 
     return (
