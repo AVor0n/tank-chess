@@ -57,6 +57,19 @@
 В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
 Если очень-очень нужно пропустить проверки, используйте `--no-verify`
 
+## Переменные окружения ENV
+
+При запуске контейнеров рядом с docker-compose.yml должен лежать файл с переменными окружения .env
+
+
+## Управление Docker
+
+`docker-compose up`  – запуск всех контейеров
+`docker-compose up server`  – запуск контейнера server
+`docker-compose up server --build`  – пересборка контейнера server
+`docker-compose ps --services`  – посмотреть запущенные контейнеры
+`docker-compose stop`  – остановка всех контейнеров
+
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`
 
@@ -68,3 +81,5 @@
 
 Если вам понадобится только один сервис, просто уточните какой в команде
 `docker compose up {sevice_name}`, например `docker compose up server`
+
+
