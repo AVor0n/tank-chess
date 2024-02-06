@@ -1,24 +1,37 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { type Request } from 'express'
 import { createServer as createViteServer, type ViteDevServer } from 'vite'
+import { postgresConnect } from './db'
 import { authMiddleware } from './middleware/auth.middleware'
+import { errorMiddleware } from './middleware/error.middleware'
+import { apiRoutes } from './routes'
 
 dotenv.config()
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
-async function startServer() {
+export const PORT = Number(process.env.PORT) || 3002
+
+async function createServer() {
   const app = express()
-  app.use(cors())
-  const port = Number(process.env.SERVER_PORT) || 5000
+  app.use(
+    cors({
+      credentials: true,
+      origin: `http://127.0.0.1:${PORT}`,
+    }),
+  )
+  // const port = Number(process.env.SERVER_PORT) || 5000;
 
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
   const srcPath = path.dirname(require.resolve('client'))
   const ssrClientPath = require.resolve('client/ssr-dist/ssr.cjs')
+
+  app.use('/api', apiRoutes)
 
   if (isDev()) {
     vite = await createViteServer({
@@ -32,14 +45,11 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
-  app.get('/api', (_, res) => {
-    res.json('👋 Howdy from the server :)')
-  })
-
   if (!isDev()) {
     app.use('/', express.static(distPath, { index: false }))
   }
 
+  app.use(cookieParser())
   app.use(authMiddleware)
 
   /* eslint-disable @typescript-eslint/no-misused-promises*/
@@ -99,9 +109,18 @@ async function startServer() {
       next(e)
     }
   })
+  app.use(errorMiddleware)
 
-  app.listen(port, () => {
-    console.log(`  ➜ 🎸 Server is listening on port: ${port}`, isDev())
+  return app
+}
+
+async function startServer() {
+  await postgresConnect()
+
+  const server = await createServer()
+
+  server.listen(PORT, () => {
+    console.log(`  ➜ 🎸 Server is listening on port: ${PORT}`)
   })
 }
 
