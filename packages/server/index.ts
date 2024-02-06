@@ -24,7 +24,6 @@ async function createServer() {
       origin: `http://127.0.0.1:${PORT}`,
     }),
   )
-  // const port = Number(process.env.SERVER_PORT) || 5000;
 
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
