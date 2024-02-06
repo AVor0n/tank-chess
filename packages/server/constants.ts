@@ -1,3 +1,15 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+export const PORT = Number(process.env.PORT) || 3002
+
+export const LOCAL_ORIGINS = [
+  `http://127.0.0.1:${PORT}`,
+  `http://localhost:${PORT}`,
+  '*', // Заменить на тот, который получим с облака
+]
+
 export const RESPONSE_MESSAGES = {
   400: {
     topics: {

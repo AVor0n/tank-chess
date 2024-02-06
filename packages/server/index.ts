@@ -5,6 +5,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { type Request } from 'express'
 import { createServer as createViteServer, type ViteDevServer } from 'vite'
+import { LOCAL_ORIGINS, PORT } from './constants'
 import { postgresConnect } from './db'
 import { authMiddleware } from './middleware/auth.middleware'
 import { errorMiddleware } from './middleware/error.middleware'
@@ -14,14 +15,12 @@ dotenv.config()
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
-export const PORT = Number(process.env.PORT) || 3002
-
 async function createServer() {
   const app = express()
   app.use(
     cors({
       credentials: true,
-      origin: `http://127.0.0.1:${PORT}`,
+      origin: [...LOCAL_ORIGINS],
     }),
   )
 

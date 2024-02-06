@@ -3,7 +3,7 @@ import { RESPONSE_MESSAGES } from '../constants'
 import { RequestError, NotFoundError } from '../errors'
 import { Comment } from '../models'
 
-const { invalidSaving } = RESPONSE_MESSAGES[400].topics
+const { invalidSaving } = RESPONSE_MESSAGES[400].comments
 const { notFoundCommentId } = RESPONSE_MESSAGES[404].comments
 
 interface CommentPropsFromClient {
@@ -33,11 +33,9 @@ export const createComment: RequestHandler = async (req, res, next) => {
 export const getComment: RequestHandler = async (req, res, next) => {
   try {
     const { commentId } = req.params
-    const comment = await Comment.findOne({
-      where: { id: commentId },
-    })
+    const comment = await Comment.findByPk(commentId)
     if (!comment) {
-      throw new NotFoundError('Такого id не существует!', 'NotFoundError')
+      throw new NotFoundError(notFoundCommentId, 'NotFoundError')
     }
 
     res.status(200).json(comment.toJSON())
@@ -53,7 +51,7 @@ export const deleteComment: RequestHandler = async (req, res, next) => {
       where: { id: commentId },
     })
     if (!comment) {
-      throw new NotFoundError('Такого id не существует!', 'NotFoundError')
+      throw new NotFoundError(notFoundCommentId, 'NotFoundError')
     }
     res.status(200).json(comment)
   } catch (error) {
@@ -64,12 +62,12 @@ export const deleteComment: RequestHandler = async (req, res, next) => {
 export const like: RequestHandler = async (req, res, next) => {
   try {
     const { commentId } = req.params
-    const commentForLike = await Comment.findByPk(commentId)
-    if (!commentForLike) {
+    const comment = await Comment.findByPk(commentId)
+    if (!comment) {
       throw new NotFoundError(notFoundCommentId, 'NotFoundError')
     }
-    commentForLike.increment('like_count')
-    res.status(200).json(commentForLike.toJSON())
+    comment.increment('like_count')
+    res.status(200).json(comment.toJSON())
   } catch (error) {
     next(error)
   }

@@ -4,6 +4,7 @@ import { RequestError, NotFoundError } from '../errors'
 import { Topic } from '../models'
 
 const { invalidSaving } = RESPONSE_MESSAGES[400].topics
+const { notFoundTopicId } = RESPONSE_MESSAGES[404].topics
 
 interface TopicPropsFromClient {
   title: string
@@ -28,7 +29,7 @@ export const getTopic: Handler = async (req, res, next) => {
       where: { id: topicId },
     })
     if (!topic) {
-      throw new NotFoundError('Такого id не существует!', 'NotFoundError')
+      throw new NotFoundError(notFoundTopicId, 'NotFoundError')
     }
 
     res.status(200).json(topic.toJSON())

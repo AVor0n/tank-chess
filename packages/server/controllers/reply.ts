@@ -16,11 +16,9 @@ interface ReplyPropsFromClient {
 export const getReply: Handler = async (req, res, next) => {
   try {
     const { replyId } = req.params
-    const reply = await Reply.findOne({
-      where: { id: replyId },
-    })
+    const reply = await Reply.findByPk(replyId)
     if (!reply) {
-      throw new NotFoundError('Такого id не существует!', 'NotFoundError')
+      throw new NotFoundError(notFoundCommentId, 'NotFoundError')
     }
     res.status(200).json(reply.toJSON())
   } catch (error) {
@@ -61,7 +59,7 @@ export const deleteReply: Handler = async (req, res, next) => {
       where: { id: replyId },
     })
     if (!reply) {
-      throw new NotFoundError('Такого id не существует!', 'NotFoundError')
+      throw new NotFoundError(notFoundCommentId, 'NotFoundError')
     }
     res.status(200).json(reply)
   } catch (error) {
