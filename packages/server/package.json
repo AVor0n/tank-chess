@@ -21,6 +21,7 @@
     "reflect-metadata": "0.2.1",
     "sequelize": "6.36.0",
     "sequelize-typescript": "2.1.6"
+    "vite": "4.4.12"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
