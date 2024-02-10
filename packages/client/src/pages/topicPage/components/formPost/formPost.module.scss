@@ -9,6 +9,35 @@
   padding: 10px;
   border: 1px solid var(--colors-green-light);
   border-radius: 5px;
+
+  .footerForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    inline-size: 100%;
+
+    .footerLeft {
+      display: flex;
+      flex-direction: end;
+
+      .emojiBtnHidden {
+        inline-size: 30px;
+        block-size: 30px;
+        background: url('./images/emoji-btn.svg');
+        background-size: cover;
+        cursor: pointer;
+      }
+
+      .emojiBtnVisible {
+        inline-size: 30px;
+        block-size: 30px;
+        background: url('./images/emoji-btn-hover.svg');
+        background-size: cover;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+    }
+  }
 }
 
 .title {

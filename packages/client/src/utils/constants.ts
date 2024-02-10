@@ -1,3 +1,8 @@
+import dotenv from 'dotenv'
+
+dotenv.config({ path: '../../.env' })
+const { SERVER_PORT } = process.env
+
 export const MAIN_MENU_LINKS = [
   { to: '/game', label: 'Начать игру' },
   { to: '/profile', label: 'Профиль' },
@@ -24,3 +29,4 @@ export const errors = {
 
 /* URLS */
 export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
+export const FORUM_BASE_URL = `http://localhost:${SERVER_PORT}/api`

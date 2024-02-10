@@ -21,6 +21,24 @@ const routes = [
       return json({ message: 'Пример данных, если нужно сделать запрос на этапе рендеринга на сервере' })
     },
   },
+  /**временно, пока нет инт */
+  {
+    path: '/forum',
+    Component: ForumPage,
+  },
+
+  {
+    path: '/forum/:topicId',
+    Component: () => {
+      const { topicId } = useParams()
+      return <TopicPage topicId={topicId!} />
+    },
+  },
+  {
+    path: '/forum/add-new-topic',
+    Component: NewTopicPage,
+  },
+  /**--------------------- */
   {
     element: <PrivateRoute />,
     children: [
@@ -43,7 +61,7 @@ const routes = [
         path: '/rating',
         Component: withErrorInfo(Leaderboard),
       },
-      {
+      /*{
         path: '/forum',
         Component: withErrorInfo(ForumPage),
       },
@@ -57,7 +75,7 @@ const routes = [
       {
         path: '/forum/add-new-topic',
         Component: withErrorInfo(NewTopicPage),
-      },
+      },*/
       {
         path: '/500',
         element: <ErrorPage type="Server Error" />,

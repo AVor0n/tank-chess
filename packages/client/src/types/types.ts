@@ -48,3 +48,28 @@ export interface AppState {
     loaded: boolean
   }
 }
+
+export interface EmojiType {
+  id: number
+  code: string
+  description: string
+  isPopular: boolean
+}
+
+export interface ReactionType {
+  id: number
+  code: string
+  quantity: number
+  emojiId: number
+}
+
+export interface PostDto {
+  id: number
+  topicId: string
+  user?: User
+  title: string
+  text: string
+  likes: number
+  time: string
+  reactions: Nullable<ReactionType[]>
+}

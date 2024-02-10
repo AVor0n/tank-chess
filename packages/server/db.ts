@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript'
-import { Comment, Topic, Reply } from './models'
+import { Comment, Topic, Reply, Reaction, Emoji } from './models'
 
 dotenv.config({ path: '../../.env' })
 
@@ -17,7 +17,7 @@ const sequelizeOptions: SequelizeOptions = {
 
 export async function postgresConnect() {
   const sequelize = new Sequelize(sequelizeOptions)
-  sequelize.addModels([Topic, Comment, Reply])
+  sequelize.addModels([Topic, Comment, Reply, Emoji, Reaction])
 
   try {
     await sequelize.authenticate()
