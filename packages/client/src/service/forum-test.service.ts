@@ -59,7 +59,7 @@ class ForumService {
       })
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const comments: PostDto[] = await response?.json()
-      return comments
+      if (comments.length > 0) return comments
     } catch (error: unknown) {
       console.log('ошибка')
     }

@@ -48,7 +48,7 @@ export const FormPost = ({ state, error, isValid, touched, emoji }: FormProps) =
         <Button view="action" size="l" type="submit" disabled={!touched || !isValid}>
           Добавить
         </Button>
-        {emoji && (
+        {emoji?.length && (
           <div
             className={styles.footerLeft}
             onMouseLeave={() => {
