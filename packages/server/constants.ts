@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export const PORT = Number(process.env.PORT) || 3001
+export const PORT = Number(process.env.SERVER_PORT) || 3002
 
 export const LOCAL_ORIGINS = [
   `http://127.0.0.1:${PORT}`,
