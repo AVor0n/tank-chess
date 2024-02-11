@@ -1,5 +1,5 @@
 import { type Optional } from 'sequelize'
-import { Column, ForeignKey, Model, Table, BelongsTo } from 'sequelize-typescript'
+import { Column, ForeignKey, Model, Table, BelongsTo, Unique } from 'sequelize-typescript'
 import { Comment } from './comment'
 import { Emoji } from './emoji'
 
@@ -19,10 +19,12 @@ export type CreateReactionProps = Optional<ReactionProps, 'id'>
 })
 export class Reaction extends Model<ReactionProps, CreateReactionProps> {
   @ForeignKey(() => Comment)
+  @Unique('indexes')
   @Column
   comment_id!: number
 
   @ForeignKey(() => Emoji)
+  @Unique('indexes')
   @Column
   emoji_id!: number
 

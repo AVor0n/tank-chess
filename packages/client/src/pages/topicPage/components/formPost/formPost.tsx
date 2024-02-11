@@ -58,6 +58,7 @@ export const FormPost = ({ state, error, isValid, touched, emoji }: FormProps) =
               emojiSet={emoji}
               isVisible={isEmojiVisible}
               onChooseEmoji={emoji => {
+                if (!state.text) state.text = ''
                 state.text += emoji.code
                 setTextAreaContent(state.text)
               }}

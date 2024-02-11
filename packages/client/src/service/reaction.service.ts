@@ -10,7 +10,7 @@ class EmojiService {
 
   importEmoji = async () => {
     try {
-      const response: Response = await fetch(this.baseURL + '/reactions/add', {
+      const response: Response = await fetch(this.baseURL + '/reactions/import', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -61,12 +61,12 @@ class EmojiService {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const reactions: Record<string, any>[] = await response?.json()
-      return reactions.map(reaction => {
-        reaction.code = (reaction.emoji as Record<string, string>).code
-        reaction.emojiId = reaction.emoji_id
-        const { code, id, quantity, emojiId } = reaction
-        return { code, id, quantity, emojiId }
-      })
+      return reactions.map(reaction => ({
+        code: (reaction.emoji as Record<string, string>).code,
+        id: reaction.id,
+        quantity: reaction.quantity,
+        emojiId: reaction.emoji_id,
+      }))
     } catch (error) {
       return []
     }

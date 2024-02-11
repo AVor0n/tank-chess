@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { type RequestHandler } from 'express'
-import { type Optional } from 'sequelize'
+import { type Optional, Transaction } from 'sequelize'
 import { Emoji, Reaction } from '../models'
 import { type CreateEmojiProps } from '../models/emoji'
 
@@ -49,13 +49,14 @@ export const clearEmoji: RequestHandler = async (_, res) => {
   }
 }
 
-const findReaction = async (commentId: number, emojiId: number) => {
+const findReaction = async (commentId: number, emojiId: number, transaction: Transaction | null = null) => {
   try {
     const reaction = await Reaction.findOne({
       where: {
         comment_id: commentId,
         emoji_id: emojiId,
       },
+      transaction,
     })
     return reaction
   } catch (error) {
@@ -104,16 +105,27 @@ export const getReactionsOnComment: RequestHandler = async (req, res) => {
 export const addReactionOnComment: RequestHandler = async (req, res) => {
   try {
     const { commentId, emojiId } = req.body
-    const reaction: Reaction | null = await findReaction(commentId, emojiId)
-    if (reaction) {
-      await reaction.increment('quantity')
-    } else {
-      await Reaction.create({
-        quantity: 1,
-        comment_id: Number(commentId),
-        emoji_id: Number(emojiId),
-      })
-    }
+    await Reaction.sequelize?.transaction(
+      { isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ },
+      async tr => {
+        const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
+        if (reaction) {
+          await reaction.increment('quantity', { transaction: tr })
+        } else {
+          await Reaction.create(
+            {
+              quantity: 1,
+              comment_id: Number(commentId),
+              emoji_id: Number(emojiId),
+            },
+            {
+              transaction: tr,
+            },
+          )
+        }
+      },
+    )
+
     res.status(200).json({ result: 'ok' })
     return true
   } catch (error) {
@@ -125,16 +137,22 @@ export const addReactionOnComment: RequestHandler = async (req, res) => {
 export const deleteReactionOnComment: RequestHandler = async (req, res) => {
   try {
     const { commentId, emojiId } = req.body
-    const reaction: Reaction | null = await findReaction(commentId, emojiId)
-    if (reaction) {
-      if (reaction.quantity >= 1) {
-        reaction.decrement('quantity')
-      } else {
-        await Emoji.destroy({
-          where: { id: reaction.id },
-        })
-      }
-    }
+    await Reaction.sequelize?.transaction(
+      { isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ },
+      async tr => {
+        const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
+        if (reaction) {
+          if (reaction.dataValues.quantity > 1) {
+            await reaction.decrement('quantity', { transaction: tr })
+          } else {
+            await Emoji.destroy({
+              where: { id: reaction.dataValues.id },
+              transaction: tr,
+            })
+          }
+        }
+      },
+    )
     res.status(200).json({ result: 'ok' })
     return true
   } catch (error) {
