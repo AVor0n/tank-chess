@@ -109,6 +109,19 @@ export const addReactionOnComment: RequestHandler = async (req, res) => {
       { isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ },
       async tr => {
         const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
+        const updQuantity = Number(reaction?.dataValues.quantity) + 1
+        Reaction.upsert(
+          {
+            quantity: updQuantity,
+            comment_id: Number(commentId),
+            emoji_id: Number(emojiId),
+          } /*,
+        {
+          transaction: tr
+        }*/,
+        )
+
+        /*
         if (reaction) {
           await reaction.increment('quantity', { transaction: tr })
         } else {
@@ -122,7 +135,7 @@ export const addReactionOnComment: RequestHandler = async (req, res) => {
               transaction: tr,
             },
           )
-        }
+        }*/
       },
     )
 
