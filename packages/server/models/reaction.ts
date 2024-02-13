@@ -1,5 +1,5 @@
 import { type Optional } from 'sequelize'
-import { Column, ForeignKey, Model, Table, BelongsTo, Unique, Min, Default } from 'sequelize-typescript'
+import { Column, ForeignKey, Model, Table, BelongsTo, Unique } from 'sequelize-typescript'
 import { Comment } from './comment'
 import { Emoji } from './emoji'
 
@@ -28,8 +28,6 @@ export class Reaction extends Model<ReactionProps, CreateReactionProps> {
   @Column
   emoji_id!: number
 
-  @Min(1)
-  @Default(1)
   @Column
   quantity!: number
 

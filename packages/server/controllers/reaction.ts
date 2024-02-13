@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { type RequestHandler } from 'express'
-import { type Optional, Transaction } from 'sequelize'
+import { type Optional, type Transaction } from 'sequelize'
 import { Emoji, Reaction } from '../models'
 import { type CreateEmojiProps } from '../models/emoji'
 
@@ -39,7 +39,7 @@ export const importEmojiFromJSON: RequestHandler = async (_, res) => {
 
 export const clearEmoji: RequestHandler = async (_, res) => {
   try {
-    await Reaction.destroy({
+    await Emoji.destroy({
       truncate: true,
     })
     res.status(200).json({ result: 'ok' })
@@ -52,6 +52,7 @@ export const clearEmoji: RequestHandler = async (_, res) => {
 const findReaction = async (commentId: number, emojiId: number, transaction: Transaction | null = null) => {
   try {
     const reaction = await Reaction.findOne({
+      lock: transaction?.LOCK.UPDATE,
       where: {
         comment_id: commentId,
         emoji_id: emojiId,
@@ -105,44 +106,26 @@ export const getReactionsOnComment: RequestHandler = async (req, res) => {
 export const addReactionOnComment: RequestHandler = async (req, res) => {
   try {
     const { commentId, emojiId } = req.body
-    await Reaction.sequelize?.transaction(
-      { isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ },
-      async tr => {
-        const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
-        const updQuantity = Number(reaction?.dataValues.quantity) + 1
-        Reaction.upsert(
-          {
-            quantity: updQuantity,
-            comment_id: Number(commentId),
-            emoji_id: Number(emojiId),
-          } /*,
+    await Reaction.sequelize?.transaction({}, async tr => {
+      const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
+      const updQuantity = reaction ? Number(reaction?.dataValues.quantity) + 1 : 1
+      await Reaction.upsert(
         {
-          transaction: tr
-        }*/,
-        )
-
-        /*
-        if (reaction) {
-          await reaction.increment('quantity', { transaction: tr })
-        } else {
-          await Reaction.create(
-            {
-              quantity: 1,
-              comment_id: Number(commentId),
-              emoji_id: Number(emojiId),
-            },
-            {
-              transaction: tr,
-            },
-          )
-        }*/
-      },
-    )
+          quantity: updQuantity,
+          comment_id: Number(commentId),
+          emoji_id: Number(emojiId),
+        },
+        {
+          transaction: tr,
+          conflictFields: ['comment_id', 'emoji_id'],
+        },
+      )
+    })
 
     res.status(200).json({ result: 'ok' })
     return true
   } catch (error) {
-    res.status(500).json({ result: 'error' })
+    if (error instanceof Error) res.status(500).json({ result: error.message })
     return false
   }
 }
@@ -150,26 +133,23 @@ export const addReactionOnComment: RequestHandler = async (req, res) => {
 export const deleteReactionOnComment: RequestHandler = async (req, res) => {
   try {
     const { commentId, emojiId } = req.body
-    await Reaction.sequelize?.transaction(
-      { isolationLevel: Transaction.ISOLATION_LEVELS.REPEATABLE_READ },
-      async tr => {
-        const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
-        if (reaction) {
-          if (reaction.dataValues.quantity > 1) {
-            await reaction.decrement('quantity', { transaction: tr })
-          } else {
-            await Emoji.destroy({
-              where: { id: reaction.dataValues.id },
-              transaction: tr,
-            })
-          }
+    await Reaction.sequelize?.transaction({}, async tr => {
+      const reaction: Reaction | null = await findReaction(commentId, emojiId, tr)
+      if (reaction) {
+        if (reaction.dataValues.quantity > 1) {
+          await reaction.decrement('quantity', { transaction: tr })
+        } else {
+          await Reaction.destroy({
+            where: { id: reaction.dataValues.id },
+            transaction: tr,
+          })
         }
-      },
-    )
+      }
+    })
     res.status(200).json({ result: 'ok' })
     return true
   } catch (error) {
-    res.status(500).json({ result: 'error' })
+    if (error instanceof Error) res.status(500).json({ result: error.message })
     return false
   }
 }
