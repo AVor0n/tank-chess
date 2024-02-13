@@ -1,0 +1,40 @@
+.emojiBarPopupContainer {
+  position: relative;
+  inline-size: 300px;
+  block-size: 10px;
+  margin-block-start: -10px;
+  margin-inline-end: -30px;
+
+  .emojiBarPopupVisible {
+    position: absolute;
+    inset-block-start: -190px;
+    inset-inline-start: -30px;
+    z-index: 10;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: start;
+    inline-size: 300px;
+    block-size: 160px;
+    padding: 15px;
+    border: var(--yc-modal-border-radius);
+    background: var(--g-color-base-modal);
+    box-shadow:
+      0 1px 3px rgb(0 0 0 / 12%),
+      0 1px 2px rgb(0 0 0 / 24%);
+    opacity: 1;
+    overflow-y: scroll;
+
+    .emojiItem {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      inline-size: 25px;
+      block-size: 25px;
+      cursor: pointer;
+    }
+  }
+
+  .emojiBarPopupHidden {
+    display: none;
+  }
+}

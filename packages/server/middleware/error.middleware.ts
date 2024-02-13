@@ -10,5 +10,6 @@ export const errorMiddleware = (err: ERROR_TYPES, _req: Request, res: Response, 
       return res.status(err.status).send({ message: err.message })
     }
   }
+  console.log(err)
   return res.status(500).send({ message: 'Internal Server Error!' })
 }

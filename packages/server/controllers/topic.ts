@@ -1,7 +1,7 @@
-import { type Handler } from 'express'
+import { type Handler, type RequestHandler } from 'express'
 import { RESPONSE_MESSAGES } from '../constants'
 import { RequestError, NotFoundError } from '../errors'
-import { Topic } from '../models'
+import { Topic, Comment } from '../models'
 
 const { invalidSaving } = RESPONSE_MESSAGES[400].topics
 const { notFoundTopicId } = RESPONSE_MESSAGES[404].topics
@@ -48,6 +48,19 @@ export const createTopic: Handler = async (req, res, next) => {
       title,
     })
     res.status(201).json(topic.toJSON())
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getAllCommentsInTopic: RequestHandler = async (req, res, next) => {
+  try {
+    const { topicId } = req.params
+    const comments = await Comment.findAll({
+      where: { topic_id: topicId },
+      order: [['createdAt', 'DESC']],
+    })
+    res.status(200).json(comments)
   } catch (error) {
     next(error)
   }

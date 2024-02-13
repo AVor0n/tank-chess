@@ -3,7 +3,9 @@ import Form from '@components/form'
 import LeftMenuPage from '@components/leftMenuPage'
 import { TOPICS } from '@pages/forumPage/forumPage'
 import { FormContext } from 'context/formContext'
-import { type User } from 'types/types'
+import ForumService from 'service/forum-test.service'
+import { type Nullable, type EmojiType, type PostDto } from 'types/types'
+import EmojiService from '../../service/reaction.service'
 import FormPost from './components/formPost'
 import PostItem from './components/postItem'
 import styles from './topicPage.module.scss'
@@ -12,76 +14,27 @@ interface TopicProps {
   topicId: string
 }
 
-export interface PostDto {
-  id: string
-  topicId: string
-  user: User
-  title: string
-  text: string
-  likes: number
-  time: string
-}
-
-// Моковые данные, по структуре хранения нужно будет продумать при создании бека
-const POSTS: PostDto[] = [
-  {
-    id: '1',
-    topicId: '1',
-    user: {
-      id: 423,
-      first_name: 'Petya',
-      second_name: 'Pupkin',
-      phone: '+79001001100',
-      login: 'userLogin',
-      email: 'string@ya.ru',
-    },
-    title: 'Вопрос про начисление очков',
-    text: 'Объясните пожалуйста, как начисляются очки при подбитии танков противника?',
-    likes: 2,
-    time: '3 дня назад',
-  },
-  {
-    id: '2',
-    topicId: '1',
-    user: {
-      id: 423,
-      first_name: 'Petya',
-      second_name: 'Pupkin',
-      phone: '+79001001100',
-      login: 'userLogin',
-      email: 'string@ya.ru',
-    },
-    title: 'Вопрос про победы',
-    text: 'Объясните пожалуйста, как победить?',
-    likes: 2,
-    time: '4 дня назад',
-  },
-]
-
 export const TopicPage = ({ topicId }: TopicProps) => {
   const [posts, setPosts] = useState<PostDto[]>([])
   const [topicTitle] = useState(TOPICS.find(topic => topic.id === topicId)?.theme)
 
+  const [emoji, setEmoji] = useState<Nullable<EmojiType[]>>(null)
   useEffect(() => {
-    setPosts(POSTS.filter(post => post.topicId === topicId))
+    ;(async () => {
+      setEmoji(await EmojiService.getEmojiSet())
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      const posts: PostDto[] = await ForumService.getComments(Number(topicId))
+      setPosts(posts)
+    })()
   }, [topicId])
 
   const onAddNewPost = (data: Record<string, File | string | number>) => {
-    const newPost = {
-      ...data,
-      topicId,
-      user: {
-        id: 423,
-        first_name: 'Petya',
-        second_name: 'Pupkin',
-        phone: '+79001001100',
-        login: 'userLogin',
-        email: 'string@ya.ru',
-      },
-    }
-    //@ts-expect-error как будет реализован store нужно переделать
-    POSTS.push(newPost)
-    setPosts(POSTS.filter(post => post.topicId === topicId))
+    // eslint-disable-next-line no-console
+    console.log(data)
   }
 
   return (
@@ -89,12 +42,21 @@ export const TopicPage = ({ topicId }: TopicProps) => {
       <section className={styles.container}>
         <div>
           <h1 className={styles.title}>{topicTitle}</h1>
-          {posts.map(post => (
-            <PostItem key={post.id} post={post} />
-          ))}
+          {posts.map(post => {
+            /*временные данные*/
+            post.user = {
+              id: 1,
+              phone: '1122121212',
+              second_name: 'Тест',
+              login: 'test',
+              first_name: 'Тест',
+              email: 'Тест',
+            }
+            return <PostItem key={post.id} post={post} emoji={emoji} />
+          })}
         </div>
         <Form onSubmit={onAddNewPost}>
-          <FormContext.Consumer>{state => <FormPost {...state} />}</FormContext.Consumer>
+          <FormContext.Consumer>{state => <FormPost {...state} emoji={emoji} />}</FormContext.Consumer>
         </Form>
       </section>
     </LeftMenuPage>
