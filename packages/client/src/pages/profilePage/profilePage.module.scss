@@ -46,15 +46,6 @@
     }
   }
 
-  .blockAchievment {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    margin-block-end: 35px;
-    padding-block-end: 30px;
-    border-block-end: 1px solid var(--colors-gray-dark);
-  }
-
   .blockPassword {
     inline-size: 100%;
     margin-block-end: 35px;

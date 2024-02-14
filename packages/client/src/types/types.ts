@@ -73,3 +73,20 @@ export interface PostDto {
   time: string
   reactions: Nullable<ReactionType[]>
 }
+
+export interface ChangePasswordPayload {
+  oldPassword: string
+  newPassword: string
+}
+
+export interface ApiError {
+  data: {
+    reason?: string
+    message?: string
+  }
+}
+
+export const isApiError = (error: unknown): error is ApiError => {
+  const apiError = error as Partial<ApiError>
+  return !!(apiError?.data?.reason ?? apiError?.data?.message)
+}

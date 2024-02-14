@@ -82,7 +82,7 @@ async function createServer() {
 
       // Мок для ssr страниц авторизации
       const preloadedState = {
-        user: {
+        auth: {
           userInfo: {
             id: 2,
             first_name: 'Тест',
@@ -93,7 +93,6 @@ async function createServer() {
             email: 'test@ya.ru',
             phone: '89008008080',
           },
-          loading: false,
         },
       }
 

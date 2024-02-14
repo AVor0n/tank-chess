@@ -4,8 +4,8 @@ import PlayerModal from '@components/playerModal'
 import StartModal from '@components/startModal'
 import { Game } from '@lib/chess'
 import { ChessCanvasUI } from '@lib/reactChessUI'
-import { gameFinished, gameStarted, setWinner } from 'reducers/gameStartFinish'
-import { useDispatch, useSelector } from 'reducers/hooks'
+import { gameFinished, gameStarted, setWinner } from 'reducers/game'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import { GameInfo } from './components/info'
 import styles from './gamePage.module.scss'
 
@@ -17,10 +17,9 @@ const gameOptions = {
 
 export const GamePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { isGameFinished, isGameStarted, winner, secondPlayer } = useSelector(store => store.gameStartFinishData)
+  const { isGameFinished, isGameStarted, winner, secondPlayer } = useAppSelector(store => store.game)
   const [uiController, setUiController] = useState<ChessCanvasUI | null>(null)
-
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const onStartGame = () => {
     game.startGame(gameOptions)

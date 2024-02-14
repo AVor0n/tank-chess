@@ -1,18 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit'
-import rootReducer from './reducers'
+import { api } from 'reducers/api'
+import { authSlice } from 'reducers/auth'
+import { errorSlice } from 'reducers/error'
+import { gameSlice } from 'reducers/game'
 
-const store = configureStore({
-  reducer: rootReducer,
-})
-
-const createStoreWithData = (preloadedState: ReturnType<typeof store.getState>) =>
+export const createStoreWithData = (preloadedState: unknown) =>
   configureStore({
-    reducer: rootReducer,
-    devTools: process.env.NODE_ENV !== 'production',
+    reducer: {
+      auth: authSlice.reducer,
+      error: errorSlice.reducer,
+      game: gameSlice.reducer,
+      [api.reducerPath]: api.reducer,
+    },
     preloadedState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware),
+    devTools: process.env.NODE_ENV !== 'production',
   })
 
-export default store
-export { createStoreWithData }
-export type RootStateType = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+type AppStore = ReturnType<typeof createStoreWithData>
+export type AppState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']

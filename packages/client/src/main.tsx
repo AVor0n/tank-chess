@@ -5,15 +5,14 @@ import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './app'
 import routes from './router'
-import { createStoreWithData, type RootStateType } from './store'
+import { createStoreWithData } from './store'
 
 const preloadState = window.__PRELOADED_STATE__
 delete window.__PRELOADED_STATE__
 
 const router = createBrowserRouter(routes)
 const preloadedState = preloadState?.preloadedState
-const store = createStoreWithData(preloadedState as RootStateType)
-
+const store = createStoreWithData(preloadedState)
 const Router = () => <RouterProvider router={router} />
 
 ReactDOM.hydrateRoot(

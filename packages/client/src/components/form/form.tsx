@@ -2,19 +2,16 @@ import { useState, useMemo, type PropsWithChildren, type FormEvent } from 'react
 import { FormContext } from '../../context/formContext'
 import { useFormValidate } from '../../hook/useFormValidate'
 
-interface OwnProps {
-  onSubmit?: (data: Record<string, File | string>) => void
-  children: JSX.Element | JSX.Element[]
+interface FormProps<T> extends PropsWithChildren {
+  onSubmit?: (data: T) => void
 }
-
-type FormProps = PropsWithChildren<OwnProps>
 
 /**
  * Компонент форм с общей валидацией
  * @param children - JSX с любыми инпутами
  * @param onSubmit - событие отправки формы
  */
-export const Form = ({ children, onSubmit }: FormProps) => {
+export const Form = <T,>({ children, onSubmit }: FormProps<T>) => {
   const [state, setState] = useState({})
   const [touched, setTouched] = useState(false)
   const [error, isValid, validate] = useFormValidate()
@@ -25,7 +22,7 @@ export const Form = ({ children, onSubmit }: FormProps) => {
     const data = Object.fromEntries(formData)
     const isValidate = validate(data)
     if (isValidate && onSubmit) {
-      onSubmit(data)
+      onSubmit(data as T)
     }
     setState(data)
   }

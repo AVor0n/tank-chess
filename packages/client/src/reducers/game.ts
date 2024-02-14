@@ -2,21 +2,21 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type Player } from '@lib/chess/core'
 import { type Nullable, type User } from 'types/types'
 
-interface GameStartFinishData {
+interface GameState {
   isGameStarted: boolean
   isGameFinished: boolean
   winner: Nullable<Player>
   secondPlayer: Nullable<User>
 }
 
-const initialState: GameStartFinishData = {
+const initialState: GameState = {
   isGameStarted: false,
   isGameFinished: false,
   winner: null,
   secondPlayer: null,
 }
 
-export const getGameStartFinishDataSlice = createSlice({
+export const gameSlice = createSlice({
   name: 'startFinishGame',
   initialState,
   reducers: {
@@ -35,5 +35,4 @@ export const getGameStartFinishDataSlice = createSlice({
   },
 })
 
-export default getGameStartFinishDataSlice.reducer
-export const { gameStarted, gameFinished, setWinner, setSecondPlayer } = getGameStartFinishDataSlice.actions
+export const { gameStarted, gameFinished, setWinner, setSecondPlayer } = gameSlice.actions
