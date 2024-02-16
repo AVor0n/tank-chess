@@ -6,22 +6,22 @@ import { createStoreWithData } from './src/store'
 import App from './src/app'
 import PreloadStoreScript from './src/components/PreloadStoreScript'
 
-let handler = createStaticHandler(routes)
+const handler = createStaticHandler(routes)
 
 const createFetchRequest = req => {
-  let origin = `${req.protocol}://${req.get('host')}`
+  const origin = `${req.protocol}://${req.get('host')}`
 
-  let url = new URL(req.originalUrl || req.url, origin)
+  const url = new URL(req.originalUrl || req.url, origin)
 
-  let controller = new AbortController()
+  const controller = new AbortController()
   req.on('close', () => controller.abort())
 
-  let headers = new Headers()
+  const headers = new Headers()
 
-  for (let [key, values] of Object.entries(req.headers)) {
+  for (const [key, values] of Object.entries(req.headers)) {
     if (values) {
       if (Array.isArray(values)) {
-        for (let value of values) {
+        for (const value of values) {
           headers.append(key, value)
         }
       } else {
@@ -30,7 +30,7 @@ const createFetchRequest = req => {
     }
   }
 
-  let init = {
+  const init = {
     method: req.method,
     headers,
     signal: controller.signal,
@@ -48,14 +48,14 @@ export async function render(req, preloadState) {
 
   const preloadedState = store.getState()
 
-  let fetchRequest = createFetchRequest(req)
-  let context = await handler.query(fetchRequest)
+  const fetchRequest = createFetchRequest(req)
+  const context = await handler.query(fetchRequest)
 
   if (context instanceof Response) {
     throw context
   }
 
-  let router = createStaticRouter(handler.dataRoutes, context)
+  const router = createStaticRouter(handler.dataRoutes, context)
 
   const Router = () => <StaticRouterProvider router={router} context={context} />
 

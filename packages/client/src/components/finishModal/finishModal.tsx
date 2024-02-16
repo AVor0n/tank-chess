@@ -2,8 +2,8 @@ import { Modal } from '@gravity-ui/uikit'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { type Player } from '@lib/chess/core'
-import { gameFinished, gameStarted, setSecondPlayer, setWinner } from 'reducers/gameStartFinish'
-import { useDispatch } from 'reducers/hooks'
+import { gameFinished, gameStarted, setSecondPlayer, setWinner } from 'reducers/game'
+import { useAppDispatch } from 'reducers/hooks'
 import styles from './finishModal.module.scss'
 
 interface FinishModalProps {
@@ -11,8 +11,8 @@ interface FinishModalProps {
 }
 
 export const FinishModal = ({ winner }: FinishModalProps) => {
+  const dispatch = useAppDispatch()
   const [open, setOpen] = useState(true)
-  const dispatch = useDispatch()
 
   const handleNewGame = () => {
     setOpen(false)

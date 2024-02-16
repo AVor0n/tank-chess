@@ -1,20 +1,21 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectError, resetError } from 'reducers/error'
-import store from 'store'
+import { useEffect, useRef } from 'react'
+import { resetError } from 'reducers/error'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import styles from './error.module.scss'
 
 export const Error = () => {
-  const error = useSelector(selectError)
-  let timeoutId: ReturnType<typeof setTimeout>
+  const dispatch = useAppDispatch()
+  const error = useAppSelector(state => state.error)
+  const timeoutId = useRef<number>()
+
   useEffect(() => {
-    timeoutId = setTimeout(() => {
-      store.dispatch(resetError())
+    timeoutId.current = window.setTimeout(() => {
+      dispatch(resetError())
     }, 10000)
     return () => {
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId.current)
     }
-  }, [])
+  }, [dispatch])
 
   return !error.hasError
     ? null
@@ -23,8 +24,8 @@ export const Error = () => {
           <div
             className={styles.resetError}
             onClick={() => {
-              clearTimeout(timeoutId)
-              store.dispatch(resetError())
+              clearTimeout(timeoutId.current)
+              dispatch(resetError())
             }}>
             &times;
           </div>

@@ -1,16 +1,15 @@
-import { useContext, useEffect, useState } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import AuthContext from '../../context/authContext'
+import PageLoader from '@components/pageLoader'
+import { api } from 'reducers/api'
+import { selectorIsAuth } from 'reducers/auth'
+import { useAppSelector } from 'reducers/hooks'
 
 export const PrivateRoute = () => {
-  const { isAuth } = useContext(AuthContext)
-  const [code, setCode] = useState<string | null>(null)
   const location = useLocation()
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
-    setCode(code)
-  }, [])
+  const { isLoading } = api.useGetUserQuery()
+  const isAuth = useAppSelector(selectorIsAuth)
 
-  return isAuth || code ? <Outlet /> : <Navigate to="/login" state={{ location }} replace />
+  if (isLoading) return <PageLoader />
+  if (!isAuth) return <Navigate to="/login" state={{ from: location }} replace />
+  return <Outlet />
 }

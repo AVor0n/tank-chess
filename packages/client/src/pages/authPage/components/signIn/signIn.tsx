@@ -1,32 +1,41 @@
 import { Button } from '@gravity-ui/uikit'
 import { useState } from 'react'
 import FormInput from '@components/formInput'
-import oAuthService from '../../../../service/oauth.service'
+import { api } from 'reducers/api'
 import { type FormProps } from '../../../../types/types'
+import { redirectToOAuthPage } from '../../utils'
 import styles from './signIn.module.scss'
 
 export const SignIn = ({ state, error }: FormProps) => {
+  const [getClientId] = api.useLazyGetClientIdQuery()
   const [signInData, setSignInData] = useState({
     login: '',
     password: '',
   })
+
+  const onClickOAuth = () => {
+    getClientId()
+      .unwrap()
+      .then(clientId => {
+        redirectToOAuthPage(clientId)
+      })
+  }
+
   return (
     <div className={styles.form} data-test="signin">
       <FormInput
-        key="login"
         placeholder="Логин"
         name="login"
-        onChange={(login: string) => setSignInData({ ...signInData, login })}
+        onChange={login => setSignInData({ ...signInData, login })}
         value={state.login}
         errorMessage={error.login}
         validationState={error.login ? 'invalid' : undefined}
       />
       <FormInput
-        key="password"
         placeholder="Пароль"
         name="password"
         type="password"
-        onChange={(password: string) => setSignInData({ ...signInData, password })}
+        onChange={password => setSignInData({ ...signInData, password })}
         value={state.password}
         errorMessage={error.password}
         validationState={error.password ? 'invalid' : undefined}
@@ -37,10 +46,7 @@ export const SignIn = ({ state, error }: FormProps) => {
 
       <Button
         className={styles.oAuthBtn}
-        onClick={() => {
-          const oAuthRedirect = async () => window.location.replace(await oAuthService.redirectYandexUrl())
-          oAuthRedirect()
-        }}
+        onClick={onClickOAuth}
         view="outlined"
         width="max"
         pin="brick-brick"

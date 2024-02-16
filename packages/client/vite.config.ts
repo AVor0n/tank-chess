@@ -19,6 +19,7 @@ export default defineConfig({
     react(),
     typescriptPaths(),
     checker({
+      overlay: false,
       typescript: true,
     }),
   ],

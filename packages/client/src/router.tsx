@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux'
-import { useParams, Navigate, json } from 'react-router-dom'
+import { useParams, json } from 'react-router-dom'
 import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
@@ -11,7 +10,6 @@ import NewTopicPage from '@pages/newTopicPage'
 import ProfilePage from '@pages/profilePage'
 import TopicPage from '@pages/topicPage'
 import withErrorInfo from 'hoc/withErrorInfo'
-import { selectUserUserInfo } from 'reducers/user'
 
 const routes = [
   {
@@ -52,10 +50,7 @@ const routes = [
       },
       {
         path: '/profile',
-        Component: withErrorInfo(() => {
-          const userProps = useSelector(selectUserUserInfo)
-          return userProps ? <ProfilePage {...userProps} /> : <Navigate to="/login" replace />
-        }),
+        Component: withErrorInfo(ProfilePage),
       },
       {
         path: '/rating',
