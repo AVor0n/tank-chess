@@ -18,7 +18,6 @@ const addEmoji = async (emojiData: Optional<CreateEmojiProps, 'id'>[]) => {
 }
 
 export const importEmojiFromJSON: RequestHandler = async (_, res) => {
-  console.log('first')
   try {
     let data: string = fs.readFileSync(path.parse(__dirname).dir + '/assets/emoji.json').toString()
     console.log(data)
