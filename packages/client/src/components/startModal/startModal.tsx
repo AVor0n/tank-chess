@@ -1,21 +1,20 @@
 import { Modal, Button, Pagination } from '@gravity-ui/uikit'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { usePagination } from 'hook/usePagination'
+import { initGame } from 'reducers/game'
 import { RULES_LIST } from './constants'
 import GameRule from './gameRule'
 import styles from './startModal.module.scss'
 
-interface StartModalProps {
-  startGame: () => void
-}
-
-export const StartModal = ({ startGame }: StartModalProps) => {
+export const StartModal = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(true)
   const [currentPage, handleUpdate] = usePagination(1)
 
   const handleStartButton = () => {
     setOpen(false)
-    startGame()
+    dispatch(initGame())
   }
 
   return (

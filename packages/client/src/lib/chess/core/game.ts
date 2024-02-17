@@ -1,6 +1,6 @@
 import { EventBus } from '../../eventBus'
 import { CHARS, PLAYER_COLORS, START_BOARD_TEMPLATE, CHAR_TO_TANK_TYPE } from '../constants'
-import { ACTION_TYPE, TANK_TYPE } from '../types'
+import { ACTION_TYPE, TANK_TYPE, type StartGameOptions } from '../types'
 import { isEqual } from '../utils/isEqual'
 import { getNextCell } from '../utils/step'
 import { Board } from './board'
@@ -55,7 +55,7 @@ export class Game extends EventBus<{
     this.board = new Board()
   }
 
-  public startGame(options: { playerName1: string; playerName2: string }): void {
+  public startGame(options: StartGameOptions): void {
     this.players = [new Player(options.playerName1), new Player(options.playerName2)]
     this.initBoard()
 

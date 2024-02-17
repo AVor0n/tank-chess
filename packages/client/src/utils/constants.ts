@@ -24,4 +24,8 @@ export const errors = {
 
 /* URLS */
 export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
-export const FORUM_BASE_URL = `http://localhost:3002/api`
+// Заменить на облачный ресурс в будущем
+export const SELF_API_URL = `http://localhost:9000/api`
+
+/** Ключ для сохранения результатов на бэке */
+export const GAME_ID = '__tank-chess-33-test'

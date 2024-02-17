@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript'
-import { Comment, Topic, Reply, Reaction, Emoji } from './models'
+import { Comment, Topic, Reaction, Emoji } from './models'
 
 dotenv.config({ path: '../../.env' })
 
 const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
 
 const sequelizeOptions: SequelizeOptions = {
-  host: POSTGRES_HOST,
+  host: POSTGRES_HOST ?? 'localhost',
   port: Number(POSTGRES_PORT),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
@@ -17,12 +17,12 @@ const sequelizeOptions: SequelizeOptions = {
 
 export async function postgresConnect() {
   const sequelize = new Sequelize(sequelizeOptions)
-  sequelize.addModels([Topic, Comment, Reply, Emoji, Reaction])
+  sequelize.addModels([Topic, Comment, Emoji, Reaction])
 
   try {
     await sequelize.authenticate()
 
-    await sequelize.sync({ force: false })
+    await sequelize.sync()
   } catch (error) {
     console.error(error)
   }

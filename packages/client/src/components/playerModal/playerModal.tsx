@@ -1,19 +1,21 @@
-import { Modal } from '@gravity-ui/uikit'
+import { Button, Modal } from '@gravity-ui/uikit'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Form from '@components/form'
-import { FormContext } from 'context/formContext'
-import { setSecondPlayer } from 'reducers/game'
-import { useAppDispatch } from 'reducers/hooks'
-import FormPost from './components/formPlayer'
+import { useNavigate } from 'react-router-dom'
+import FormInput from '@components/formInput'
+import { selectorUserInfo } from 'reducers/auth'
+import { setPlayers } from 'reducers/game'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import styles from './playerModal.module.scss'
 
 export const PlayerModal = () => {
-  const [open, setOpen] = useState(true)
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const currentUserInfo = useAppSelector(selectorUserInfo)
+  const [open, setOpen] = useState(true)
+  const [opponentName, setOpponentName] = useState('')
 
-  const onAddSecondUser = (data: Record<string, File | string | number>) => {
-    dispatch(setSecondPlayer(data))
+  const onStartGame = () => {
+    dispatch(setPlayers([currentUserInfo!.login, opponentName || 'Player 2']))
     setOpen(false)
   }
 
@@ -21,13 +23,15 @@ export const PlayerModal = () => {
     <Modal open={open}>
       <div className={styles.container}>
         <h2 className={styles.title}>Введите данные второго игрока</h2>
-        <Form onSubmit={onAddSecondUser}>
-          <FormContext.Consumer>{state => <FormPost {...state} />}</FormContext.Consumer>
-        </Form>
-        <div className={styles.links}>
-          <Link className={styles.link} to="/">
-            Вернуться в главное меню
-          </Link>
+        <FormInput placeholder="Player 2" name="login" onChange={setOpponentName} value={opponentName} />
+
+        <div className={styles.actions}>
+          <Button className={styles.backBtn} onClick={() => navigate('/')} pin="brick-brick" size="xl">
+            В главное меню
+          </Button>
+          <Button onClick={onStartGame} view="action" pin="brick-brick" size="xl">
+            Далее
+          </Button>
         </div>
       </div>
     </Modal>

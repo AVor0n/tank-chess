@@ -1,6 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL } from '@utils/constants'
-import { type User, type SignInDataType, type SignUpDataType, type ChangePasswordPayload } from 'types/types'
+import { BASE_URL, GAME_ID } from '@utils/constants'
+import {
+  type User,
+  type SignInDataType,
+  type SignUpDataType,
+  type ChangePasswordPayload,
+  type GameResult,
+} from 'types/types'
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -8,7 +14,7 @@ export const api = createApi({
     credentials: 'include',
     mode: 'cors',
   }),
-  tagTypes: ['USER'],
+  tagTypes: ['USER', 'RATING'],
   endpoints: builder => ({
     signIn: builder.mutation<void, SignInDataType>({
       query: data => ({
@@ -65,6 +71,33 @@ export const api = createApi({
         method: 'PUT',
         body: data,
       }),
+    }),
+    saveGameResult: builder.mutation<void, GameResult>({
+      query: data => ({
+        url: '/leaderboard',
+        method: 'POST',
+        body: {
+          ratingFieldName: GAME_ID,
+          data: {
+            [GAME_ID]: data.score,
+            ...data,
+          },
+        },
+      }),
+      invalidatesTags: ['RATING'],
+    }),
+    getLeaderboard: builder.query<GameResult[], { page: number; pageSize?: number }>({
+      query: data => ({
+        url: '/leaderboard/all',
+        method: 'POST',
+        body: {
+          ratingFieldName: GAME_ID,
+          cursor: data.page,
+          limit: data.pageSize,
+        },
+      }),
+      transformResponse: (response: { data: GameResult }[]) => response.map(({ data }) => data),
+      providesTags: ['RATING'],
     }),
   }),
 })

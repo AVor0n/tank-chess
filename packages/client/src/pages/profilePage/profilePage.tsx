@@ -4,6 +4,7 @@ import { useApiErrorToast } from 'hook/useApiErrorToast'
 import { api } from 'reducers/api'
 import { selectorUserInfo } from 'reducers/auth'
 import { useAppSelector } from 'reducers/hooks'
+import NotificationServiceInstance from 'service/notification.service'
 import { type ChangePasswordPayload } from 'types/types'
 import Form from '../../components/form'
 import { FormContext } from '../../context/formContext'
@@ -14,8 +15,7 @@ import styles from './profilePage.module.scss'
 export const ProfilePage = () => {
   const user = useAppSelector(selectorUserInfo)
   const [logout, { error: logoutError }] = api.useLogoutMutation()
-  const [changePassword, { error: changePasswordError }] = api.useChangePasswordMutation()
-  useApiErrorToast(changePasswordError)
+  const [changePassword] = api.useChangePasswordMutation()
   useApiErrorToast(logoutError)
 
   if (!user) return <PageLoader />
@@ -57,6 +57,17 @@ export const ProfilePage = () => {
             <Form<ChangePasswordPayload>
               onSubmit={data => {
                 changePassword(data)
+                  .unwrap()
+                  .then(() => {
+                    NotificationServiceInstance.show('Изменение пароля', {
+                      body: 'Пароль успешно изменен',
+                    })
+                  })
+                  .catch(() => {
+                    NotificationServiceInstance.show('Изменение пароля', {
+                      body: 'Не удалось изменить пароль',
+                    })
+                  })
               }}>
               <FormContext.Consumer>{state => <FormPassword {...state} />}</FormContext.Consumer>
             </Form>

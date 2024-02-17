@@ -1,12 +1,12 @@
 import { type Nullable, type EmojiType } from 'types/types'
-import { FORUM_BASE_URL } from '../utils/constants'
+import { SELF_API_URL } from '../utils/constants'
 /* eslint no-console: 0 */
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 /* eslint @typescript-eslint/no-unsafe-assignment: 0 */
 /* eslint @typescript-eslint/no-unsafe-argument: 0 */
 
 class EmojiService {
-  baseURL = FORUM_BASE_URL
+  baseURL = SELF_API_URL
 
   importEmoji = async () => {
     try {

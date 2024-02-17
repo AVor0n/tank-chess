@@ -1,39 +1,39 @@
 import { Modal } from '@gravity-ui/uikit'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { type Player } from '@lib/chess/core'
-import { gameFinished, gameStarted, setSecondPlayer, setWinner } from 'reducers/game'
-import { useAppDispatch } from 'reducers/hooks'
+import { type Game } from '@lib/chess'
+import { resetGame, startGame } from 'reducers/game'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import styles from './finishModal.module.scss'
 
-interface FinishModalProps {
-  winner: Player
+interface FinisModalProps {
+  game: Game
 }
 
-export const FinishModal = ({ winner }: FinishModalProps) => {
-  const dispatch = useAppDispatch()
+export const FinishModal = ({ game }: FinisModalProps) => {
   const [open, setOpen] = useState(true)
+  const { players, winnerName } = useAppSelector(state => state.game)
+  const dispatch = useAppDispatch()
 
   const handleNewGame = () => {
     setOpen(false)
-    dispatch(gameFinished(false))
-    dispatch(gameStarted(false))
-    dispatch(setWinner(null))
+    game.resetGame()
+    game.startGame({
+      playerName1: players[0] ?? 'Player 1',
+      playerName2: players[1] ?? 'Player 2',
+    })
+    dispatch(startGame())
   }
 
   const handleMainMenu = () => {
-    setOpen(false)
-    dispatch(gameFinished(false))
-    dispatch(gameStarted(false))
-    dispatch(setSecondPlayer(null))
-    dispatch(setWinner(null))
+    dispatch(resetGame())
   }
 
   return (
     <Modal open={open}>
       <div className={styles.container}>
         <h2 className={styles.title}>Ура, победа!!!</h2>
-        <h6 className={styles.subtitle}>Победил {winner.name}</h6>
+        <h6 className={styles.subtitle}>Победил {winnerName}</h6>
         <div className={styles.links}>
           <Link className={styles.link} to="/game" onClick={handleNewGame}>
             Начать новую игру

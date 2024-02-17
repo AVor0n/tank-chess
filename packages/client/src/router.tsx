@@ -1,4 +1,4 @@
-import { useParams, json } from 'react-router-dom'
+import { json } from 'react-router-dom'
 import PrivateRoute from '@components/privateRoute'
 import AuthPage from '@pages/authPage'
 import ErrorPage from '@pages/errorPage'
@@ -19,31 +19,13 @@ const routes = [
       return json({ message: 'Пример данных, если нужно сделать запрос на этапе рендеринга на сервере' })
     },
   },
-  /**временно, пока нет инт */
   {
-    path: '/forum',
-    Component: ForumPage,
+    path: '/',
+    Component: withErrorInfo(MainPage),
   },
-
-  {
-    path: '/forum/:topicId',
-    Component: () => {
-      const { topicId } = useParams()
-      return <TopicPage topicId={topicId!} />
-    },
-  },
-  {
-    path: '/forum/add-new-topic',
-    Component: NewTopicPage,
-  },
-  /**--------------------- */
   {
     element: <PrivateRoute />,
     children: [
-      {
-        path: '/',
-        Component: withErrorInfo(MainPage),
-      },
       {
         path: '/game',
         Component: withErrorInfo(GamePage),
@@ -56,21 +38,19 @@ const routes = [
         path: '/rating',
         Component: withErrorInfo(Leaderboard),
       },
-      /*{
+      {
         path: '/forum',
         Component: withErrorInfo(ForumPage),
       },
+
       {
         path: '/forum/:topicId',
-        Component: withErrorInfo(() => {
-          const { topicId } = useParams()
-          return <TopicPage topicId={topicId!} />
-        }),
+        Component: withErrorInfo(TopicPage),
       },
       {
         path: '/forum/add-new-topic',
         Component: withErrorInfo(NewTopicPage),
-      },*/
+      },
       {
         path: '/500',
         element: <ErrorPage type="Server Error" />,

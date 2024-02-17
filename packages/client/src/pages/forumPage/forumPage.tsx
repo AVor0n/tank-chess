@@ -1,54 +1,41 @@
-import { Pagination, Table } from '@gravity-ui/uikit'
+import { Loader, Pagination, Table } from '@gravity-ui/uikit'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import LeftMenuPage from '@components/leftMenuPage'
 import { ROWS_PER_PAGE } from '@pages/leaderboad/constants'
+import { datetimeFormatter } from '@utils/format'
 import { usePagination } from 'hook/usePagination'
-import { FORUM_PAGE_COLUMNS } from './constants'
+import { selectTopicsLoading, selectTopics, type TopicDto } from 'reducers/forum/topicSlice'
+import { getTopicById } from 'reducers/forum/topicThunks/getTopicById'
+import { loadAllForumTopics } from 'reducers/forum/topicThunks/loadAllTopics'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
+import { FORUM_PAGE_COLUMNS, type TopicRow } from './constants'
 import styles from './forumPage.module.scss'
 
-export interface TopicDto {
-  id: string
-  theme: string
-  postsNumber: number
-  lastPost: string
-}
-
-// Моковые данные, по структуре хранения нужно будет продумать при создании бека
-export const TOPICS: TopicDto[] = [
-  {
-    id: '1',
-    theme: 'Правил игры',
-    postsNumber: 1,
-    lastPost: 'userLogin - 3 дня назад',
-  },
-  {
-    id: '2',
-    theme: 'Противник',
-    postsNumber: 1,
-    lastPost: 'userLogin - 3 дня назад',
-  },
-]
-
 export const ForumPage = () => {
+  const loadingTopics = useAppSelector(selectTopicsLoading)
+  const topics = useAppSelector(selectTopics)
   const [currentPage, handleUpdate] = usePagination(ROWS_PER_PAGE)
-  const [topics, setTopics] = useState<TopicDto[]>(TOPICS)
   const [filteredTopics, setFilteredTopics] = useState<TopicDto[]>([])
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    setTopics(TOPICS)
-  }, [])
+    dispatch(loadAllForumTopics())
+  }, [dispatch])
 
   useEffect(() => {
     const startIndex = (currentPage.page - 1) * currentPage.pageSize
     const endIndex = (currentPage.page - 1) * currentPage.pageSize + currentPage.pageSize - 1
     setFilteredTopics(topics.slice(startIndex, endIndex + 1))
-  }, [topics, currentPage.page, currentPage.pageSize])
+  }, [topics, currentPage.page, currentPage.pageSize, dispatch])
 
-  const handleTopicClick = (topic: TopicDto) => {
+  const handleTopicClick = (topic: TopicRow) => {
+    dispatch(getTopicById(topic.id))
     navigate(`/forum/${topic.id}`)
   }
+
+  if (loadingTopics) return <Loader />
 
   return (
     <LeftMenuPage>
@@ -61,7 +48,12 @@ export const ForumPage = () => {
         </div>
         <Table
           className={styles.table}
-          data={filteredTopics}
+          data={filteredTopics.map(topic => ({
+            id: topic.id,
+            title: topic.title,
+            updatedAt: datetimeFormatter(topic.updatedAt),
+            commentsCount: topic.comments?.length ?? 0,
+          }))}
           columns={FORUM_PAGE_COLUMNS}
           onRowClick={handleTopicClick}
           edgePadding={false}

@@ -6,6 +6,7 @@ interface TopicProps {
   id: number
   user_id?: number // Переделать при реализации авторизации на беке
   title: string
+  text: string
   comments?: Comment[]
   createdAt: Date
   updatedAt: Date
@@ -19,6 +20,10 @@ export class Topic extends Model<TopicProps, CreateTopicProps> {
   @NotEmpty
   @Column(DataType.STRING)
   title!: string
+
+  @NotEmpty
+  @Column
+  text!: string
 
   @HasMany(() => Comment)
   comments!: Comment[]
