@@ -9,12 +9,12 @@ const TankTypesCost: Record<TANK_TYPE, number> = {
   LT: 400,
 }
 
-const calculateScore = (game: Game, winner: Player) => {
+const calculateScore = (game: Game, player: Player) => {
   const lostOwnTanks: TANK_TYPE[] = []
   const destroyedEnemyTanks: TANK_TYPE[] = []
   game.tanks.forEach(tank => {
     if (!tank.isAlive) {
-      const targetCollection = tank.playerId === winner.id ? lostOwnTanks : destroyedEnemyTanks
+      const targetCollection = tank.playerId === player.id ? lostOwnTanks : destroyedEnemyTanks
       targetCollection.push(tank.type)
     }
   })
