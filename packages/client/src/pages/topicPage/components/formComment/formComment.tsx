@@ -1,8 +1,8 @@
-import { Button, TextArea, TextInput } from '@gravity-ui/uikit'
+import { Button, TextArea } from '@gravity-ui/uikit'
 import { useState } from 'react'
 import EmojiBar from '@components/emojiBar'
 import { type EmojiType, type Nullable } from 'types/types'
-import styles from './formPost.module.scss'
+import styles from './formComment.module.scss'
 
 interface FormProps {
   state: Record<string, string>
@@ -12,25 +12,13 @@ interface FormProps {
   emoji: Nullable<EmojiType[]>
 }
 
-export const FormPost = ({ state, error, isValid, touched, emoji }: FormProps) => {
+export const FormComment = ({ state, error, isValid, touched, emoji }: FormProps) => {
   const [textAreaContent, setTextAreaContent] = useState(state.text)
   const [isEmojiVisible, setEmojiVisibility] = useState(false)
 
   return (
     <div className={styles.container}>
       <h6 className={styles.title}>Новый Комментарий</h6>
-      <div className={styles.text}>
-        <TextInput
-          name="title"
-          placeholder="Тема"
-          type="text"
-          view="normal"
-          pin="round-round"
-          value={state.title}
-          errorMessage={error.title}
-          validationState={error.title ? 'invalid' : undefined}
-        />
-      </div>
       <div className={styles.text}>
         <TextArea
           name="text"

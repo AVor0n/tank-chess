@@ -1,49 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import FinishModal from '@components/finishModal'
 import PlayerModal from '@components/playerModal'
 import StartModal from '@components/startModal'
 import { Game } from '@lib/chess'
 import { ChessCanvasUI } from '@lib/reactChessUI'
-import { gameFinished, gameStarted, setWinner } from 'reducers/game'
+import { useApiErrorToast } from 'hook/useApiErrorToast'
+import { api } from 'reducers/api'
+import { GameStatus, finishGame, startGame } from 'reducers/game'
 import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import { GameInfo } from './components/info'
+import { getGameResult } from './utils'
 import styles from './gamePage.module.scss'
-
-const game = new Game()
-const gameOptions = {
-  playerName1: 'commander',
-  playerName2: 'enemy',
-}
 
 export const GamePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { isGameFinished, isGameStarted, winner, secondPlayer } = useAppSelector(store => store.game)
   const [uiController, setUiController] = useState<ChessCanvasUI | null>(null)
+  const game = useMemo(() => new Game(), [])
+
   const dispatch = useAppDispatch()
-
-  const onStartGame = () => {
-    game.startGame(gameOptions)
-
-    dispatch(gameStarted(true))
-  }
+  const gameStatus = useAppSelector(state => state.game.status)
+  const { status, players } = useAppSelector(state => state.game)
+  const [saveResult, { error }] = api.useSaveGameResultMutation()
+  useApiErrorToast(error)
 
   useEffect(() => {
-    if (isGameStarted && canvasRef.current && !uiController) {
+    if (status !== GameStatus.READY_TO_START) return
+
+    dispatch(startGame())
+    game.startGame({
+      playerName1: players[0] ?? 'player_1',
+      playerName2: players[1] ?? 'player_2',
+    })
+    game.on('endGame', winner => {
+      dispatch(finishGame(winner.name))
+      const currentPlayerWin = winner.id === game.players[0].id
+      if (currentPlayerWin) {
+        saveResult(getGameResult(game, winner))
+      }
+    })
+  }, [dispatch, game, players, saveResult, status])
+
+  useEffect(() => {
+    if (gameStatus > GameStatus.SETUP && canvasRef.current && !uiController) {
       setUiController(new ChessCanvasUI(game, canvasRef.current, screen.availHeight * 0.85))
     }
-
     uiController?.refresh()
-  }, [isGameStarted, uiController])
-
-  useEffect(() => {
-    const disposer = game.on('endGame', winner => {
-      dispatch(gameFinished(true))
-      dispatch(setWinner(winner))
-      game.resetGame()
-      game.startGame(gameOptions)
-    })
-    return () => disposer()
-  })
+  }, [game, gameStatus, uiController])
 
   return (
     <div className={styles.game}>
@@ -55,9 +57,10 @@ export const GamePage = () => {
         onClick={e => uiController?.onMouseClick(e)}
         onMouseMove={e => uiController?.onMouseMove(e)}
       />
-      {isGameFinished && <FinishModal winner={winner!} />}
-      {!secondPlayer?.login && isGameStarted && <PlayerModal />}
-      {isGameStarted ? <GameInfo game={game} /> : <StartModal startGame={onStartGame} />}
+      {gameStatus === GameStatus.NO_INIT && <StartModal />}
+      {gameStatus === GameStatus.SETUP && <PlayerModal />}
+      {gameStatus === GameStatus.IN_PROGRESS && <GameInfo game={game} />}
+      {gameStatus === GameStatus.FINISHED && <FinishModal game={game} />}
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { ReactionController } from '../controllers'
 
 const reactionRouter = Router()
 
-reactionRouter.post('/import', ReactionController.importEmojiFromJSON)
+reactionRouter.get('/import', ReactionController.importEmojiFromJSON)
 reactionRouter.post('/clear', ReactionController.clearEmoji)
 reactionRouter.get('/:limit', ReactionController.getAllEmoji)
 reactionRouter.get('/comment/:commentId', ReactionController.getReactionsOnComment)

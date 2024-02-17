@@ -69,6 +69,7 @@
 `docker-compose up server --build`  – пересборка контейнера server
 `docker-compose ps --services`  – посмотреть запущенные контейнеры
 `docker-compose stop`  – остановка всех контейнеров
+`docker-compose up -d --no-deps --build`  – пересборка всех контейнеров
 
 ## Production окружение в докере
 Перед первым запуском выполните `node init.js`

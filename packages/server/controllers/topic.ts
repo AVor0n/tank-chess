@@ -8,15 +8,22 @@ const { notFoundTopicId } = RESPONSE_MESSAGES[404].topics
 
 interface TopicPropsFromClient {
   title: string
+  text: string
 }
 
 /* eslint-disable @typescript-eslint/no-misused-promises*/
 export const getAllTopics: Handler = async (_, res, next) => {
   try {
     const topics = await Topic.findAll({
-      order: [['createdAt', 'DESC']],
+      order: [['updatedAt', 'DESC']],
+      include: [
+        {
+          model: Comment,
+          order: [['createdAt', 'DESC']],
+        },
+      ],
     })
-    res.status(200).json({ topics })
+    res.status(200).json(topics)
   } catch (error) {
     next(error)
   }
@@ -27,6 +34,12 @@ export const getTopic: Handler = async (req, res, next) => {
     const { topicId } = req.params
     const topic = await Topic.findOne({
       where: { id: topicId },
+      include: [
+        {
+          model: Comment,
+        },
+      ],
+      order: [[{ model: Comment, as: 'comments' }, 'createdAt', 'DESC']],
     })
     if (!topic) {
       throw new NotFoundError(notFoundTopicId, 'NotFoundError')
@@ -40,12 +53,13 @@ export const getTopic: Handler = async (req, res, next) => {
 
 export const createTopic: Handler = async (req, res, next) => {
   try {
-    const { title } = req.body as TopicPropsFromClient
-    if (!title) {
+    const { title, text } = req.body as TopicPropsFromClient
+    if (!title || !text) {
       throw new RequestError(invalidSaving, 'RequestError')
     }
     const topic: Topic = await Topic.create({
       title,
+      text,
     })
     res.status(201).json(topic.toJSON())
   } catch (error) {

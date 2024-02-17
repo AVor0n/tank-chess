@@ -59,6 +59,7 @@ module.exports = (async () => {
         'import/no-default-export': 'error',
         'import/no-named-default': 'error',
         'import/no-named-export': 'off',
+        'import/namespace': 'off', // не работает c flatConfig - https://github.com/import-js/eslint-plugin-import/issues/2556
         'import/no-useless-path-segments': 'error',
         'import/newline-after-import': 'error',
         'import/no-cycle': ['error', { maxDepth: 3, ignoreExternal: true }],

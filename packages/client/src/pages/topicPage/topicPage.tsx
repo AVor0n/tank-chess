@@ -1,24 +1,28 @@
+import { Loader } from '@gravity-ui/uikit'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import Form from '@components/form'
 import LeftMenuPage from '@components/leftMenuPage'
-import { TOPICS } from '@pages/forumPage/forumPage'
 import { FormContext } from 'context/formContext'
-import ForumService from 'service/forum-test.service'
-import { type Nullable, type EmojiType, type PostDto } from 'types/types'
+import { type CommentDto, selectComments } from 'reducers/forum/commentSlice'
+import { createNewComment } from 'reducers/forum/commentThunks/createNewComment'
+import { selectTopic, selectTopicsLoading } from 'reducers/forum/topicSlice'
+import { getTopicById } from 'reducers/forum/topicThunks/getTopicById'
+import { useAppDispatch, useAppSelector } from 'reducers/hooks'
+import { type Nullable, type EmojiType } from 'types/types'
 import EmojiService from '../../service/reaction.service'
-import FormPost from './components/formPost'
-import PostItem from './components/postItem'
+import CommentItem from './components/commentItem'
+import FormComment from './components/formComment'
 import styles from './topicPage.module.scss'
 
-interface TopicProps {
-  topicId: string
-}
+export const TopicPage = () => {
+  const currentTopic = useAppSelector(selectTopic)
+  const currentComments = useAppSelector(selectComments)
+  const loading = useAppSelector(selectTopicsLoading)
+  const dispatch = useAppDispatch()
+  const { topicId } = useParams()
 
-export const TopicPage = ({ topicId }: TopicProps) => {
-  const [posts, setPosts] = useState<PostDto[]>([])
-  const [topicTitle] = useState(TOPICS.find(topic => topic.id === topicId)?.theme)
-
-  const [emoji, setEmoji] = useState<Nullable<EmojiType[]>>(null)
+  const [emoji, setEmoji] = useState<Nullable<EmojiType[]>>(() => [])
   useEffect(() => {
     ;(async () => {
       setEmoji(await EmojiService.getEmojiSet())
@@ -26,37 +30,32 @@ export const TopicPage = ({ topicId }: TopicProps) => {
   }, [])
 
   useEffect(() => {
-    ;(async () => {
-      const posts: PostDto[] = await ForumService.getComments(Number(topicId))
-      setPosts(posts)
-    })()
-  }, [topicId])
+    if (topicId) {
+      dispatch(getTopicById(topicId))
+    }
+  }, [topicId, dispatch])
 
   const onAddNewPost = (data: Record<string, File | string | number>) => {
-    // eslint-disable-next-line no-console
-    console.log(data)
+    const { text } = data
+    if (currentTopic && text) {
+      dispatch(createNewComment({ text, topicId: currentTopic?.id } as CommentDto))
+    }
   }
+
+  if (loading) return <Loader />
 
   return (
     <LeftMenuPage>
       <section className={styles.container}>
         <div>
-          <h1 className={styles.title}>{topicTitle}</h1>
-          {posts.map(post => {
-            /*временные данные*/
-            post.user = {
-              id: 1,
-              phone: '1122121212',
-              second_name: 'Тест',
-              login: 'test',
-              first_name: 'Тест',
-              email: 'Тест',
-            }
-            return <PostItem key={post.id} post={post} emoji={emoji} />
-          })}
+          <h1 className={styles.title}>{currentTopic?.title}</h1>
+          <h3 className={styles.title}>{currentTopic?.text}</h3>
+          {currentComments.map(comment => (
+            <CommentItem key={comment.id} comment={comment} emoji={emoji} />
+          ))}
         </div>
         <Form onSubmit={onAddNewPost}>
-          <FormContext.Consumer>{state => <FormPost {...state} emoji={emoji} />}</FormContext.Consumer>
+          <FormContext.Consumer>{state => <FormComment {...state} emoji={emoji} />}</FormContext.Consumer>
         </Form>
       </section>
     </LeftMenuPage>

@@ -1,38 +1,52 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { type Player } from '@lib/chess/core'
-import { type Nullable, type User } from 'types/types'
+import { type Nullable } from 'types/types'
+
+export const enum GameStatus {
+  /** Начальное состояние */
+  NO_INIT,
+  /** Для старта требуется указать стартовые параметры */
+  SETUP,
+  /** Игра готова для старта */
+  READY_TO_START,
+  /** Игра в процессе игры... */
+  IN_PROGRESS,
+  /** Игра окончена. Имеется победитель */
+  FINISHED,
+}
 
 interface GameState {
-  isGameStarted: boolean
-  isGameFinished: boolean
-  winner: Nullable<Player>
-  secondPlayer: Nullable<User>
+  status: GameStatus
+  winnerName: Nullable<string>
+  players: [Nullable<string>, Nullable<string>]
 }
 
 const initialState: GameState = {
-  isGameStarted: false,
-  isGameFinished: false,
-  winner: null,
-  secondPlayer: null,
+  status: GameStatus.NO_INIT,
+  winnerName: null,
+  players: [null, null],
 }
 
 export const gameSlice = createSlice({
-  name: 'startFinishGame',
+  name: 'game',
   initialState,
   reducers: {
-    gameStarted: (state, action: PayloadAction<boolean>) => {
-      state.isGameStarted = action.payload
+    initGame: () => ({
+      ...initialState,
+      status: GameStatus.SETUP,
+    }),
+    setPlayers: (state, action: PayloadAction<[string, string]>) => {
+      state.players = action.payload
+      state.status = GameStatus.READY_TO_START
     },
-    gameFinished: (state, action: PayloadAction<boolean>) => {
-      state.isGameFinished = action.payload
+    startGame: state => {
+      state.status = GameStatus.IN_PROGRESS
     },
-    setWinner: (state, action: PayloadAction<Nullable<Player>>) => {
-      state.winner = action.payload
+    finishGame: (state, action: PayloadAction<string>) => {
+      state.winnerName = action.payload
+      state.status = GameStatus.FINISHED
     },
-    setSecondPlayer: (state, action) => {
-      state.secondPlayer = action.payload as User
-    },
+    resetGame: () => initialState,
   },
 })
 
-export const { gameStarted, gameFinished, setWinner, setSecondPlayer } = gameSlice.actions
+export const { startGame, finishGame, resetGame, setPlayers, initGame } = gameSlice.actions

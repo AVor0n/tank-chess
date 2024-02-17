@@ -1,7 +1,7 @@
 import { type RequestHandler } from 'express'
 import { RESPONSE_MESSAGES } from '../constants'
 import { RequestError, NotFoundError } from '../errors'
-import { Comment } from '../models'
+import { Comment, Topic } from '../models'
 
 const { invalidSaving } = RESPONSE_MESSAGES[400].comments
 const { notFoundCommentId } = RESPONSE_MESSAGES[404].comments
@@ -24,7 +24,14 @@ export const createComment: RequestHandler = async (req, res, next) => {
       topic_id: Number(topicId),
       text,
     })
-    res.status(201).json({ message: 'Комментарий успешно добавлен', data: newComment })
+    if (newComment) {
+      const topic = await Topic.findByPk(Number(topicId))
+      topic?.changed('updatedAt', true)
+      await topic?.update({
+        updatedAt: new Date(),
+      })
+    }
+    res.status(201).json(newComment)
   } catch (error) {
     next(error)
   }

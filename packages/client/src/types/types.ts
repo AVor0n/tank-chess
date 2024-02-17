@@ -1,3 +1,5 @@
+import { type TANK_TYPE } from '@lib/chess'
+
 export interface User {
   id: number
   phone: string
@@ -47,6 +49,15 @@ export interface AppState {
     userInfo: Nullable<User>
     loaded: boolean
   }
+}
+
+export interface GameResult {
+  score: number
+  lostOwnTanks: TANK_TYPE[]
+  destroyedEnemyTanks: TANK_TYPE[]
+  moves: number
+  endDate: string
+  userName: string
 }
 
 export interface EmojiType {

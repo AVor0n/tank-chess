@@ -52,3 +52,8 @@ export interface TankCell {
 }
 
 export type ItemOnBoard = EmptyCell | WallCell | TankCell
+
+export interface StartGameOptions {
+  playerName1: string
+  playerName2: string
+}
