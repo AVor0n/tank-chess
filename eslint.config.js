@@ -54,6 +54,7 @@ module.exports = (async () => {
         '@typescript-eslint/consistent-type-imports': ['warn', { fixStyle: 'inline-type-imports' }],
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
+        '@typescript-eslint/no-misused-promises': 'off',
         'import/no-anonymous-default-export': 'error',
         'import/prefer-default-export': 'off',
         'import/no-default-export': 'error',

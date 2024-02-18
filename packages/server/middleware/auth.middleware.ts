@@ -1,18 +1,37 @@
-import type { Request, Response, NextFunction } from 'express'
+import { type Request, type Response, type NextFunction } from 'express'
 
-// Дописать для авторизации по куке
-export const authMiddleware = (request: Request, _response: Response, next: NextFunction) => {
-  const { cookie } = request.headers
-  const urlYandexApi = `https://ya-praktikum.tech/`
+export interface UserInfo {
+  id: number
+  first_name: string
+  second_name: string
+  display_name: string | null
+  login: string
+  avatar: string | null
+  email: string
+  phone: string
+}
 
-  if (!cookie) {
+export interface RequestWithUserInfo extends Request {
+  userInfo?: UserInfo
+}
+
+export const authMiddleware = async (request: RequestWithUserInfo, _response: Response, next: NextFunction) => {
+  const cookie = request.header('cookie')
+  if (!cookie || request.url.includes('.')) {
     next()
     return
   }
 
-  fetch(`${urlYandexApi}/api/v2/auth/user`, {
-    headers: { 'Content-Type': 'application/json; charset=utf-8', cookie: cookie.toString() },
-  })
-
-  next()
+  try {
+    const user = await fetch('https://ya-praktikum.tech/api/v2/auth/user', {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        cookie,
+      },
+    })
+    request.userInfo = (await user.json()) as UserInfo
+    next()
+  } catch (error) {
+    next()
+  }
 }

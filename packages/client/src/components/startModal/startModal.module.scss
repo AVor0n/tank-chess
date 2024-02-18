@@ -17,11 +17,4 @@
 .button {
   inline-size: 200px;
   margin: 25px;
-  color: var(--colors-gray-light);
-  background-color: var(--colors-chess-dark);
-
-  &:hover {
-    color: var(--colors-gray-light);
-    opacity: 0.8;
-  }
 }

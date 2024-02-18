@@ -1,0 +1,53 @@
+:root {
+  --colors-gray-light: #eaeaea;
+  --colors-gray: #c2c9c3;
+  --colors-gray-dark: #acb6bc;
+  --colors-red: #cb0000;
+  --colors-light-red: #f9c6c6;
+  --colors-green-light: #c3cfc8;
+  --colors-green-text: #5b7c6c;
+  --colors-green: #749080;
+  --colors-green-dark: #68866f;
+  --colors-chess-block: #38322a;
+  --colors-chess-square-light: #949283;
+  --colors-chess-square-dark: #797468;
+  --colors-chess-dark: #38322a;
+}
+
+.g-root {
+  --g-font-family-sans: 'Roboto', 'Helvetica Neue', sans-serif;
+  --g-text-body-font-weight: 600;
+  --g-text-caption-font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  --g-text-header-font-family: 'Bebas Neue', 'Helvetica Neue', sans-serif;
+  --g-text-body-1-font-size: 16px;
+  --g-text-body-1-line-height: 20px;
+  --g-text-header-font-weight: 600;
+  --g-text-subheader-font-weight: 600;
+  --g-text-display-font-weight: 600;
+  --g-text-accent-font-weight: 800;
+
+  &_theme_light {
+    --g-color-base-generic: #e5e5e5;
+    --g-color-base-brand: #749080;
+    --g-color-base-brand-hover: #68866f;
+    --g-color-base-selection: #19241d;
+    --g-color-base-selection-hover: #19241d;
+    --g-color-line-brand: #5b7c6c;
+    --g-color-text-brand: #5b7c6c;
+    --g-color-text-brand-contrast: #fff;
+    --g-color-text-link: #68866f;
+    --g-color-text-link-hover: #68866f;
+  }
+
+  &_theme_dark {
+    --g-color-base-brand: #749080;
+    --g-color-base-brand-hover: #68866f;
+    --g-color-base-selection: #19241d;
+    --g-color-base-selection-hover: #19241d;
+    --g-color-line-brand: #5b7c6c;
+    --g-color-text-brand: #5b7c6c;
+    --g-color-text-brand-contrast: #fff;
+    --g-color-text-link: #68866f;
+    --g-color-text-link-hover: #68866f;
+  }
+}

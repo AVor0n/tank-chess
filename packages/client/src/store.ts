@@ -5,11 +5,13 @@ import { errorSlice } from 'reducers/error'
 import commentSlice from 'reducers/forum/commentSlice'
 import topicSlice from 'reducers/forum/topicSlice'
 import { gameSlice } from 'reducers/game'
+import { themeSlice } from 'reducers/theme'
 
 export const createStoreWithData = (preloadedState: unknown) =>
   configureStore({
     reducer: {
       auth: authSlice.reducer,
+      theme: themeSlice.reducer,
       topic: topicSlice.reducer,
       comment: commentSlice.reducer,
       error: errorSlice.reducer,

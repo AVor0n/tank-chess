@@ -1,12 +1,12 @@
+import { BASE_URL } from '@utils/constants'
 import { type Nullable, type EmojiType } from 'types/types'
-import { SELF_API_URL } from '../utils/constants'
 /* eslint no-console: 0 */
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 /* eslint @typescript-eslint/no-unsafe-assignment: 0 */
 /* eslint @typescript-eslint/no-unsafe-argument: 0 */
 
 class EmojiService {
-  baseURL = SELF_API_URL
+  baseURL = BASE_URL
 
   importEmoji = async () => {
     try {
@@ -19,10 +19,8 @@ class EmojiService {
         credentials: 'include',
         mode: 'cors',
       })
-      console.log(response)
 
-      const result = await response?.json()
-      console.log(result)
+      await response?.json()
     } catch (error) {
       if (error instanceof Error) console.log('ошибка')
     }

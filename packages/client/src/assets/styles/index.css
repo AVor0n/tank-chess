@@ -1,8 +1,7 @@
 @import '@gravity-ui/uikit/styles/fonts.css';
 @import '@gravity-ui/uikit/styles/styles.css';
 @import url(../fonts/index.css);
-@import url(../styles/common.css);
-@import url(../styles/custom-gravity-ui.css);
+@import url(../styles/vars.scss);
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -39,10 +38,10 @@ h3 {
   background: transparent;
 }
 .g-pagination .yc-button_view_normal.yc-button_selected {
-  border: 1px solid var(--colors-black);
+  border: 1px solid var(--g-color-line-generic);
   border-radius: 7px;
   background: transparent;
-  color: var(--colors-green-text);
+  color: var(--g-color-base-generic);
 }
 .g-pagination .yc-button_view_normal.yc-button_selected:hover {
   background: transparent;
@@ -51,7 +50,7 @@ h3 {
   background: transparent;
 }
 .g-pagination .yc-button_selected .yc-button__text:hover {
-  color: var(--colors-white);
+  color: var(--g-color-base-selection);
 }
 .g-pagination .yc-button::before {
   background: transparent;

@@ -26,7 +26,7 @@ export const PlayerModal = () => {
         <FormInput placeholder="Player 2" name="login" onChange={setOpponentName} value={opponentName} />
 
         <div className={styles.actions}>
-          <Button className={styles.backBtn} onClick={() => navigate('/')} pin="brick-brick" size="xl">
+          <Button onClick={() => navigate('/')} view="normal" pin="brick-brick" size="xl">
             В главное меню
           </Button>
           <Button onClick={onStartGame} view="action" pin="brick-brick" size="xl">

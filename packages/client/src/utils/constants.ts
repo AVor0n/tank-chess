@@ -5,9 +5,6 @@ export const MAIN_MENU_LINKS = [
   { to: '/forum', label: 'Форум' },
 ]
 
-/* URLS */
-export const URL_RESOURCES = 'https://ya-praktikum.tech/api/v2/resources/'
-
 /* VALIDATE */
 export const VALID_EMAIL = 'validEmail'
 export const VALID_PASSWORD = 'validPassword'
@@ -23,9 +20,8 @@ export const errors = {
 }
 
 /* URLS */
-export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
-// Заменить на облачный ресурс в будущем
-export const SELF_API_URL = `http://localhost:9000/api`
+export const BASE_URL = 'http://localhost:9000/api'
+export const URL_RESOURCES = 'http://localhost:9000/api/proxy/resources/'
 
 /** Ключ для сохранения результатов на бэке */
 export const GAME_ID = '__tank-chess-33-test'

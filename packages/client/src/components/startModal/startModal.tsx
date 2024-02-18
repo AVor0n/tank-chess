@@ -28,7 +28,7 @@ export const StartModal = () => {
           total={RULES_LIST.length}
           onUpdate={handleUpdate}
         />
-        <Button size="xl" className={styles.button} onClick={handleStartButton}>
+        <Button size="xl" className={styles.button} view="action" pin="brick-brick" onClick={handleStartButton}>
           Начать
         </Button>
       </div>
