@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState, useMemo } from 'react'
 import FinishModal from '@components/finishModal'
 import PlayerModal from '@components/playerModal'
 import StartModal from '@components/startModal'
@@ -11,6 +11,14 @@ import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import { GameInfo } from './components/info'
 import { getGameResult } from './utils'
 import styles from './gamePage.module.scss'
+
+const gameComponent: (game: Game) => Record<GameStatus, ReactNode> = game => ({
+  [GameStatus.NO_INIT]: <StartModal />,
+  [GameStatus.SETUP]: <PlayerModal />,
+  [GameStatus.READY_TO_START]: null,
+  [GameStatus.IN_PROGRESS]: <GameInfo game={game} />,
+  [GameStatus.FINISHED]: <FinishModal game={game} />,
+})
 
 export const GamePage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -57,10 +65,7 @@ export const GamePage = () => {
         onClick={e => uiController?.onMouseClick(e)}
         onMouseMove={e => uiController?.onMouseMove(e)}
       />
-      {gameStatus === GameStatus.NO_INIT && <StartModal />}
-      {gameStatus === GameStatus.SETUP && <PlayerModal />}
-      {gameStatus === GameStatus.IN_PROGRESS && <GameInfo game={game} />}
-      {gameStatus === GameStatus.FINISHED && <FinishModal game={game} />}
+      {gameComponent(game)[gameStatus]}
     </div>
   )
 }

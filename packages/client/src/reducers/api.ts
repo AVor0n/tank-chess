@@ -14,7 +14,7 @@ export const api = createApi({
     credentials: 'include',
     mode: 'cors',
   }),
-  tagTypes: ['USER', 'RATING'],
+  tagTypes: ['USER', 'SCORE'],
   endpoints: builder => ({
     signIn: builder.mutation<void, SignInDataType>({
       query: data => ({
@@ -84,7 +84,7 @@ export const api = createApi({
           },
         },
       }),
-      invalidatesTags: ['RATING'],
+      invalidatesTags: ['SCORE'],
     }),
     getLeaderboard: builder.query<GameResult[], { page: number; pageSize?: number }>({
       query: data => ({
@@ -97,7 +97,7 @@ export const api = createApi({
         },
       }),
       transformResponse: (response: { data: GameResult }[]) => response.map(({ data }) => data),
-      providesTags: ['RATING'],
+      providesTags: ['SCORE'],
     }),
   }),
 })
