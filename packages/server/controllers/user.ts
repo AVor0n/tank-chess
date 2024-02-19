@@ -39,14 +39,8 @@ export const setTheme: Handler = async (req: RequestWithUserInfo, res, next) => 
       return
     }
 
-    const user = await User.findByPk(login)
-    if (user) {
-      await User.update({ theme }, { where: { login } })
-    } else {
-      await User.create({ login, theme })
-    }
-
-    res.send(200).send({ theme, login })
+    await User.upsert({ login, theme })
+    res.send(200).send({ login, theme })
   } catch (error) {
     next(error)
   }
