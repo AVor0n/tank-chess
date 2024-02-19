@@ -1,6 +1,6 @@
+import { BASE_URL } from '@utils/constants'
 import { type CommentDto } from 'reducers/forum/commentSlice'
 import { type TopicDto } from 'reducers/forum/topicSlice'
-import { SELF_API_URL } from '../utils/constants'
 
 export const checkResponse = <T>(res: Response): Promise<T> =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -10,7 +10,7 @@ export const apiRequest = <T>(url: string, options: RequestInit): Promise<T> =>
   fetch(url, options).then(res => checkResponse<T>(res))
 
 export const getTopicsRequestApi = () =>
-  apiRequest<TopicDto[]>(`${SELF_API_URL}/topics`, {
+  apiRequest<TopicDto[]>(`${BASE_URL}/topics`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charger=utf-8',
@@ -20,7 +20,7 @@ export const getTopicsRequestApi = () =>
   })
 
 export const getTopicByIdRequestApi = (topicId: string) =>
-  apiRequest<TopicDto>(`${SELF_API_URL}/topics/${topicId}`, {
+  apiRequest<TopicDto>(`${BASE_URL}/topics/${topicId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charger=utf-8',
@@ -30,7 +30,7 @@ export const getTopicByIdRequestApi = (topicId: string) =>
   })
 
 export const createNewTopicRequestApi = (title: string, text: string) =>
-  apiRequest<TopicDto>(`${SELF_API_URL}/topics`, {
+  apiRequest<TopicDto>(`${BASE_URL}/topics`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -45,7 +45,7 @@ export const createNewTopicRequestApi = (title: string, text: string) =>
   })
 
 export const createNewCommentRequestApi = (text: string, topicId: string) =>
-  apiRequest<CommentDto>(`${SELF_API_URL}/comments`, {
+  apiRequest<CommentDto>(`${BASE_URL}/comments`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charger=utf-8',
@@ -59,7 +59,7 @@ export const createNewCommentRequestApi = (text: string, topicId: string) =>
   })
 
 export const deleteCommentRequestApi = (commentId: string) =>
-  apiRequest<CommentDto>(`${SELF_API_URL}/comments/${commentId}`, {
+  apiRequest<CommentDto>(`${BASE_URL}/comments/${commentId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json;charger=utf-8',

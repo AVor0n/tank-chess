@@ -17,7 +17,7 @@
     justify-content: start;
     margin-block-end: 35px;
     padding-block-end: 35px;
-    border-block-end: 1px solid var(--colors-gray-dark);
+    border-block-end: 1px solid var(--g-color-line-generic);
 
     .avatar {
       padding-inline-end: 50px;
@@ -33,7 +33,7 @@
         justify-content: space-between;
         inline-size: 400px;
         padding: 10px;
-        border-block-end: 1px solid var(--colors-gray-light);
+        border-block-end: 1px solid var(--g-color-line-generic);
 
         &:last-child {
           border-block-end: none;
@@ -50,7 +50,7 @@
     inline-size: 100%;
     margin-block-end: 35px;
     padding-block-end: 30px;
-    border-block-end: 1px solid var(--colors-gray-dark);
+    border-block-end: 1px solid var(--g-color-line-generic);
 
     .blockPasswordInner {
       inline-size: 300px;
@@ -60,12 +60,12 @@
   .logoutBlock {
     .logoutBtn {
       padding-inline-start: 15px;
-      color: var(--colors-red);
+      color: var(--g-color-base-danger);
       cursor: pointer;
-      border-inline-start: 3px solid var(--colors-green);
+      border-inline-start: 3px solid var(--g-color-line-danger);
 
       &:hover {
-        color: var(--colors-chess-dark);
+        color: var(--g-color-text-danger);
       }
     }
 

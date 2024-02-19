@@ -37,7 +37,7 @@
 .link {
   inline-size: 200px;
   padding: 25px;
-  color: var(--colors-gray-light);
+  color: var(--g-color-text-link);
   font-weight: 400;
   font-size: 18px;
   font-style: normal;
@@ -47,7 +47,7 @@
   background-color: var(--colors-chess-dark);
 
   &:hover {
-    color: var(--colors-gray-light);
+    color: var(--g-color-text-link-hover);
     opacity: 0.8;
   }
 }

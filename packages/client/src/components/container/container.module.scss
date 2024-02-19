@@ -4,13 +4,14 @@
   justify-content: center;
   inline-size: 100%;
   block-size: 100vh;
-  background: var(--colors-gray-light);
+  background: var(--g-color-base-generic);
 
   .card {
+    position: relative;
     inline-size: 300px;
     margin-block-start: 0;
     padding: 30px;
-    background: var(--colors-white);
+    background: var(--g-color-base-background);
   }
 }
 
@@ -22,12 +23,12 @@
   block-size: 100vh;
   min-block-size: 100vh;
   box-sizing: border-box;
-  background: var(--colors-white);
+  background: var(var(--g-color-base-background));
 
   .page {
     inline-size: 94%;
     max-inline-size: 1;
     margin-block-start: 0;
-    background: var(--colors-white);
+    background: var(var(--g-color-base-background));
   }
 }
