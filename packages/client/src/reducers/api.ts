@@ -55,7 +55,11 @@ export const api = createApi({
       transformResponse: (response: { service_id: string }) => response.service_id,
     }),
     getUser: builder.query<User, void>({
-      query: () => '/proxy/auth/user',
+      query: () => ({
+        url: '/users/user',
+        method: 'GET',
+        //body: {theme: localStorage.getItem(THEME_LS_KEY)? localStorage.getItem(THEME_LS_KEY) : 'light'}
+      }),
       providesTags: ['USER'],
     }),
     changeAvatar: builder.mutation<User, FormData>({

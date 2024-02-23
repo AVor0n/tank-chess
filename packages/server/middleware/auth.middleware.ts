@@ -21,7 +21,6 @@ export const authMiddleware = async (request: RequestWithUserInfo, _response: Re
     next()
     return
   }
-
   try {
     const user = await fetch('https://ya-praktikum.tech/api/v2/auth/user', {
       headers: {
@@ -29,9 +28,23 @@ export const authMiddleware = async (request: RequestWithUserInfo, _response: Re
         cookie,
       },
     })
+
     request.userInfo = (await user.json()) as UserInfo
+
     next()
   } catch (error) {
     next()
   }
+
+  /* await setTimeout(()=>console.log(1), 1)
+  request.userInfo = {
+    id: 123,
+    first_name: 'кри',
+    second_name: 'кри',
+    display_name: 'kri',
+    login: 'kri',
+    avatar: null,
+    email: 'kri@kri.ru',
+    phone: '948549549854'
+    }*/
 }
