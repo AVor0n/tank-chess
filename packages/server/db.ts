@@ -1,15 +1,13 @@
 import dotenv from 'dotenv'
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript'
+import { importEmojiFromJSON } from './controllers/reaction'
 import { Comment, Topic, Reaction, Emoji, User } from './models'
 
 dotenv.config({ path: '../../.env' })
 
-/***upd when push */
 //const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
 const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
-
 const sequelizeOptions: SequelizeOptions = {
-  /***upd when push */
   //host: POSTGRES_HOST ?? 'localhost',
   host: 'localhost',
   port: Number(POSTGRES_PORT),
@@ -26,7 +24,13 @@ export async function postgresConnect() {
   try {
     await sequelize.authenticate()
 
-    await sequelize.sync({ force: true })
+    await sequelize.sync()
+
+    /**заполняем таблицу с емодзи, если она пустая */
+    const emoji = await Emoji.findAndCountAll()
+    if (emoji.count === 0) {
+      await importEmojiFromJSON()
+    }
   } catch (error) {
     console.error(error)
   }
