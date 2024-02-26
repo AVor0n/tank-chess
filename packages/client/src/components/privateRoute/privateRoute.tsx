@@ -7,6 +7,7 @@ import { useAppSelector } from 'reducers/hooks'
 export const PrivateRoute = () => {
   const location = useLocation()
   const { isLoading } = api.useGetUserQuery()
+  //const [ isLoading ] = api.useGetUserMutation()
   const isAuth = useAppSelector(selectorIsAuth)
 
   if (isLoading) return <PageLoader />
