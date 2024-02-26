@@ -5,6 +5,6 @@ const userRouter = Router()
 
 userRouter.get('/theme', UserController.getTheme)
 userRouter.post('/theme', UserController.setTheme)
-userRouter.get('/user', UserController.getAndSaveUser)
-userRouter.post('/user', UserController.findUser)
+userRouter.post('/user', UserController.getAndSaveUser)
+userRouter.post('/user/:id', UserController.findUserById)
 export { userRouter }

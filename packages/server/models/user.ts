@@ -16,41 +16,37 @@ interface UserProps {
 export class User extends Model<UserProps> {
   @PrimaryKey
   @AllowNull(false)
+  @Unique('user_indices')
   @Column
-  user_id!: number
+  _id!: number
 
-  @PrimaryKey
   @Unique
   @AllowNull(false)
+  @Unique('user_indices')
   @Column
   login!: string
 
   @Unique
-  @PrimaryKey
   @AllowNull(false)
+  @Unique('user_indices')
   @Column
   email!: string
 
-  @Unique
   @Default('')
   @Column
   first_name!: string
 
-  @Unique
   @Default('')
   @Column
   second_name!: string
 
-  @Unique
   @Column
   display_name!: string
 
-  @Unique
   @Default('')
   @Column
   phone!: string
 
-  @Unique
   @Default('')
   @Column
   avatar!: string

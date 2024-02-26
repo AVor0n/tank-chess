@@ -26,7 +26,7 @@ export async function postgresConnect() {
   try {
     await sequelize.authenticate()
 
-    await sequelize.sync()
+    await sequelize.sync({ force: true })
   } catch (error) {
     console.error(error)
   }
