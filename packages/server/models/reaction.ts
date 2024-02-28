@@ -1,5 +1,5 @@
 import { type Optional } from 'sequelize'
-import { Column, ForeignKey, Model, Table, BelongsTo, Unique } from 'sequelize-typescript'
+import { Column, ForeignKey, Model, Table, Unique, BelongsTo } from 'sequelize-typescript'
 import { Comment } from './comment'
 import { Emoji } from './emoji'
 import { User } from './user'
@@ -15,7 +15,6 @@ export type CreateReactionProps = Optional<ReactionProps, 'id'>
 
 @Table({
   timestamps: true,
-  paranoid: true,
   tableName: 'reactions',
 })
 export class Reaction extends Model<ReactionProps, CreateReactionProps> {

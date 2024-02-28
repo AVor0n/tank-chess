@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { type AppState } from 'store'
-import { type User } from 'types/types'
+import { type ReactionType, type User } from 'types/types'
 import { createNewComment } from './commentThunks/createNewComment'
 import { deleteComment } from './commentThunks/deleteComment'
 
@@ -12,6 +12,7 @@ export interface CommentDto {
   likeCount: number
   createdAt: string
   updatedAt: string
+  reactions?: ReactionType[]
 }
 
 export interface TopicsInitialState {

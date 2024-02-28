@@ -11,7 +11,6 @@ interface TopicPropsFromClient {
   text: string
 }
 
-/* eslint-disable @typescript-eslint/no-misused-promises*/
 export const getAllTopics: Handler = async (_, res, next) => {
   try {
     const topics = await Topic.findAll({
@@ -44,7 +43,6 @@ export const getTopic: Handler = async (req, res, next) => {
     if (!topic) {
       throw new NotFoundError(notFoundTopicId, 'NotFoundError')
     }
-
     res.status(200).json(topic.toJSON())
   } catch (error) {
     next(error)

@@ -9,12 +9,13 @@ interface AddReactionProps {
   emojiSet: Nullable<EmojiType[]>
   reactions?: Nullable<ReactionType[]>
   commentId: number
+  userId?: number
   onAddRection: () => void
 }
-export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection }: AddReactionProps) => {
+export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection, userId }: AddReactionProps) => {
   const [isEmojiVisible, setEmojiVisibility] = useState(false)
 
-  return (
+  return userId ? (
     <div className={styles.reactionActsContainer}>
       <div className={styles.reactionList}>
         {reactions?.map(reaction => (
@@ -23,7 +24,7 @@ export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection }: Ad
             className={styles.reactionContainer}
             onClick={() => {
               ;(async () => {
-                await ReactionService.addReactionsOnComment(commentId, reaction.emojiId)
+                await ReactionService.doReactionOnComment(commentId, reaction.emojiId, userId)
                 onAddRection()
               })()
             }}>
@@ -43,7 +44,7 @@ export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection }: Ad
           isVisible={isEmojiVisible}
           onChooseEmoji={emoji =>
             (async () => {
-              await ReactionService.addReactionsOnComment(commentId, emoji.id)
+              await ReactionService.doReactionOnComment(commentId, emoji.id, userId)
               onAddRection()
             })()
           }
@@ -56,5 +57,7 @@ export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection }: Ad
         />
       </div>
     </div>
+  ) : (
+    <div />
   )
 }

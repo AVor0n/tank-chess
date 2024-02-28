@@ -31,6 +31,7 @@ export async function postgresConnect() {
     if (emoji.count === 0) {
       await importEmojiFromJSON()
     }
+    /**test */
   } catch (error) {
     console.error(error)
   }

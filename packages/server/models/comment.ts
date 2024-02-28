@@ -1,5 +1,7 @@
 import { type Optional } from 'sequelize'
-import { BelongsTo, Column, Default, ForeignKey, Min, Model, NotEmpty, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, Default, ForeignKey, Min, Model, NotEmpty, Table, HasMany } from 'sequelize-typescript'
+import { type ReactionType } from '../controllers/reaction'
+import { Reaction } from './reaction'
 import { Topic } from './topic'
 
 interface CommentProps {
@@ -27,4 +29,7 @@ export class Comment extends Model<CommentProps, CreateCommentProps> {
   @Default(0)
   @Column
   like_count!: number
+
+  @HasMany(() => Reaction)
+  reactions?: ReactionType[]
 }
