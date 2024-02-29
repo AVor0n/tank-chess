@@ -1,30 +1,18 @@
-import { BASE_URL } from '@utils/constants'
-import { type Nullable, type EmojiType } from 'types/types'
+import { type Nullable, type EmojiType, type ReactionType } from 'types/types'
+import { BASE_URL } from '../utils/constants'
 /* eslint no-console: 0 */
 /* eslint @typescript-eslint/no-misused-promises: 0 */
 /* eslint @typescript-eslint/no-unsafe-assignment: 0 */
 /* eslint @typescript-eslint/no-unsafe-argument: 0 */
 
+interface doReactionAnswerType {
+  emojiId: number
+  userId: number
+  commentId: number
+}
+
 class EmojiService {
   baseURL = BASE_URL
-
-  importEmoji = async () => {
-    try {
-      const response: Response = await fetch(this.baseURL + '/reactions/import', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          Accept: 'application/json',
-        },
-        credentials: 'include',
-        mode: 'cors',
-      })
-
-      await response?.json()
-    } catch (error) {
-      if (error instanceof Error) console.log('ошибка')
-    }
-  }
 
   async getEmojiSet(limit = 100): Promise<Nullable<EmojiType[]>> {
     try {
@@ -45,7 +33,7 @@ class EmojiService {
     }
   }
 
-  async getReactionsOnComment(commentId: number) {
+  async getReactionsOnComment(commentId: number): Promise<ReactionType[]> {
     try {
       const response: Response = await fetch(this.baseURL + '/reactions/comment/' + commentId, {
         method: 'GET',
@@ -56,24 +44,20 @@ class EmojiService {
         credentials: 'include',
         mode: 'cors',
       })
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const reactions: Record<string, any>[] = await response?.json()
-      return reactions.map(reaction => ({
-        code: (reaction.emoji as Record<string, string>).code,
-        id: reaction.id,
-        quantity: reaction.quantity,
-        emojiId: reaction.emoji_id,
-      }))
+      return (await response?.json()) as ReactionType[]
     } catch (error) {
       return []
     }
   }
 
-  async addReactionsOnComment(commentId: number, emojiId: number) {
-    const response: Response = await fetch(this.baseURL + '/reactions/comment/add-reaction', {
+  async doReactionOnComment(
+    commentId: number,
+    emojiId: number,
+    userId: number,
+  ): Promise<doReactionAnswerType | { reason: string }> {
+    const response: Response = await fetch(this.baseURL + '/reactions/comment/reaction', {
       method: 'POST',
-      body: JSON.stringify({ commentId, emojiId }),
+      body: JSON.stringify({ commentId, emojiId, userId }),
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -82,23 +66,7 @@ class EmojiService {
       mode: 'cors',
     })
 
-    const result: JSON = await response?.json()
-    return result
-  }
-
-  async deleteReactionsOnComment(commentId: number, emojiId: number) {
-    const response: Response = await fetch(this.baseURL + '/reactions/comment/delete-reaction', {
-      method: 'POST',
-      body: JSON.stringify({ commentId, emojiId }),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-      mode: 'cors',
-    })
-
-    const result: JSON = await response?.json()
+    const result: doReactionAnswerType | { reason: string } = await response?.json()
     return result
   }
 }

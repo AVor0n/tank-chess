@@ -12,7 +12,6 @@ export type CreateEmojiProps = Optional<EmojiProps, 'id'>
 
 @Table({
   timestamps: false,
-  paranoid: true,
   tableName: 'emoji',
 })
 export class Emoji extends Model<EmojiProps, CreateEmojiProps> {

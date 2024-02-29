@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL, GAME_ID } from '@utils/constants'
+import { THEME_LS_KEY, type Theme } from 'reducers/theme'
 import {
   type User,
   type SignInDataType,
@@ -7,7 +8,6 @@ import {
   type ChangePasswordPayload,
   type GameResult,
 } from 'types/types'
-import { type Theme } from './theme'
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -55,7 +55,11 @@ export const api = createApi({
       transformResponse: (response: { service_id: string }) => response.service_id,
     }),
     getUser: builder.query<User, void>({
-      query: () => '/proxy/auth/user',
+      query: () => ({
+        url: '/users/user',
+        method: 'POST',
+        body: { theme: localStorage.getItem(THEME_LS_KEY) ?? 'light' },
+      }),
       providesTags: ['USER'],
     }),
     changeAvatar: builder.mutation<User, FormData>({

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { Sequelize, type SequelizeOptions } from 'sequelize-typescript'
+import { importEmojiFromJSON } from './controllers/reaction'
 import { Comment, Topic, Reaction, Emoji, User } from './models'
 
 dotenv.config({ path: '../../.env' })
@@ -23,6 +24,13 @@ export async function postgresConnect() {
     await sequelize.authenticate()
 
     await sequelize.sync()
+
+    /**заполняем таблицу с емодзи, если она пустая */
+    const emoji = await Emoji.findAndCountAll()
+    if (emoji.count === 0) {
+      await importEmojiFromJSON()
+    }
+    /**------ */
   } catch (error) {
     console.error(error)
   }

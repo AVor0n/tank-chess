@@ -68,7 +68,6 @@ export interface EmojiType {
 }
 
 export interface ReactionType {
-  id: number
   code: string
   quantity: number
   emojiId: number
