@@ -5,11 +5,10 @@ import { Comment, Topic, Reaction, Emoji, User } from './models'
 
 dotenv.config({ path: '../../.env' })
 
-//const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
+const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
+
 const sequelizeOptions: SequelizeOptions = {
-  //host: POSTGRES_HOST ?? 'localhost',
-  host: 'localhost',
+  host: POSTGRES_HOST ?? 'localhost',
   port: Number(POSTGRES_PORT),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
@@ -31,7 +30,7 @@ export async function postgresConnect() {
     if (emoji.count === 0) {
       await importEmojiFromJSON()
     }
-    /**test */
+    /**------ */
   } catch (error) {
     console.error(error)
   }
