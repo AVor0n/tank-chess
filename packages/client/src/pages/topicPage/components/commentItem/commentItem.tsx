@@ -52,7 +52,7 @@ export const CommentItem = ({ comment, emoji }: CommentProps) => {
         </div>
       </div>
 
-      {emoji && (
+      {emoji && user?.id && (
         <AddReaction
           commentId={Number(comment.id)}
           reactions={reactionList}

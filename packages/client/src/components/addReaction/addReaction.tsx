@@ -9,13 +9,13 @@ interface AddReactionProps {
   emojiSet: Nullable<EmojiType[]>
   reactions?: Nullable<ReactionType[]>
   commentId: number
-  userId?: number
+  userId: number
   onAddRection: () => void
 }
 export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection, userId }: AddReactionProps) => {
   const [isEmojiVisible, setEmojiVisibility] = useState(false)
 
-  return userId ? (
+  return (
     <div className={styles.reactionActsContainer}>
       <div className={styles.reactionList}>
         {reactions?.map(reaction => (
@@ -57,7 +57,5 @@ export const AddReaction = ({ reactions, emojiSet, commentId, onAddRection, user
         />
       </div>
     </div>
-  ) : (
-    <div />
   )
 }

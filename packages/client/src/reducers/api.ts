@@ -58,7 +58,7 @@ export const api = createApi({
       query: () => ({
         url: '/users/user',
         method: 'POST',
-        body: { theme: localStorage.getItem(THEME_LS_KEY) ? localStorage.getItem(THEME_LS_KEY) : 'light' },
+        body: { theme: localStorage.getItem(THEME_LS_KEY) ?? 'light' },
       }),
       providesTags: ['USER'],
     }),
