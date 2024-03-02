@@ -1,5 +1,6 @@
 import { type Game, type Tank, TANK_TYPE, ACTION_TYPE } from '../chess'
 import { colors } from './constants'
+import { shootSound, moveSound, stopSound } from './soundEffects'
 import { getContrast } from './utils'
 
 export class ChessCanvasUI {
@@ -20,6 +21,9 @@ export class ChessCanvasUI {
   /** Поле повернуто на 180° */
   isInverted: boolean
 
+  /** Играть со звуком */
+  withSound: boolean
+
   private cache: {
     availableActions: Set<ACTION_TYPE> | null
     target: Tank | null
@@ -39,12 +43,13 @@ export class ChessCanvasUI {
     }
   }
 
-  constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number) {
+  constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number, withSound = false) {
     this.game = game
     this.ctx = canvas.getContext('2d')!
     this.canvasSize = canvasSize
     this.cellSize = (canvasSize - this.boardBorderWidth * 2) / this.game.board.size
     this.isInverted = false
+    this.withSound = withSound
 
     this.game.on('startGame', this.refresh)
     this.game.on('onChangeActivePlayer', this.refresh)
@@ -502,6 +507,8 @@ export class ChessCanvasUI {
       const action = this.getActionUnderCursor(event)
       if (action && this.cache.availableActions?.has(action)) {
         this.game.makeMove(action)
+
+        if (this.withSound) this.soundEffect(action)
       }
       return
     }
@@ -527,5 +534,16 @@ export class ChessCanvasUI {
           this.cache.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.TURN_RIGHT,
       },
     })
+  }
+
+  public changeSound = (withSound: boolean) => {
+    this.withSound = withSound
+  }
+  private soundEffect = (action: ACTION_TYPE) => {
+    if (action === ACTION_TYPE.FIRE) shootSound()
+    else if (action !== ACTION_TYPE.STOP) moveSound()
+    else {
+      stopSound()
+    }
   }
 }

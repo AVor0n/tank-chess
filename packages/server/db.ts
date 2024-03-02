@@ -5,10 +5,12 @@ import { Comment, Topic, Reaction, Emoji, User } from './models'
 
 dotenv.config({ path: '../../.env' })
 
-const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
+//const { POSTGRES_HOST, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
 
 const sequelizeOptions: SequelizeOptions = {
-  host: POSTGRES_HOST ?? 'localhost',
+  //host: POSTGRES_HOST ?? 'localhost',
+  host: 'localhost',
   port: Number(POSTGRES_PORT),
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
