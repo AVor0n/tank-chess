@@ -6,6 +6,7 @@ import { getTopicById } from './topicThunks/getTopicById'
 import { loadAllForumTopics } from './topicThunks/loadAllTopics'
 
 export interface TopicDto {
+  user: { login: string }
   id: string
   title: string
   text: string

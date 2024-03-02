@@ -1,7 +1,8 @@
 import { type Handler, type RequestHandler } from 'express'
 import { RESPONSE_MESSAGES } from '../constants'
 import { RequestError, NotFoundError } from '../errors'
-import { Topic, Comment } from '../models'
+import { type RequestWithUserInfo } from '../middleware/auth.middleware'
+import { Topic, Comment, User } from '../models'
 
 const { invalidSaving } = RESPONSE_MESSAGES[400].topics
 const { notFoundTopicId } = RESPONSE_MESSAGES[404].topics
@@ -20,6 +21,10 @@ export const getAllTopics: Handler = async (_, res, next) => {
           model: Comment,
           order: [['createdAt', 'DESC']],
         },
+        {
+          model: User,
+          attributes: ['login'],
+        },
       ],
     })
     res.status(200).json(topics)
@@ -36,6 +41,12 @@ export const getTopic: Handler = async (req, res, next) => {
       include: [
         {
           model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['login'],
+            },
+          ],
         },
       ],
       order: [[{ model: Comment, as: 'comments' }, 'createdAt', 'DESC']],
@@ -49,15 +60,17 @@ export const getTopic: Handler = async (req, res, next) => {
   }
 }
 
-export const createTopic: Handler = async (req, res, next) => {
+export const createTopic: Handler = async (req: RequestWithUserInfo, res, next) => {
   try {
     const { title, text } = req.body as TopicPropsFromClient
+    const { id } = req.userInfo!
     if (!title || !text) {
       throw new RequestError(invalidSaving, 'RequestError')
     }
     const topic: Topic = await Topic.create({
       title,
       text,
+      user_id: id,
     })
     res.status(201).json(topic.toJSON())
   } catch (error) {

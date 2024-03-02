@@ -43,7 +43,7 @@ export const CommentItem = ({ comment, emoji }: CommentProps) => {
         </div>
         <div className={styles.info}>
           <div>
-            <p className={styles.author}>Автор - User</p>
+            <p className={styles.author}>Автор - {comment.user.login}</p>
             <p className={styles.time}>Оставлен - {commentTime}</p>
           </div>
           <div className={styles.delete}>

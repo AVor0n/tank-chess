@@ -53,6 +53,7 @@ export const ForumPage = () => {
             title: topic.title,
             updatedAt: datetimeFormatter(topic.updatedAt),
             commentsCount: topic.comments?.length ?? 0,
+            userLogin: topic.user?.login,
           }))}
           columns={FORUM_PAGE_COLUMNS}
           onRowClick={handleTopicClick}
