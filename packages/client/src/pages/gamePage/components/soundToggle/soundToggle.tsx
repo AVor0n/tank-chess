@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useAppDispatch } from 'reducers/hooks'
 import { toggleSound } from 'reducers/sound'
 import styles from './soundToggle.module.scss'
-//import {shootSound} from './../../../../utils/webApiAudio'
 
 interface SoundToggleProps {
   withSound?: boolean
