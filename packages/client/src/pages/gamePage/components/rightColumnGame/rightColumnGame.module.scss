@@ -1,0 +1,28 @@
+.rightColumnGame {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  flex-shrink: 1;
+  justify-content: space-between;
+
+  .rightColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .exit {
+      display: block;
+      margin-block-end: 20px;
+      margin-inline-end: 20px;
+      padding-block: 10px;
+      padding-inline: 20px;
+      color: var(--colors-gray-light);
+      text-decoration: none;
+      background-color: var(--colors-green);
+
+      &:hover {
+        background-color: var(--colors-green-dark);
+      }
+    }
+  }
+}
