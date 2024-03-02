@@ -1,6 +1,7 @@
 import { type RequestHandler } from 'express'
 import { RESPONSE_MESSAGES } from '../constants'
 import { RequestError, NotFoundError } from '../errors'
+import { type RequestWithUserInfo } from '../middleware/auth.middleware'
 import { Comment, Topic } from '../models'
 
 const { invalidSaving } = RESPONSE_MESSAGES[400].comments
@@ -11,10 +12,10 @@ interface CommentPropsFromClient {
   text: string
 }
 
-/* eslint-disable @typescript-eslint/no-misused-promises*/
-export const createComment: RequestHandler = async (req, res, next) => {
+export const createComment: RequestHandler = async (req: RequestWithUserInfo, res, next) => {
   try {
     const { text, topicId } = req.body as CommentPropsFromClient
+    const { id } = req.userInfo!
 
     if (!text) {
       throw new RequestError(invalidSaving, 'RequestError')
@@ -23,6 +24,7 @@ export const createComment: RequestHandler = async (req, res, next) => {
     const newComment = await Comment.create({
       topic_id: Number(topicId),
       text,
+      user_id: id,
     })
     if (newComment) {
       const topic = await Topic.findByPk(Number(topicId))

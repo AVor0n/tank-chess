@@ -1,4 +1,6 @@
-import { Column, Default, Model, PrimaryKey, Table, Unique, AllowNull } from 'sequelize-typescript'
+import { Column, Default, Model, PrimaryKey, Table, Unique, AllowNull, HasMany } from 'sequelize-typescript'
+import { Comment } from './comment'
+import { Topic } from './topic'
 
 interface UserProps {
   _id: number
@@ -54,4 +56,10 @@ export class User extends Model<UserProps> {
   @Default('light')
   @Column
   theme!: string
+
+  @HasMany(() => Comment)
+  comments!: Comment[]
+
+  @HasMany(() => Topic)
+  topic!: Topic[]
 }

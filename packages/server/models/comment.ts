@@ -3,18 +3,23 @@ import { BelongsTo, Column, Default, ForeignKey, Min, Model, NotEmpty, Table, Ha
 import { type ReactionType } from '../controllers/reaction'
 import { Reaction } from './reaction'
 import { Topic } from './topic'
+import { User } from './user'
 
 interface CommentProps {
   id: number
   topic_id: number
   text: string
   like_count?: number
+  user_id: number
 }
 
 export type CreateCommentProps = Optional<CommentProps, 'id'>
 
 @Table({ tableName: 'comments', timestamps: true })
 export class Comment extends Model<CommentProps, CreateCommentProps> {
+  @ForeignKey(() => User)
+  user_id!: number
+
   @BelongsTo(() => Topic)
   topic!: Topic
 
@@ -32,4 +37,7 @@ export class Comment extends Model<CommentProps, CreateCommentProps> {
 
   @HasMany(() => Reaction)
   reactions?: ReactionType[]
+
+  @BelongsTo(() => User, { targetKey: '_id' })
+  user?: User
 }
