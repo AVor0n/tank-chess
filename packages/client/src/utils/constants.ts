@@ -20,8 +20,8 @@ export const errors = {
 }
 
 /* URLS */
-export const BASE_URL = 'http://localhost:9000/api'
-export const URL_RESOURCES = 'http://localhost:9000/api/proxy/resources/'
+export const BASE_URL = 'http://localhost:5000/api'
+export const URL_RESOURCES = 'http://localhost:5000/api/proxy/resources/'
 
 /** Ключ для сохранения результатов на бэке */
 export const GAME_ID = '__tank-chess-33-test'

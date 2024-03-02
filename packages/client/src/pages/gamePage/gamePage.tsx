@@ -60,7 +60,7 @@ export const GamePage = () => {
 
   useEffect(() => {
     if (gameStatus > GameStatus.SETUP && canvasRef.current && !uiController) {
-      setUiController(new ChessCanvasUI(game, canvasRef.current, screen.availHeight * 0.85, sound))
+      setUiController(new ChessCanvasUI(game, canvasRef.current, screen.availHeight * 0.85, sound, './sounds/'))
     }
     uiController?.refresh()
   }, [game, gameStatus, uiController])
