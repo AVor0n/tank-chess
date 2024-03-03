@@ -21,3 +21,4 @@
 - [Работа с монорепозиторием](./docs/get_started.md)
 - [Git flow](./docs/gitflow.md)
 - [Файловая структура](./docs/file_structure.md)
+- [Как донести изменения на сервер](./docs/action.md)
