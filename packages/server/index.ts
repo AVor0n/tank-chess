@@ -13,7 +13,7 @@ import { apiRoutes } from './routes'
 
 dotenv.config()
 
-const isDev = () => process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development'
 
 async function createServer() {
   const app = express()
@@ -35,7 +35,7 @@ async function createServer() {
       target: 'https://ya-praktikum.tech/api/v2',
       changeOrigin: true,
       cookieDomainRewrite: {
-        'ya-praktikum.tech': 'localhost',
+        'ya-praktikum.tech': isDev ? 'localhost' : 'tank-chess.ya-praktikum.tech',
       },
       pathRewrite: reqPath => reqPath.replace('api/proxy', ''),
     }),
@@ -43,7 +43,7 @@ async function createServer() {
   app.use(authMiddleware)
   app.use('/api', apiRoutes)
 
-  if (isDev()) {
+  if (isDev) {
     vite = await createViteServer({
       server: { middlewareMode: true },
       root: srcPath,
@@ -55,7 +55,7 @@ async function createServer() {
     app.use(vite.middlewares)
   }
 
-  if (!isDev()) {
+  if (!isDev) {
     app.use('/', express.static(distPath, { index: false }))
   }
 
@@ -65,7 +65,7 @@ async function createServer() {
     try {
       let template: string
 
-      if (!isDev()) {
+      if (!isDev) {
         template = fs.readFileSync(path.resolve(distPath, 'index.html'), 'utf-8')
       } else {
         template = fs.readFileSync(path.resolve(srcPath, 'index.html'), 'utf-8')
@@ -79,7 +79,7 @@ async function createServer() {
 
       let mod: SSRModule
 
-      if (!isDev()) {
+      if (!isDev) {
         mod = (await import(ssrClientPath)) as SSRModule
       } else {
         mod = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'), { fixStacktrace: true })) as SSRModule
@@ -100,7 +100,7 @@ async function createServer() {
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
-      if (isDev()) {
+      if (isDev) {
         vite!.ssrFixStacktrace(e as Error)
       }
       next(e)
