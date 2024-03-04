@@ -11,6 +11,8 @@ export const LOCAL_ORIGINS = [
   `http://127.0.0.1`,
   'http://tank-chess.ya-praktikum.tech',
   'https://tank-chess.ya-praktikum.tech',
+  'http://130.193.40.168',
+  'https://130.193.40.168',
 ]
 
 export const RESPONSE_MESSAGES = {
