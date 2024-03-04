@@ -8,7 +8,7 @@ import { useApiErrorToast } from 'hook/useApiErrorToast'
 import { api } from 'reducers/api'
 import { GameStatus, finishGame, startGame } from 'reducers/game'
 import { useAppDispatch, useAppSelector } from 'reducers/hooks'
-import { GameInfo } from './components/info'
+import RightColumnGame from './components/rightColumnGame'
 import { getGameResult } from './utils'
 import styles from './gamePage.module.scss'
 
@@ -16,7 +16,7 @@ const gameComponent: (game: Game) => Record<GameStatus, ReactNode> = game => ({
   [GameStatus.NO_INIT]: <StartModal />,
   [GameStatus.SETUP]: <PlayerModal />,
   [GameStatus.READY_TO_START]: null,
-  [GameStatus.IN_PROGRESS]: <GameInfo game={game} />,
+  [GameStatus.IN_PROGRESS]: <RightColumnGame game={game} />,
   [GameStatus.FINISHED]: <FinishModal game={game} />,
 })
 
@@ -29,6 +29,16 @@ export const GamePage = () => {
   const gameStatus = useAppSelector(state => state.game.status)
   const { status, players } = useAppSelector(state => state.game)
   const [saveResult, { error }] = api.useSaveGameResultMutation()
+
+  /**звук */
+  const { sound } = useAppSelector(state => state.sound)
+  useEffect(() => {
+    if (uiController) {
+      uiController.changeSound(sound)
+    }
+  }, [sound])
+  /**--- */
+
   useApiErrorToast(error)
 
   useEffect(() => {
@@ -50,22 +60,24 @@ export const GamePage = () => {
 
   useEffect(() => {
     if (gameStatus > GameStatus.SETUP && canvasRef.current && !uiController) {
-      setUiController(new ChessCanvasUI(game, canvasRef.current, screen.availHeight * 0.85))
+      setUiController(new ChessCanvasUI(game, canvasRef.current, screen.availHeight * 0.85, sound, './sounds/'))
     }
     uiController?.refresh()
   }, [game, gameStatus, uiController])
 
   return (
-    <div className={styles.game}>
-      <canvas
-        className={styles.board}
-        ref={canvasRef}
-        width={uiController?.canvasSize}
-        height={uiController?.canvasSize}
-        onClick={e => uiController?.onMouseClick(e)}
-        onMouseMove={e => uiController?.onMouseMove(e)}
-      />
-      {gameComponent(game)[gameStatus]}
+    <div className={styles.gameContainer}>
+      <div className={styles.game}>
+        <canvas
+          className={styles.board}
+          ref={canvasRef}
+          width={uiController?.canvasSize}
+          height={uiController?.canvasSize}
+          onClick={e => uiController?.onMouseClick(e)}
+          onMouseMove={e => uiController?.onMouseMove(e)}
+        />
+        {gameComponent(game)[gameStatus]}
+      </div>
     </div>
   )
 }

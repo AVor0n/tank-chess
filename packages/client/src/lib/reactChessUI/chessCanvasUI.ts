@@ -1,5 +1,6 @@
 import { type Game, type Tank, TANK_TYPE, ACTION_TYPE } from '../chess'
 import { colors } from './constants'
+import { shootSound, moveSound, stopSound, winSound, changeSound, chooseSound } from './soundEffects'
 import { getContrast } from './utils'
 
 export class ChessCanvasUI {
@@ -20,6 +21,12 @@ export class ChessCanvasUI {
   /** Поле повернуто на 180° */
   isInverted: boolean
 
+  /** Играть со звуком */
+  withSound: boolean
+
+  /** Путь к папке со звуками */
+  soundPath: string
+
   private cache: {
     availableActions: Set<ACTION_TYPE> | null
     target: Tank | null
@@ -39,22 +46,41 @@ export class ChessCanvasUI {
     }
   }
 
-  constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number) {
+  constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number, withSound = false, soundPath = '') {
     this.game = game
     this.ctx = canvas.getContext('2d')!
     this.canvasSize = canvasSize
     this.cellSize = (canvasSize - this.boardBorderWidth * 2) / this.game.board.size
     this.isInverted = false
 
+    /**определяем, будет ли звук и
+     * где хранятся звуки
+     */
+    if (soundPath) {
+      this.withSound = withSound
+      this.soundPath = soundPath
+    } else {
+      this.withSound = false
+      this.soundPath = ''
+    }
+
     this.game.on('startGame', this.refresh)
-    this.game.on('onChangeActivePlayer', this.refresh)
+    this.game.on('onChangeActivePlayer', () => {
+      if (this.withSound) changeSound(this.soundPath)
+      this.refresh()
+    })
     this.game.on('onChangeActiveTank', () => {
+      if (this.withSound) chooseSound(this.soundPath)
       this.updateCache()
       this.refresh()
     })
-    this.game.on('didPerformAction', () => {
+    this.game.on('didPerformAction', action => {
+      if (this.withSound) this.soundEffectAction(action)
       this.updateCache()
       this.refresh()
+    })
+    this.game.on('endGame', () => {
+      if (this.withSound) winSound(this.soundPath)
     })
   }
 
@@ -527,5 +553,16 @@ export class ChessCanvasUI {
           this.cache.availableActions?.has(ACTION_TYPE.TURN_RIGHT) && hoveredAction === ACTION_TYPE.TURN_RIGHT,
       },
     })
+  }
+
+  public changeSound = (withSound: boolean) => {
+    this.withSound = withSound
+  }
+  private soundEffectAction = (action: ACTION_TYPE) => {
+    if (action === ACTION_TYPE.FIRE) shootSound(this.soundPath)
+    else if (action !== ACTION_TYPE.STOP) moveSound(this.soundPath)
+    else {
+      stopSound(this.soundPath)
+    }
   }
 }
