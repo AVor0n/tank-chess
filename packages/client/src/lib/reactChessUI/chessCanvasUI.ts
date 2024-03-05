@@ -7,6 +7,9 @@ export class ChessCanvasUI {
   /** объект содержащий всю логику игры */
   game: Game
 
+  /** Игрок которому принадлежит доска. undefined если два игрока играют на одном компьютере */
+  private playerId?: number
+
   ctx: CanvasRenderingContext2D
 
   /** Размер каждой из сторон canvas в px */
@@ -19,7 +22,7 @@ export class ChessCanvasUI {
   boardBorderWidth = 20
 
   /** Поле повернуто на 180° */
-  isInverted: boolean
+  isInverted = false
 
   /** Играть со звуком */
   withSound: boolean
@@ -46,16 +49,30 @@ export class ChessCanvasUI {
     }
   }
 
-  constructor(game: Game, canvas: HTMLCanvasElement, canvasSize: number, withSound = false, soundPath = '') {
+  /** в данный момент ходит 'хозяин' доски. Либо у доски нет 'хозяина' */
+  public get isMyMove() {
+    return !this.playerId || this.playerId === this.game.activePlayer.id
+  }
+
+  constructor(
+    game: Game,
+    canvas: HTMLCanvasElement,
+    canvasSize: number,
+    withSound = false,
+    soundPath = '',
+    playerId?: number,
+  ) {
     this.game = game
+    this.playerId = playerId
     this.ctx = canvas.getContext('2d')!
     this.canvasSize = canvasSize
     this.cellSize = (canvasSize - this.boardBorderWidth * 2) / this.game.board.size
-    this.isInverted = false
 
-    /**определяем, будет ли звук и
-     * где хранятся звуки
-     */
+    if (playerId === game.players[1].id) {
+      this.flip()
+    }
+
+    /** определяем, будет ли звук и где хранятся звуки */
     if (soundPath) {
       this.withSound = withSound
       this.soundPath = soundPath
@@ -150,10 +167,10 @@ export class ChessCanvasUI {
   }
 
   /** Поворачивает доску на 180 градусов */
-  // private flip() {
-  //   this.isInverted = !this.isInverted
-  //   this.ctx.canvas.style.transform = this.isInverted ? 'rotate(180deg)' : 'rotate(0deg)'
-  // }
+  private flip() {
+    this.isInverted = !this.isInverted
+    this.ctx.canvas.style.transform = this.isInverted ? 'rotate(180deg)' : 'rotate(0deg)'
+  }
 
   /** Рисует стрелку вверх */
   private drawArrowUp() {
@@ -391,12 +408,13 @@ export class ChessCanvasUI {
       this.drawEmptyCell(x, y)
       this.drawTank(tank)
 
-      if (!activeTankId && tanksForMove.has(tank.id)) {
+      if (this.isMyMove && !activeTankId && tanksForMove.has(tank.id)) {
         this.drawSelectedBound(x, y, 'lime')
       }
       if (activeTankId === tank.id) {
         this.drawSelectedBound(x, y, 'cyan')
-        this.drawAvailableActionsForTank(tank)
+
+        if (this.isMyMove) this.drawAvailableActionsForTank(tank)
       }
     })
   }
@@ -524,6 +542,8 @@ export class ChessCanvasUI {
   }
 
   public onMouseClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!this.isMyMove) return
+
     if (this.game.activeTank) {
       const action = this.getActionUnderCursor(event)
       if (action && this.cache.availableActions?.has(action)) {
@@ -541,7 +561,7 @@ export class ChessCanvasUI {
   }
 
   public onMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!this.game.activeTank) return
+    if (!this.isMyMove || !this.game.activeTank) return
     const hoveredAction = this.getActionUnderCursor(event)
     this.drawAvailableActionsForTank(this.game.activeTank, {
       highlight: {

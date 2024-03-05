@@ -18,15 +18,15 @@ const repeat = (repeatFunc: () => void, quantity: number) => {
 describe('Проверяем состояние после StartGame', () => {
   let game: Game
   let gamers: {
-    playerName1: string
-    playerName2: string
+    player1: Player
+    player2: Player
   }
 
   beforeEach(() => {
     game = new Game()
     gamers = {
-      playerName1: 'Иван Иванов',
-      playerName2: 'Катя Катина',
+      player1: new Player('Иван Иванов'),
+      player2: new Player('Катя Катина'),
     }
   })
 
@@ -72,15 +72,15 @@ describe('Проверяем состояние после StartGame', () => {
 describe('Проверяем правильную расстановку танков', () => {
   let game: Game
   let gamers: {
-    playerName1: string
-    playerName2: string
+    player1: Player
+    player2: Player
   }
 
   beforeAll(() => {
     game = new Game()
     gamers = {
-      playerName1: 'Иван Иванов',
-      playerName2: 'Катя Катина',
+      player1: new Player('Иван Иванов'),
+      player2: new Player('Катя Катина'),
     }
     game.startGame(gamers)
   })
@@ -171,16 +171,16 @@ describe('Проверяем правильную расстановку тан�
 describe('Тестирование действий', () => {
   let game: Game
   let gamers: {
-    playerName1: string
-    playerName2: string
+    player1: Player
+    player2: Player
   }
   let testWhiteTank: Tank, testBlackTank: Tank, testWhiteTankLine2: Tank
 
   beforeEach(() => {
     game = new Game()
     gamers = {
-      playerName1: 'Иван Иванов',
-      playerName2: 'Катя Катина',
+      player1: new Player('Иван Иванов'),
+      player2: new Player('Катя Катина'),
     }
     game.startGame(gamers)
     testWhiteTank = game.tanks[10]
@@ -283,16 +283,16 @@ describe('Тестирование действий', () => {
 describe('Подбитие танка', () => {
   let game: Game
   let gamers: {
-    playerName1: string
-    playerName2: string
+    player1: Player
+    player2: Player
   }
   let testWhiteTank: Tank, testBlackTank: Tank, testBlackComanderTank: Tank
 
   beforeEach(() => {
     game = new Game()
     gamers = {
-      playerName1: 'Иван Иванов',
-      playerName2: 'Катя Катина',
+      player1: new Player('Иван Иванов'),
+      player2: new Player('Катя Катина'),
     }
     game.startGame(gamers)
     testWhiteTank = game.tanks[10]

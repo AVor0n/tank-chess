@@ -100,3 +100,8 @@ export const isApiError = (error: unknown): error is ApiError => {
   const apiError = error as Partial<ApiError>
   return !!(apiError?.data?.reason ?? apiError?.data?.message)
 }
+
+export interface Player {
+  id?: number
+  name: string
+}

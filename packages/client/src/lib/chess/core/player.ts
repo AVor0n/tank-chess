@@ -1,11 +1,9 @@
-import { generateId } from '../utils/generateid'
-
 export class Player {
-  readonly id: string
+  readonly id: number
   public readonly name: string
 
-  constructor(name: string) {
-    this.id = generateId(`player`)
+  constructor(name: string, id?: number) {
+    this.id = id ?? Math.random()
     this.name = name
   }
 }

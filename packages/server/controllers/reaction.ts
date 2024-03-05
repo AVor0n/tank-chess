@@ -100,7 +100,7 @@ export const getReactionsOnComment: RequestHandler = async (req, res) => {
      * */
     const queryResult: [unknown[], unknown] | undefined = await Reaction.sequelize?.query(
       `SELECT  "Reaction"."emoji_id" as "emojiId",  "Emoji"."code" as "code", COUNT("Reaction"."emoji_id") AS "quantity"
-      FROM "reactions" AS "Reaction", "emoji" as "Emoji" 
+      FROM "reactions" AS "Reaction", "emoji" as "Emoji"
       WHERE "Reaction"."comment_id" = '${commentId}' AND "Reaction"."emoji_id" = "Emoji"."id"
       GROUP BY "emoji_id", "Emoji"."code"`,
     )
@@ -121,19 +121,16 @@ export const addReactionOnComment = async (
   tr: Transaction | null = null,
 ): Promise<boolean> => {
   try {
-    console.log(userId + ' - ' + commentId + ' - ' + emojiId)
-    console.log(
-      await Reaction.create(
-        {
-          user_id: Number(userId),
-          comment_id: Number(commentId),
-          emoji_id: Number(emojiId),
-        },
-        {
-          transaction: tr,
-          conflictFields: ['comment_id', 'emoji_id', 'user_id'],
-        },
-      ),
+    await Reaction.create(
+      {
+        user_id: Number(userId),
+        comment_id: Number(commentId),
+        emoji_id: Number(emojiId),
+      },
+      {
+        transaction: tr,
+        conflictFields: ['comment_id', 'emoji_id', 'user_id'],
+      },
     )
     return true
   } catch (error) {

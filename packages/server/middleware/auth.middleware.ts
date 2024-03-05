@@ -11,8 +11,9 @@ export interface UserInfo {
   phone: string
 }
 
-export interface RequestWithUserInfo extends Request {
+export interface RequestWithUserInfo<T = unknown> extends Request {
   userInfo?: UserInfo
+  body: T
 }
 
 export const authMiddleware = async (request: RequestWithUserInfo, _response: Response, next: NextFunction) => {

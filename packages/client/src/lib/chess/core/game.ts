@@ -4,7 +4,7 @@ import { ACTION_TYPE, TANK_TYPE, type StartGameOptions } from '../types'
 import { isEqual } from '../utils/isEqual'
 import { getNextCell } from '../utils/step'
 import { Board } from './board'
-import { Player } from './player'
+import { type Player } from './player'
 import { Tank } from './tank'
 
 export class Game extends EventBus<{
@@ -56,7 +56,7 @@ export class Game extends EventBus<{
   }
 
   public startGame(options: StartGameOptions): void {
-    this.players = [new Player(options.playerName1), new Player(options.playerName2)]
+    this.players = [options.player1, options.player2]
     this.initBoard()
 
     this._moveCounter = 0
