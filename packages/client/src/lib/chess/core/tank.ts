@@ -9,7 +9,7 @@ export class Tank {
   readonly armor: number
   readonly strength: number
   readonly movement: number
-  readonly playerId: string
+  readonly playerId: number
   private _energy: number
   private _color: string
   private x = 0
@@ -57,7 +57,7 @@ export class Tank {
    * @param color цвет танка
    * @param position начальная позиция танка на доске
    */
-  constructor(type: TANK_TYPE, playerId: string, color: string, position: BoardPosition) {
+  constructor(type: TANK_TYPE, playerId: number, color: string, position: BoardPosition) {
     const { armor, damage, energy } = TANK_TYPE_TO_PROPS[type]
     this.id = generateId(`${type}_${playerId}`)
     this.type = type

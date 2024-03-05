@@ -4,9 +4,10 @@ import { type FC, useEffect } from 'react'
 import Error from '@components/error'
 import { toggleFullScreen } from '@utils/webApi'
 import { api } from 'reducers/api'
-import { selectorIsAuth } from 'reducers/auth'
+import { selectorIsAuth, selectorUserInfo } from 'reducers/auth'
 import { useAppDispatch, useAppSelector } from 'reducers/hooks'
 import { THEME_LS_KEY, type Theme, setTheme } from 'reducers/theme'
+import wsService from './service/socket.service'
 import registerServiceWorker from './utils/serviceWorker'
 
 if (process.env.NODE_ENV === 'production') {
@@ -20,6 +21,7 @@ interface Props {
 const App: FC<Props> = ({ RouterProvider }) => {
   const [executeOAuth] = api.useExecuteOAuthMutation()
   const isAuth = useAppSelector(selectorIsAuth)
+  const userInfo = useAppSelector(selectorUserInfo)
   const { theme } = useAppSelector(state => state.theme)
   const [getTheme] = api.useLazyGetThemeQuery()
   const dispatch = useAppDispatch()
@@ -61,6 +63,16 @@ const App: FC<Props> = ({ RouterProvider }) => {
       updateTheme()
     }
   }, [dispatch, getTheme, isAuth])
+
+  useEffect(() => {
+    if (userInfo) {
+      wsService.connect(userInfo.id, userInfo.login)
+    }
+
+    return () => {
+      wsService.socket.close()
+    }
+  }, [userInfo?.id])
 
   return (
     <ThemeProvider theme={theme}>

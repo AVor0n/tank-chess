@@ -12,7 +12,7 @@ const repeat = (repeatFunc: () => void, quantity: number) => {
 describe('class Tank - общее', () => {
   let lightTank: Tank
   beforeEach(() => {
-    lightTank = new Tank(TANK_TYPE.LT, 'player_1', '#ffffff', { x: 2, y: 4, rotation: 0 })
+    lightTank = new Tank(TANK_TYPE.LT, 0, '#ffffff', { x: 2, y: 4, rotation: 0 })
   })
 
   test('reverse делает шаг назад', () => {
@@ -44,7 +44,7 @@ describe('class Tank - общее', () => {
 describe('class Tank - легкий танк', () => {
   let lightTank: Tank
   beforeEach(() => {
-    lightTank = new Tank(TANK_TYPE.LT, 'player_1', '#ffffff', { x: 2, y: 4, rotation: 0 })
+    lightTank = new Tank(TANK_TYPE.LT, 0, '#ffffff', { x: 2, y: 4, rotation: 0 })
   })
 
   test('Правильно присваивается тип танка', () => {
@@ -94,7 +94,7 @@ describe('class Tank - легкий танк', () => {
 describe('class Tank - средний танк', () => {
   let middleTank: Tank
   beforeEach(() => {
-    middleTank = new Tank(TANK_TYPE.MT, 'player_1', '#ffffff', { x: 2, y: 4, rotation: 0 })
+    middleTank = new Tank(TANK_TYPE.MT, 0, '#ffffff', { x: 2, y: 4, rotation: 0 })
   })
 
   test('Правильно присваивается тип танка', () => {
@@ -150,7 +150,7 @@ describe('class Tank - средний танк', () => {
 describe('class Tank - тяжелый танк', () => {
   let heavyTank: Tank
   beforeEach(() => {
-    heavyTank = new Tank(TANK_TYPE.HT, 'player_1', '#ffffff', { x: 2, y: 4, rotation: 0 })
+    heavyTank = new Tank(TANK_TYPE.HT, 0, '#ffffff', { x: 2, y: 4, rotation: 0 })
   })
 
   test('Правильно присваивается тип танка', () => {
@@ -203,7 +203,7 @@ describe('class Tank - тяжелый танк', () => {
 describe('class Tank - командирский танк', () => {
   let comanderTank: Tank
   beforeEach(() => {
-    comanderTank = new Tank(TANK_TYPE.CLT, 'player_1', '#ffffff', { x: 2, y: 4, rotation: 0 })
+    comanderTank = new Tank(TANK_TYPE.CLT, 0, '#ffffff', { x: 2, y: 4, rotation: 0 })
   })
 
   test('Правильно присваивается тип танка', () => {
