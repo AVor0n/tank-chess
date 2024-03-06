@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - fix-url
+      - online-game
 
 jobs:
   build-and-push:

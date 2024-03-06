@@ -23,6 +23,8 @@ export const errors = {
 export const URL = import.meta.env.DEV ? 'http://localhost:5000' : 'https://tank-chess.ya-praktikum.tech'
 export const BASE_URL = `${URL}/api`
 export const URL_RESOURCES = `${BASE_URL}/proxy/resources/`
+//для oAuth
+export const redirectUrl = import.meta.env.DEV ? 'http://localhost:5000' : `http://tank-chess.ya-praktikum.tech/login`
 
 /** Ключ для сохранения результатов на бэке */
 export const GAME_ID = '__tank-chess-33-test'
