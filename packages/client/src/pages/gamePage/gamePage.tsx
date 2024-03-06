@@ -1,5 +1,6 @@
 import { toaster } from '@gravity-ui/uikit/toaster-singleton-react-18'
 import { type ReactNode, useEffect, useRef, useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import FinishModal from '@components/finishModal'
 import PlayerModal from '@components/playerModal'
 import StartModal from '@components/startModal'
@@ -27,6 +28,7 @@ export const GamePage = () => {
   const [uiController, setUiController] = useState<ChessCanvasUI | null>(null)
   const game = useMemo(() => new Game(), [])
 
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const roomId = useAppSelector(state => state.game.roomId)
   const userId = useAppSelector(state => state.auth.userInfo?.id)
@@ -78,6 +80,27 @@ export const GamePage = () => {
   }, [game, gameStatus, roomId, sound, uiController, userId])
 
   useEffect(() => {
+    const makeMove = (action: ACTION_TYPE) => {
+      if (game.activePlayer.id === userId) return
+      game.activeTank && game.makeMove(action)
+    }
+
+    const setActiveTank = (activeTankId: string) => {
+      if (game.activePlayer.id === userId) return
+      game.setActiveTank(activeTankId)
+    }
+
+    const endGame = (initiator: number) => {
+      if (game.activePlayer.id === initiator) return
+      toaster.add({
+        name: `${roomId}/endGame`,
+        isClosable: true,
+        title: 'Игра завешена',
+        content: 'Противник вышел из игры',
+      })
+      navigate('/')
+    }
+
     if (roomId) {
       game.on('willPerformAction', action => {
         wsService.socket.emit('sent-room-event', { event: 'willPerformAction', roomId, payload: action })
@@ -89,21 +112,15 @@ export const GamePage = () => {
         wsService.socket.emit('sent-room-event', { event: 'endGame', roomId })
       })
 
-      wsService.socket.on('willPerformAction', (action: ACTION_TYPE) => {
-        if (game.activePlayer.id === userId) return
-        game.activeTank && game.makeMove(action)
-      })
-      wsService.socket.on('onChangeActiveTank', (activeTankId: string) => {
-        if (game.activePlayer.id === userId) return
-        game.setActiveTank(activeTankId)
-      })
-      wsService.socket.on('endGame', () =>
-        toaster.add({
-          name: `${roomId}/endGame`,
-          isClosable: true,
-          title: 'Игра завешена',
-        }),
-      )
+      wsService.socket.on('willPerformAction', makeMove)
+      wsService.socket.on('onChangeActiveTank', setActiveTank)
+      wsService.socket.on('endGame', endGame)
+    }
+
+    return () => {
+      wsService.socket.off('willPerformAction', makeMove)
+      wsService.socket.off('onChangeActiveTank', setActiveTank)
+      wsService.socket.off('endGame', endGame)
     }
   }, [game, roomId, userId])
 
