@@ -49,13 +49,13 @@ const App: FC<Props> = ({ RouterProvider }) => {
   }, [executeOAuth])
 
   useEffect(() => {
-    const themeFromLS = localStorage.getItem(THEME_LS_KEY) as Theme
+    const themeFromLS = (localStorage.getItem(THEME_LS_KEY) as Theme) ?? 'light'
     dispatch(setTheme(themeFromLS))
   }, [dispatch])
 
   useEffect(() => {
     const updateTheme = async () => {
-      const themeFromApi = await getTheme().unwrap()
+      const themeFromApi = (await getTheme().unwrap()) ?? 'light'
       dispatch(setTheme(themeFromApi))
     }
 
