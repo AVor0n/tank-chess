@@ -30,8 +30,9 @@ export const PlayerModal = () => {
 
   const onStartGame = useCallback(() => {
     if (!opponentName) return
+    dispatch(setRoomId(null))
     startGame(currentUser, { name: opponentName })
-  }, [currentUser, opponentName, startGame])
+  }, [currentUser, dispatch, opponentName, startGame])
 
   const createGameSession = useCallback(() => {
     wsService.socket.emit('create-room', wsService.sessionId)
