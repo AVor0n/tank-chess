@@ -40,7 +40,7 @@ export const gameSlice = createSlice({
       state.players = action.payload
       state.status = GameStatus.READY_TO_START
     },
-    setRoomId: (state, action: PayloadAction<string>) => {
+    setRoomId: (state, action: PayloadAction<string | null>) => {
       state.roomId = action.payload
     },
     startGame: state => {
