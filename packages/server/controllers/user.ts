@@ -22,10 +22,10 @@ export const getTheme: Handler = async (req: RequestWithUserInfo, res, next) => 
   }
 }
 
-export const setTheme: Handler = async (req: RequestWithUserInfo, res, next) => {
+export const setTheme: Handler = async (req: RequestWithUserInfo<ThemePayload>, res, next) => {
   try {
     const id = req.userInfo?.id
-    const { theme } = req.body as ThemePayload
+    const { theme } = req.body
     if (!id) {
       res.status(400).send({ reason: 'Not provided id' })
       return
@@ -39,16 +39,8 @@ export const setTheme: Handler = async (req: RequestWithUserInfo, res, next) => 
       return
     }
 
-    await User.sequelize?.transaction({}, async tr => {
-      const user = await User.findOne({
-        lock: tr?.LOCK.UPDATE,
-        where: {
-          _id: id,
-        },
-        transaction: tr,
-      })
-      await user?.update({ theme })
-    })
+    const user = await User.findByPk(id)
+    await user?.update({ theme })
 
     res.status(200).send({ id, theme })
   } catch (error) {
@@ -70,10 +62,10 @@ export const getAndSaveUser: Handler = async (req: RequestWithUserInfo, res, nex
           email,
           first_name,
           second_name,
-          display_name: display_name ? display_name : ' ',
+          display_name: display_name ?? ' ',
           phone,
-          avatar: avatar ? avatar : ' ',
-          theme: theme ? theme : 'light',
+          avatar: avatar ?? ' ',
+          theme: theme ?? 'light',
         }
         await User.upsert(aboutUser)
         res.status(200).send(req.userInfo)
