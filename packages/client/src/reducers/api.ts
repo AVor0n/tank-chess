@@ -55,7 +55,9 @@ export const api = createApi({
       query: () => ({
         url: '/proxy/oauth/yandex/service-id',
         method: 'GET',
-        body: { redirect_url: URL },
+        params: {
+          redirect_uri: URL,
+        },
       }),
       transformResponse: (response: { service_id: string }) => response.service_id,
     }),

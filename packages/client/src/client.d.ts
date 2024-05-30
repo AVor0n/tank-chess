@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 declare const __SERVER_PORT__: number
 
 interface Window {
@@ -22,4 +23,16 @@ declare module '*.svg' {
 declare module '*.jpg' {
   const path: string
   export default path
+}
+
+interface ImportMetaEnv {
+  readonly BASE_URL: string
+  readonly DEV: boolean
+  readonly PROD: boolean
+  readonly SSR: boolean
+  readonly MODE: 'development' | 'production'
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
 }
