@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ACTION_TYPE, type Game } from 'lib/chess'
+import { useAppSelector } from 'reducers/hooks'
 import { TankController } from '../tankController'
 import { TankInfo } from '../tankInfo'
 import styles from './info.module.scss'
 
 export const GameInfo = ({ game }: { game: Game }) => {
   const [update, setUpdate] = useState(0)
-  const { activeTank } = game
+  const { activeTank, activePlayer } = game
+  const roomId = useAppSelector(state => state.game.roomId)
+  const userId = useAppSelector(state => state.auth.userInfo!.id)
+  const isOpponentMove = roomId && activePlayer.id !== userId
 
   const onEndMove = useCallback(() => game.endMove(), [game])
 
@@ -31,13 +35,15 @@ export const GameInfo = ({ game }: { game: Game }) => {
             energy={activeTank.energy}
             strength={activeTank.strength}
           />
-          <TankController
-            canEndMove={game.getAvailableActions(activeTank).includes(ACTION_TYPE.STOP)}
-            onEndMove={onEndMove}
-          />
+          {!isOpponentMove && (
+            <TankController
+              canEndMove={game.getAvailableActions(activeTank).includes(ACTION_TYPE.STOP)}
+              onEndMove={onEndMove}
+            />
+          )}
         </>
       ) : (
-        <h2>Выберите танк</h2>
+        <h2>{isOpponentMove ? 'Подождите...' : 'Выберите танк'}</h2>
       )}
     </div>
   )

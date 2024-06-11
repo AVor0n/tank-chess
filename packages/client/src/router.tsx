@@ -27,7 +27,7 @@ const routes = [
     element: <PrivateRoute />,
     children: [
       {
-        path: '/game',
+        path: '/game/:roomId?',
         Component: withErrorInfo(GamePage),
       },
       {

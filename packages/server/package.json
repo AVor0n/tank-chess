@@ -21,6 +21,8 @@
     "reflect-metadata": "0.2.1",
     "sequelize": "6.36.0",
     "sequelize-typescript": "2.1.6",
+    "socket.io": "^4.7.4",
+    "stomp-protocol": "^0.4.7",
     "vite": "4.4.12"
   },
   "devDependencies": {

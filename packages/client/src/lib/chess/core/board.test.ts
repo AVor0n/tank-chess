@@ -10,7 +10,7 @@ describe('class Board', () => {
   beforeEach(() => {
     board = new Board()
     board.initialize(16)
-    lightWhiteTank = new Tank(TANK_TYPE.LT, 'player_1', '#ffffff', { x: 4, y: 4, rotation: 0 })
+    lightWhiteTank = new Tank(TANK_TYPE.LT, 0, '#ffffff', { x: 4, y: 4, rotation: 0 })
   })
 
   test('После инициализации создается массив заданного размера', () => {
@@ -61,37 +61,37 @@ describe('class Board', () => {
   })
 
   test('getTarget возвращает цель справа', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 4, y: 4, rotation: 2 })).not.toBe(null)
   })
 
   test('getTarget возвращает цель слева', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 8, y: 4, rotation: 6 })).not.toBe(null)
   })
 
   test('getTarget возвращает цель вверху', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 6, y: 8, rotation: 0 })).not.toBe(null)
   })
 
   test('getTarget возвращает цель внизу', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 6, y: 2, rotation: 4 })).not.toBe(null)
   })
 
   test('getTarget возвращает null, если нет танка на прицеле', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 8, y: 0, rotation: 0 })).toBe(null)
   })
 
   test('getTarget возвращает null, если пушка повернута не на цель', () => {
-    const lightBlackTank = new Tank(TANK_TYPE.LT, 'player_2', '#000000', { x: 6, y: 4, rotation: 0 })
+    const lightBlackTank = new Tank(TANK_TYPE.LT, 0, '#000000', { x: 6, y: 4, rotation: 0 })
     board.placeTank(lightBlackTank)
     expect(board.getTarget({ x: 8, y: 4, rotation: 0 })).toBe(null)
   })

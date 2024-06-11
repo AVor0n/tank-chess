@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL, GAME_ID, URL } from '@utils/constants'
+import { BASE_URL, GAME_ID, redirectUrl } from '@utils/constants'
 import { THEME_LS_KEY, type Theme } from 'reducers/theme'
 import {
   type User,
@@ -39,7 +39,7 @@ export const api = createApi({
         method: 'POST',
         body: {
           code,
-          redirect_uri: URL,
+          redirect_uri: redirectUrl,
         },
       }),
       invalidatesTags: ['USER', 'THEME'],
@@ -56,7 +56,7 @@ export const api = createApi({
         url: '/proxy/oauth/yandex/service-id',
         method: 'GET',
         params: {
-          redirect_uri: URL,
+          redirect_uri: redirectUrl,
         },
       }),
       transformResponse: (response: { service_id: string }) => response.service_id,

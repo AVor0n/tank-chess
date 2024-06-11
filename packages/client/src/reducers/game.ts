@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { type Nullable } from 'types/types'
+import { type Player, type Nullable } from 'types/types'
 
 export const enum GameStatus {
   /** Начальное состояние */
@@ -16,13 +16,15 @@ export const enum GameStatus {
 
 interface GameState {
   status: GameStatus
-  winnerName: Nullable<string>
-  players: [Nullable<string>, Nullable<string>]
+  winner: Nullable<Player>
+  roomId: Nullable<string>
+  players: [Nullable<Player>, Nullable<Player>]
 }
 
 const initialState: GameState = {
   status: GameStatus.NO_INIT,
-  winnerName: null,
+  winner: null,
+  roomId: null,
   players: [null, null],
 }
 
@@ -34,19 +36,22 @@ export const gameSlice = createSlice({
       ...initialState,
       status: GameStatus.SETUP,
     }),
-    setPlayers: (state, action: PayloadAction<[string, string]>) => {
+    setPlayers: (state, action: PayloadAction<[Player, Player]>) => {
       state.players = action.payload
       state.status = GameStatus.READY_TO_START
+    },
+    setRoomId: (state, action: PayloadAction<string | null>) => {
+      state.roomId = action.payload
     },
     startGame: state => {
       state.status = GameStatus.IN_PROGRESS
     },
-    finishGame: (state, action: PayloadAction<string>) => {
-      state.winnerName = action.payload
+    finishGame: (state, action: PayloadAction<Player>) => {
+      state.winner = action.payload
       state.status = GameStatus.FINISHED
     },
     resetGame: () => initialState,
   },
 })
 
-export const { startGame, finishGame, resetGame, setPlayers, initGame } = gameSlice.actions
+export const { startGame, finishGame, resetGame, setPlayers, setRoomId, initGame } = gameSlice.actions

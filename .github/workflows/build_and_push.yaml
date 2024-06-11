@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - online-game
 
 jobs:
   build-and-push:

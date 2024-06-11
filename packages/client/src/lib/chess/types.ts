@@ -1,4 +1,4 @@
-import { type Tank } from './core'
+import { type Player, type Tank } from './core'
 
 /** Действия, которые может совершить танк */
 export const enum ACTION_TYPE {
@@ -54,6 +54,6 @@ export interface TankCell {
 export type ItemOnBoard = EmptyCell | WallCell | TankCell
 
 export interface StartGameOptions {
-  playerName1: string
-  playerName2: string
+  player1: Player
+  player2: Player
 }

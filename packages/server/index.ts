@@ -1,15 +1,21 @@
+import { randomUUID } from 'crypto'
 import * as fs from 'fs'
+import { createServer as createHttpServer } from 'http'
 import * as path from 'path'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import express, { type Request } from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+import { Server } from 'socket.io'
 import { createServer as createViteServer, type ViteDevServer } from 'vite'
 import { LOCAL_ORIGINS, PORT } from './constants'
 import { postgresConnect } from './db'
 import { authMiddleware, type RequestWithUserInfo } from './middleware/auth.middleware'
 import { errorMiddleware } from './middleware/error.middleware'
+import { Game } from './models/game'
 import { apiRoutes } from './routes'
+import { sessionStore } from './sessionStore'
+import { type SessionSocket } from './types'
 
 dotenv.config()
 
@@ -108,13 +114,55 @@ async function createServer() {
   })
   app.use(errorMiddleware)
 
-  return app
+  return createHttpServer(app)
 }
 
 async function startServer() {
   await postgresConnect()
 
   const server = await createServer()
+  const io = new Server(server)
+
+  io.use((socket: SessionSocket, next) => {
+    let sessionId = socket.handshake.auth.sessionId ?? ''
+    let session = sessionStore.findSession(sessionId)
+
+    if (!session) {
+      const { userId, username } = socket.handshake.auth
+      if (!userId || !username) {
+        next(new Error('cannot find user'))
+        return
+      }
+
+      sessionId = randomUUID()
+      session = { username, userId, sessionId }
+      sessionStore.saveSession(sessionId, session)
+      console.log(`save ${sessionId}`)
+    }
+
+    socket.userId = session.userId
+    socket.username = session.username
+    socket.sessionId = session.sessionId
+    next()
+  })
+
+  io.on('connection', (socket: SessionSocket) => {
+    socket.emit('session', {
+      sessionId: socket.sessionId,
+      userId: socket.userId,
+    })
+
+    socket.on('create-room', () => Game.createRoom(socket))
+    socket.on('join-to-room', (roomId: string) => Game.joinToRoom(socket, roomId))
+    socket.on(
+      'sent-room-event',
+      ({ event, roomId, payload }: { event: string; roomId: string; payload: Record<string, string> }) => {
+        io.to(roomId).except(socket.id).emit(event, payload)
+      },
+    )
+  })
+
+  Game.connectSocket(io)
 
   server.listen(PORT, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${PORT}`)
